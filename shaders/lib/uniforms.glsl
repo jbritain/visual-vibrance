@@ -1,6 +1,9 @@
 #ifndef UNIFORMS_INCLUDE
 #define UNIFORMS_INCLUDE
 
+// uniform list from Complementary
+// https://github.com/ComplementaryDevelopment/ComplementaryReimagined/blob/main/shaders/lib/uniforms.glsl
+
 /*----------------------------------------------------------------------------------------------
         _____                                                                    _____
         ( ___ )                                                                  ( ___ )
@@ -15,6 +18,8 @@
         (_____)                              (thanks to isuewo and SpacEagle17)  (_____)
 
 ---------------------------------------------------------------------------------------------*/
+
+uniform float alphaTestRef;
 
 uniform int blockEntityId;
 uniform int currentRenderedItemId;

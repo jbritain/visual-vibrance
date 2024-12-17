@@ -18,9 +18,6 @@
 // ===========================================================================================
 
 #ifdef fsh
-
-    uniform float alphaTestRef = 0.1;
-
     in vec2 lmcoord;
     in vec2 texcoord;
     in vec4 glcolor;
