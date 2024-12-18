@@ -2,10 +2,12 @@
 #define COMMON_GLSL
 
 #include "/lib/common/syntax.glsl"
+#include "/lib/common/material.glsl"
 #include "/lib/common/uniforms.glsl"
 #include "/lib/common/util.glsl"
 #include "/lib/common/spaceConversions.glsl"
-#include "/lib/common/material.glsl"
+
+#include "/lib/common/settings.glsl"
 
 vec3 sunDir = normalize(sunPosition);
 vec3 worldSunDir = mat3(gbufferModelViewInverse) * sunDir;

@@ -55,21 +55,6 @@ vec3 raymarchScattering(vec3 pos,
     return lum;
 }
 
-float getSunAltitude(float time)
-{
-    const float periodSec = 120.0;
-    const float halfPeriod = periodSec / 2.0;
-    const float sunriseShift = 0.1;
-    float cyclePoint = (1.0 - abs((mod(time,periodSec)-halfPeriod)/halfPeriod));
-    cyclePoint = (cyclePoint*(1.0+sunriseShift))-sunriseShift;
-    return (0.5*PI)*cyclePoint;
-}
-vec3 getSunDir(float time)
-{
-    float altitude = getSunAltitude(time);
-    return normalize(vec3(0.0, sin(altitude), -cos(altitude)));
-}
-
 void main()
 {
     ivec2 texelCoord = ivec2(gl_GlobalInvocationID.xy);
