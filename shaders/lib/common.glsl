@@ -6,6 +6,7 @@
 #include "/lib/common/uniforms.glsl"
 #include "/lib/common/util.glsl"
 #include "/lib/common/spaceConversions.glsl"
+#include "/lib/common/materialIDs.glsl"
 
 #include "/lib/common/settings.glsl"
 

@@ -112,6 +112,8 @@ uniform vec3 previousCameraPositionFract;
 uniform sampler2DShadow shadowtex1;
 uniform sampler2DShadow shadowtex0;
 
+uniform sampler2D shadowcolor0;
+
 uniform sampler2D sunTransmittanceLUTTex;
 uniform sampler2D multipleScatteringLUTTex;
 uniform sampler2D skyViewLUTTex;

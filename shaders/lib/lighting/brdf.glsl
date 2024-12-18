@@ -34,14 +34,14 @@ vec3 schlick(Material material, float NoV){
 	}
 }
 
-vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos){
+vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos, float scatter){
 	vec3 L = lightDir;
 	float faceNoL = clamp01(dot(faceNormal, L));
 	float mappedNoL = clamp01(dot(mappedNormal, L));
 
 	float NoL = clamp01(mappedNoL * smoothstep(0.0, 0.1, faceNoL));
 
-	if(NoL < 1e-6){
+	if(NoL + scatter < 1e-6){
 		return vec3(0.0);
 	}
 
@@ -63,15 +63,15 @@ vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos){
 	float D = pow2(alpha) / (PI * pow2(denominator));
 	float G = geometrySmith(N, V, L, material.roughness);
 
-	vec3 Rs = (F * D * G) / (4.0 * NoL * NoV + 1e-6);
+	vec3 Rs = (F * D * G) / (4.0 * NoV + 1e-6);
 
 	if(material.metalID != NO_METAL){
 		Rs *= material.albedo;
 	}
 
-	vec3 Rd = material.albedo * (1.0 - F);
+	vec3 Rd = material.albedo * (1.0 - F) * clamp01(NoL + scatter);
 
-	return NoL * (Rs + Rd);
+	return Rs + Rd;
 }
 
 #endif // BRDF_GLSL

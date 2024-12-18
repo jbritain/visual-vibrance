@@ -67,6 +67,10 @@
         vec4 specularData = texture(specular, texcoord);
         Material material = materialFromSpecularMap(albedo.rgb, specularData);
 
+        if(materialID == MATERIAL_PLANTS || materialID == MATERIAL_LEAVES){
+            material.sss = 1.0;
+        }
+
 
 
         color.rgb = getShadedColor(material, mappedNormal, tbnMatrix[2], lightmap, viewPos);
