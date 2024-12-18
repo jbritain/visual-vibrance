@@ -15,8 +15,10 @@ vec3 getShadedColor(Material material, vec3 mappedNormal, vec3 faceNormal, vec2 
         shadow
     ;
     vec3 diffuse = 
-        skylightColor * lightmap.y +
-        vec3(255, 152, 54) / 255.0 * lightmap.x
+        skylightColor * pow2(lightmap.y) +
+        vec3(255, 152, 54) * 1e-5 * max0(exp(-(1.0 - lightmap.x * 10.0))) +
+        vec3(0.01)
+
         
     ;
 

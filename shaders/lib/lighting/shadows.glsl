@@ -14,13 +14,13 @@ vec2 vogelDiscSample(int stepIndex, int stepCount, float noise) {
 }
 
 vec3 sampleShadow(vec3 shadowScreenPos){
-  float transparentShadow = shadow2D(shadowtex0, shadowScreenPos).r;
+  float transparentShadow = shadow2D(shadowtex0HW, shadowScreenPos).r;
 
   if(transparentShadow == 1.0){
     return vec3(1.0);
   }
 
-  float opaqueShadow = shadow2D(shadowtex1, shadowScreenPos).r;
+  float opaqueShadow = shadow2D(shadowtex1HW, shadowScreenPos).r;
 
   if(opaqueShadow == 0.0){
     return vec3(0.0);

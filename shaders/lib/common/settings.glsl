@@ -10,4 +10,6 @@ const bool shadowHardwareFiltering = true;
 #define SHADOW_RADIUS 0.005
 #define SHADOW_SAMPLES 4
 
+#define WATER_ABSORPTION vec3(0.3, 0.09, 0.04)
+
 #endif // SETTINGS_GLSL

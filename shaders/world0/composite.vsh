@@ -2,4 +2,4 @@
 
 #define vsh
 
-#include "/program/gbuffers_solid.glsl"
+#include "/program/composite.glsl"

@@ -41,38 +41,30 @@
     in vec4 glcolor;
     in mat3 tbnMatrix;
     flat in int materialID;
-    in vec3 viewPos;
-
-    vec3 getMappedNormal(vec2 texcoord){
-        vec3 mappedNormal = texture(normals, texcoord).rgb;
-        mappedNormal = mappedNormal * 2.0 - 1.0;
-        mappedNormal.z = sqrt(1.0 - dot(mappedNormal.xy, mappedNormal.xy)); // reconstruct z due to labPBR encoding
-        
-        return tbnMatrix * mappedNormal;
-    }
+    in vec3 shadowViewPos;
 
     /* RENDERTARGETS: 0 */
     layout(location = 0) out vec4 color;
 
     void main() {
-        vec2 lightmap = (lmcoord * 33.05 / 32.0) - (1.05 / 32.0);
+        color = texture(gtexture, texcoord) * glcolor;
 
-        vec4 albedo = texture(gtexture, texcoord) * glcolor;
-
-        if (albedo.a < alphaTestRef) {
+        if (color.a < alphaTestRef) {
             discard;
         }
 
-        albedo.rgb = pow(albedo.rgb, vec3(2.2));
+        const float avgWaterAbsorption = sum3(WATER_ABSORPTION) / 3.0;
 
-        vec3 mappedNormal = getMappedNormal(texcoord);
+        if(materialID == MATERIAL_WATER){
+            float opaqueDepth = texture(shadowtex1, gl_FragCoord.xy / shadowMapResolution).r;
+            float opaqueDistance = getShadowDistanceZ(opaqueDepth); // how far away from the sun is the opaque fragment shadowed by the water?
+            float waterDepth = abs(shadowViewPos.z - opaqueDistance);
 
-        vec4 specularData = texture(specular, texcoord);
-        Material material = materialFromSpecularMap(albedo.rgb, specularData);
+            color.rgb = 1.0 - WATER_ABSORPTION;
+            color.a = 1.0 - (exp(-avgWaterAbsorption * waterDepth));
+        }
 
-
-
-        color.rgb = getShadedColor(material, mappedNormal, tbnMatrix[2], lightmap, viewPos);
+        color.rgb = pow(color.rgb, vec3(2.2));
     }
 
 #endif

@@ -1,6 +1,42 @@
 #ifndef BRDF_GLSL
 #define BRDF_GLSL
 
+#include "/lib/atmosphere/sky/hillaireCommon.glsl"
+
+// https://advances.realtimerendering.com/s2017/DecimaSiggraph2017.pdf
+float getNoHSquared(float NoL, float NoV, float VoL, float radius) {
+  float radiusCos = cos(radius);
+	float radiusTan = tan(radius);
+  
+  float RoL = 2.0 * NoL * NoV - VoL;
+  if (RoL >= radiusCos)
+    return 1.0;
+
+  float rOverLengthT = radiusCos * radiusTan / sqrt(1.0 - RoL * RoL);
+  float NoTr = rOverLengthT * (NoV - RoL * NoL);
+  float VoTr = rOverLengthT * (2.0 * NoV * NoV - 1.0 - RoL * VoL);
+
+  float triple = sqrt(clamp(1.0 - NoL * NoL - NoV * NoV - VoL * VoL + 2.0 * NoL * NoV * VoL, 0.0, 1.0));
+  
+  float NoBr = rOverLengthT * triple, VoBr = rOverLengthT * (2.0 * triple * NoV);
+  float NoLVTr = NoL * radiusCos + NoV + NoTr, VoLVTr = VoL * radiusCos + 1.0 + VoTr;
+  float p = NoBr * VoLVTr, q = NoLVTr * VoLVTr, s = VoBr * NoLVTr;  
+  float xNum = q * (-0.5 * p + 0.25 * VoBr * NoLVTr);
+  float xDenom = p * p + s * ((s - 2.0 * p)) + NoLVTr * ((NoL * radiusCos + NoV) * VoLVTr * VoLVTr + 
+           q * (-0.5 * (VoLVTr + VoL * radiusCos) - 0.5));
+  float twoX1 = 2.0 * xNum / (xDenom * xDenom + xNum * xNum);
+  float sinTheta = twoX1 * xDenom;
+  float cosTheta = 1.0 - twoX1 * xNum;
+  NoTr = cosTheta * NoTr + sinTheta * NoBr;
+  VoTr = cosTheta * VoTr + sinTheta * VoBr;
+  
+  float newNoL = NoL * radiusCos + NoTr;
+  float newVoL = VoL * radiusCos + VoTr;
+  float NoH = NoV + newNoL;
+  float HoH = 2.0 * newVoL + 2.0;
+  return clamp(NoH * NoH / HoH, 0.0, 1.0);
+}
+
 float schlickGGX(float NoV, float K) {
 	float nom	 = NoV;
 	float denom = NoV * (1.0 - K) + K;
@@ -52,14 +88,14 @@ vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos, f
 	float NoV = dot(N, V);
 	float VoL = dot(V, L);
 	float HoV = dot(H, V);
-    float NoH = dot(N, H);
 
-	float alpha = max(0.02, material.roughness);
+	float alpha = max(1e-3, material.roughness);
+	float NoHSquared = getNoHSquared(NoL, NoV, VoL, sunAngularRadius);
 
 	vec3 F = clamp01(schlick(material, HoV));
 
 	// trowbridge-reitz ggx
-	float denominator = max(pow2(NoH) * (pow2(alpha) - 1.0) + 1.0, 1e-6);
+	float denominator = NoHSquared * (pow2(alpha) - 1.0) + 1.0;
 	float D = pow2(alpha) / (PI * pow2(denominator));
 	float G = geometrySmith(N, V, L, material.roughness);
 

@@ -32,6 +32,7 @@
 
 #ifdef fsh
     #include "/lib/lighting/shading.glsl"
+    #include "/lib/util/packing.glsl"
 
     in vec2 lmcoord;
     in vec2 texcoord;
@@ -48,8 +49,9 @@
         return tbnMatrix * mappedNormal;
     }
 
-    /* RENDERTARGETS: 0 */
+    /* RENDERTARGETS: 0,1 */
     layout(location = 0) out vec4 color;
+    layout(location = 1) out vec4 outData1;
 
     void main() {
         vec2 lightmap = (lmcoord * 33.05 / 32.0) - (1.05 / 32.0);
@@ -69,11 +71,28 @@
 
         if(materialID == MATERIAL_PLANTS || materialID == MATERIAL_LEAVES){
             material.sss = 1.0;
+            material.f0 = vec3(0.04);
+            material.roughness = 0.5;
+        }
+
+        if(materialID == MATERIAL_WATER){
+            material.f0 = vec3(0.02);
+            material.roughness = 0.0;
         }
 
 
 
-        color.rgb = getShadedColor(material, mappedNormal, tbnMatrix[2], lightmap, viewPos);
+
+        if(materialID == MATERIAL_WATER){
+            color.a = 0.0;
+        }  else {
+            color.rgb = getShadedColor(material, mappedNormal, tbnMatrix[2], lightmap, viewPos);
+            color.a = albedo.a;
+        }
+
+        outData1.xy = encodeNormal(mat3(gbufferModelViewInverse) * mappedNormal);
+        outData1.z = lightmap.y;
+        outData1.a = clamp01(float(materialID - 1000) * rcp(255.0));
     }
 
 #endif

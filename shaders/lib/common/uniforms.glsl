@@ -109,8 +109,10 @@ uniform ivec3 previousCameraPositionInt;
 uniform vec3 cameraPositionFract;
 uniform vec3 previousCameraPositionFract;
 
-uniform sampler2DShadow shadowtex1;
-uniform sampler2DShadow shadowtex0;
+uniform sampler2D shadowtex1;
+uniform sampler2D shadowtex0;
+uniform sampler2DShadow shadowtex1HW;
+uniform sampler2DShadow shadowtex0HW;
 
 uniform sampler2D shadowcolor0;
 
