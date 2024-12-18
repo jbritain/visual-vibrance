@@ -1,0 +1,6 @@
+#ifndef MATERIAL_IDS_GLSL
+#define MATERIAL_IDS_GLSL
+
+#define MATERIAL_WATER 1000
+
+#endif // MATERIAL_IDS_GLSL

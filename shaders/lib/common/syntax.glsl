@@ -1,7 +1,12 @@
-#ifndef SYNTAX_INCLUDE
-#define SYNTAX_INCLUDE
+#ifndef SYNTAX_GLSL
+#define SYNTAX_GLSL
 
-#define pow2(x) ((x) * (x))
+const float PI = 3.14159265358;
+
+#define pow2(x) (x*x)
+#define pow3(x) (x*x*x)
+#define pow4(x) (x*x*x*x)
+#define pow5(x) (x*x*x*x*x)
 
 #define rcp(x) (1.0 / (x))
 
@@ -29,4 +34,4 @@
 #define saturate clamp01
 #define lerp mix
 
-#endif // SYNTAX_INCLUDE
+#endif // SYNTAX_GLSL

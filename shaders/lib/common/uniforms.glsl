@@ -1,5 +1,5 @@
-#ifndef UNIFORMS_INCLUDE
-#define UNIFORMS_INCLUDE
+#ifndef UNIFORMS_GLSL
+#define UNIFORMS_GLSL
 
 // uniform list from Complementary
 // https://github.com/ComplementaryDevelopment/ComplementaryReimagined/blob/main/shaders/lib/uniforms.glsl
@@ -62,9 +62,14 @@ uniform vec3 previousCameraPosition;
 uniform vec3 skyColor;
 uniform vec3 relativeEyePosition;
 
+uniform vec3 sunPosition;
+uniform vec3 shadowLightPosition;
+
 uniform vec4 entityColor;
 uniform vec4 lightningBoltPosition;
 
+uniform mat4 gbufferProjection;
+uniform mat4 gbufferProjectionInverse;
 uniform mat4 gbufferModelView;
 uniform mat4 gbufferModelViewInverse;
 uniform mat4 gbufferPreviousModelView;
@@ -94,9 +99,6 @@ uniform sampler2D colortex15;
 uniform sampler2D depthtex0;
 uniform sampler2D depthtex1;
 uniform sampler2D depthtex2;
-uniform sampler2D gaux1;
-uniform sampler2D gaux2;
-uniform sampler2D gaux4;
 uniform sampler2D normals;
 uniform sampler2D noisetex;
 uniform sampler2D specular;
@@ -110,6 +112,10 @@ uniform vec3 previousCameraPositionFract;
 uniform sampler2DShadow shadowtex1;
 uniform sampler2DShadow shadowtex0;
 
+uniform sampler2D sunTransmittanceLUTTex;
+uniform sampler2D multipleScatteringLUTTex;
+uniform sampler2D skyViewLUTTex;
+
 #ifdef DISTANT_HORIZONS
     uniform int dhRenderDistance;
 
@@ -120,4 +126,4 @@ uniform sampler2DShadow shadowtex0;
     uniform sampler2D dhDepthTex1;
 #endif
 
-#endif // UNIFORMS_INCLUDE
+#endif // UNIFORMS_GLSL

@@ -24,6 +24,8 @@
         color = texture(colortex0, texcoord);
 
         color.rgb = tonemap(color.rgb);
+
+        // color.rgb = skylightColor;
         color.rgb = pow(color.rgb, vec3(rcp(2.2)));
     }
 

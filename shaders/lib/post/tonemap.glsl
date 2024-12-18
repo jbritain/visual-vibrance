@@ -1,5 +1,5 @@
-#ifndef TONEMAP_INCLUDE
-#define TONEMAP_INCLUDE
+#ifndef TONEMAP_GLSL
+#define TONEMAP_GLSL
 
 vec3 jodieReinhardTonemap(vec3 v){
     float l = luminance(v);
@@ -9,4 +9,4 @@ vec3 jodieReinhardTonemap(vec3 v){
 
 #define tonemap jodieReinhardTonemap
 
-#endif // TONEMAP_INCLUDE
+#endif // TONEMAP_GLSL

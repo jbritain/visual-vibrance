@@ -14,6 +14,8 @@
 // ===========================================================================================
 
 #ifdef fsh
+    #include "/lib/atmosphere/sky/sky.glsl"
+
     in vec2 texcoord;
 
     layout(location = 0) out vec4 color;
@@ -23,7 +25,8 @@
 
         float depth = texture(depthtex0, texcoord).r;
         if(depth == 1.0){
-            color.rgb = vec3(0.0);    
+            vec3 viewPos = screenSpaceToViewSpace(vec3(texcoord, depth)); 
+            color.rgb = getSky(mat3(gbufferModelViewInverse) * normalize(viewPos), true);
         }
     }
 
