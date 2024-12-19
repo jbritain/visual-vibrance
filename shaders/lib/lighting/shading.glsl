@@ -24,6 +24,8 @@ vec3 getShadedColor(Material material, vec3 mappedNormal, vec3 faceNormal, vec2 
 
     color += diffuse * material.albedo;
 
+    color += material.emission * material.albedo * 16.0;
+
     return color;
 }
 

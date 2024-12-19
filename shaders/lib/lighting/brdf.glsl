@@ -105,7 +105,7 @@ vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos, f
 		Rs *= material.albedo;
 	}
 
-	vec3 Rd = material.albedo * (1.0 - F) * clamp01(NoL + scatter);
+	vec3 Rd = material.albedo * (1.0 - F) * clamp01(NoL + scatter) * (1.0 - 0.5 * material.sss);
 
 	return Rs + Rd;
 }

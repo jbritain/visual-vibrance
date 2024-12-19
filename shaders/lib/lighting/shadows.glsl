@@ -41,8 +41,8 @@ vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material m
     float sampleRadius = SHADOW_RADIUS;
 
     if(faceNoL <= 1e-6){
-        scatter = pow2(clamp01(faceNoL) * 0.5 + 0.5) * material.sss;
-        sampleRadius *= (1.0 + 7.0 * material.sss);
+      scatter = max0(1.0 - faceNoL) * material.sss * 0.5;
+      sampleRadius *= (1.0 + 8.0 * material.sss);
     }
 
     vec3 bias = getShadowBias(shadowClipPos.xyz, mat3(gbufferModelViewInverse) * faceNormal, faceNoL);

@@ -71,8 +71,8 @@
 
         if(materialID == MATERIAL_PLANTS || materialID == MATERIAL_LEAVES){
             material.sss = 1.0;
-            material.f0 = vec3(0.04);
-            material.roughness = 0.5;
+            // material.f0 = vec3(0.04);
+            // material.roughness = 0.5;
         }
 
         if(materialID == MATERIAL_WATER){
