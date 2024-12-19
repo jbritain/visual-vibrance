@@ -23,7 +23,12 @@
     void main() {
         color = texture(colortex0, texcoord);
 
+        vec3 bloom = texture(colortex2, texcoord).rgb;
+        color.rgb = mix(color.rgb, bloom, 0.01);
+
         color.rgb = tonemap(color.rgb);
+
+        
 
         // color.rgb = skylightColor;
         color.rgb = pow(color.rgb, vec3(rcp(2.2)));

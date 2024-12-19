@@ -1,7 +1,7 @@
 #ifndef HILLAIRE_COMMON_GLSL
 #define HILLAIRE_COMMON_GLSL
 
-const float sunAngularRadius = 0.53*PI/180.0;
+const float sunAngularRadius = PI/180.0;
 
 const vec3 sunIrradiance = vec3(1.0, 0.949, 0.937) * 12.6;
 const vec3 sunRadiance = sunIrradiance / sunAngularRadius;

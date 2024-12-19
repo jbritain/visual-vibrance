@@ -26,6 +26,7 @@ layout(std430, binding = 0) buffer lightColors {
 // BUFFER FORMATS
 /*
     const int colortex0Format = RGB16F;
+    const int colortex2Format = RGB16F;
 */
 
 #endif // COMMON_GLSL

@@ -40,7 +40,7 @@ vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material m
 
     float sampleRadius = SHADOW_RADIUS;
 
-    if(faceNoL <= 1e-6){
+    if(faceNoL <= 1e-6 && material.sss > 1e-6){
       scatter = max0(1.0 - faceNoL) * material.sss * 0.5;
       sampleRadius *= (1.0 + 8.0 * material.sss);
     }
@@ -61,15 +61,27 @@ vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material m
 	);
 
     vec3 shadow = vec3(0.0);
-    float noise = interleavedGradientNoise(floor(gl_FragCoord.xy), frameCounter);
     
+    
+	if(distFade < 1.0){
+		float noise = interleavedGradientNoise(floor(gl_FragCoord.xy), frameCounter);
 
-    for (int i = 0; i < SHADOW_SAMPLES; i++) {
-        vec3 offset = vec3(vogelDiscSample(i, SHADOW_SAMPLES, noise), 0.0) * sampleRadius;
-        shadow += sampleShadow(shadowScreenPos + offset);
-    }
+		// scatter falloff
+		float scatterSampleAngle = noise * 2 * PI;
+		vec2 scatterSampleOffset = vec2(sin(scatterSampleAngle), cos(scatterSampleAngle)) * (SHADOW_RADIUS / SHADOW_SAMPLES);
+		float blockerDepthDifference = max0(shadowScreenPos.z - texture(shadowtex0, shadowScreenPos.xy + scatterSampleOffset).r);
+		float blockerDistance = blockerDepthDifference * 512;
 
-    shadow /= float(SHADOW_SAMPLES);
+		scatter *= 1.0 - smoothstep(blockerDistance, 0.0, 2.0);
+
+		for (int i = 0; i < SHADOW_SAMPLES; i++) {
+			vec3 offset = vec3(vogelDiscSample(i, SHADOW_SAMPLES, noise), 0.0) * sampleRadius;
+			shadow += sampleShadow(shadowScreenPos + offset);
+		}
+
+		shadow /= float(SHADOW_SAMPLES);
+	}
+
 
     scatter -= scatter * 0.75 * clamp01(distFade);
     return mix(shadow, vec3(fakeShadow), clamp01(distFade));

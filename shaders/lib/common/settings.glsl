@@ -12,4 +12,6 @@ const bool shadowHardwareFiltering = true;
 
 #define WATER_ABSORPTION vec3(0.3, 0.09, 0.04) * 3.0
 
+#define BLOOM_RADIUS 1.0
+
 #endif // SETTINGS_GLSL
