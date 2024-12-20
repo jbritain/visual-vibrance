@@ -65,15 +65,23 @@
         albedo.rgb = pow(albedo.rgb, vec3(2.2));
 
         vec3 mappedNormal = getMappedNormal(texcoord);
+        
+        // if((materialID == MATERIAL_LEAVES) && albedo.g > albedo.r){
+        //     albedo.rgb *= 0.5;
+
+        // }
 
         vec4 specularData = texture(specular, texcoord);
         Material material = materialFromSpecularMap(albedo.rgb, specularData);
 
         if(materialID == MATERIAL_PLANTS || materialID == MATERIAL_LEAVES){
             material.sss = 1.0;
-            // material.f0 = vec3(0.04);
-            // material.roughness = 0.5;
+            material.f0 = vec3(0.04);
+            material.roughness = 0.5;
         }
+
+
+
 
         if(materialID == MATERIAL_WATER){
             material.f0 = vec3(0.02);

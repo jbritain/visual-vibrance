@@ -19,6 +19,7 @@
     #include "/lib/lighting/shading.glsl"
     #include "/lib/waveNormals.glsl"
     #include "/lib/util/packing.glsl"
+    #include "/lib/waterFog.glsl"
 
     in vec2 texcoord;
 
@@ -40,18 +41,13 @@
         vec3 translucentViewPos = screenSpaceToViewSpace(vec3(texcoord, translucentDepth));
         vec3 opaqueViewPos = screenSpaceToViewSpace(vec3(texcoord, opaqueDepth));
 
+        vec3 viewDir = normalize(translucentViewPos);
+
         vec3 translucentFeetPlayerPos = (gbufferModelViewInverse * vec4(translucentViewPos, 1.0)).xyz;
 
         bool isWater = materialID == MATERIAL_WATER;
         bool inWater = isEyeInWater == 1;
 
-        // water fog when we're not in water
-        if (!inWater && isWater){
-            float distanceThroughWater = distance(opaqueViewPos, translucentViewPos);
-            color.rgb *= exp(-distanceThroughWater * WATER_ABSORPTION);
-        }
-
-        // SSR
         if(isWater){
             Material material = Material(
                 vec3(0.0),
@@ -64,10 +60,24 @@
                 NO_METAL
             );
 
-            normal = mat3(gbufferModelView) * waveNormal(translucentFeetPlayerPos.xz + cameraPosition.xz, mat3(gbufferModelViewInverse) * normal);
+            vec3 waveNormal = mat3(gbufferModelView) * waveNormal(translucentFeetPlayerPos.xz + cameraPosition.xz, mat3(gbufferModelViewInverse) * normal);
 
+            // refraction
+            vec3 refractedDir = normalize(refract(viewDir, normal - waveNormal, inWater ? 1.33 : rcp(1.33)));
+            vec3 refractedViewPos = translucentViewPos + refractedDir * distance(translucentViewPos, opaqueViewPos);
+            vec3 refractedPos = viewSpaceToScreenSpace(refractedViewPos);
+            if(clamp01(refractedPos.xy) == refractedPos.xy){
+                color = texture(colortex0, refractedPos.xy);
+            } 
+
+            // water fog when we're not in water
+            if (!inWater){
+                color.rgb = waterFog(color.rgb, translucentViewPos, opaqueViewPos);
+            }
+
+            // SSR
             float jitter = interleavedGradientNoise(floor(gl_FragCoord.xy), frameCounter);
-            vec3 reflectedDir = reflect(normalize(translucentViewPos), normal);
+            vec3 reflectedDir = reflect(viewDir, waveNormal);
             vec3 reflectedPos;
             vec3 reflectedColor;
 
@@ -79,14 +89,12 @@
                 shadow = vec3(0.0);
             } else {
                 reflectedColor = getSky(mat3(gbufferModelViewInverse) * reflectedDir, false) * skyLightmap;
-                shadow = getShadowing(translucentFeetPlayerPos, normal, vec2(skyLightmap), material, scatter);
+                shadow = getShadowing(translucentFeetPlayerPos, waveNormal, vec2(skyLightmap), material, scatter);
             }
 
+            reflectedColor += max0(brdf(material, waveNormal, waveNormal, translucentViewPos, scatter) * sunlightColor * shadow);
 
-
-            reflectedColor += max0(brdf(material, normal, normal, translucentViewPos, scatter) * sunlightColor * shadow);
-
-            vec3 fresnel = schlick(material, dot(normal, normalize(-translucentViewPos)));
+            vec3 fresnel = schlick(material, dot(waveNormal, normalize(-translucentViewPos)));
 
             color.rgb = mix(color.rgb, reflectedColor, fresnel);
         }
@@ -95,11 +103,10 @@
         if (inWater){
             float distanceThroughWater;
             if(isWater){
-                distanceThroughWater = length(translucentViewPos);
+                color.rgb = waterFog(color.rgb, vec3(0.0), translucentViewPos);
             } else {
-                distanceThroughWater = length(opaqueViewPos);
+               color.rgb = waterFog(color.rgb, vec3(0.0), opaqueViewPos);
             }
-            color.rgb *= exp(-distanceThroughWater * WATER_ABSORPTION);
         }
         
         

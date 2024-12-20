@@ -101,11 +101,13 @@ vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos, f
 
 	vec3 Rs = (F * D * G) / (4.0 * NoV + 1e-6);
 
+	Rs = min(Rs, vec3(500.0)); // prevent specular blowing bloom out
+
 	if(material.metalID != NO_METAL){
 		Rs *= material.albedo;
 	}
 
-	vec3 Rd = material.albedo * (1.0 - F) * clamp01(NoL + scatter) * (1.0 - 0.5 * material.sss);
+	vec3 Rd = material.albedo * (1.0 - F) * clamp01(NoL + scatter);
 
 	return Rs + Rd;
 }

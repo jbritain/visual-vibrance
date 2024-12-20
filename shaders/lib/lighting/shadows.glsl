@@ -41,8 +41,9 @@ vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material m
     float sampleRadius = SHADOW_RADIUS;
 
     if(faceNoL <= 1e-6 && material.sss > 1e-6){
-      scatter = max0(1.0 - faceNoL) * material.sss * 0.5;
-      sampleRadius *= (1.0 + 8.0 * material.sss);
+      scatter = max0(1.0 - faceNoL) * material.sss;
+      sampleRadius *= (1.0 + 7.0 * material.sss);
+      scatter *= henyeyGreenstein(0.4, dot(normalize(feetPlayerPos), worldSunDir));
     }
 
     vec3 bias = getShadowBias(shadowClipPos.xyz, mat3(gbufferModelViewInverse) * faceNormal, faceNoL);
@@ -72,7 +73,8 @@ vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material m
 		float blockerDepthDifference = max0(shadowScreenPos.z - texture(shadowtex0, shadowScreenPos.xy + scatterSampleOffset).r);
 		float blockerDistance = blockerDepthDifference * 512;
 
-		scatter *= 1.0 - smoothstep(blockerDistance, 0.0, 2.0);
+		scatter *= mix(1.0 - smoothstep(blockerDistance, 0.0, 2.0), 1.0, distFade);
+    
 
 		for (int i = 0; i < SHADOW_SAMPLES; i++) {
 			vec3 offset = vec3(vogelDiscSample(i, SHADOW_SAMPLES, noise), 0.0) * sampleRadius;

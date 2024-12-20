@@ -33,6 +33,7 @@ uniform int isEyeInWater;
 uniform int moonPhase;
 uniform int worldTime;
 uniform int worldDay;
+uniform int renderStage;
 
 uniform float aspectRatio;
 uniform float blindness;
@@ -119,6 +120,8 @@ uniform sampler2D shadowcolor0;
 uniform sampler2D sunTransmittanceLUTTex;
 uniform sampler2D multipleScatteringLUTTex;
 uniform sampler2D skyViewLUTTex;
+
+uniform sampler2D perlinNoiseTex;
 
 #ifdef DISTANT_HORIZONS
     uniform int dhRenderDistance;

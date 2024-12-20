@@ -53,16 +53,16 @@
             discard;
         }
 
-        const float avgWaterAbsorption = sum3(WATER_ABSORPTION) / 3.0;
+        // const float avgWaterAbsorption = sum3(WATER_ABSORPTION) / 3.0;
 
-        if(materialID == MATERIAL_WATER){
-            float opaqueDepth = texture(shadowtex1, gl_FragCoord.xy / shadowMapResolution).r;
-            float opaqueDistance = getShadowDistanceZ(opaqueDepth); // how far away from the sun is the opaque fragment shadowed by the water?
-            float waterDepth = abs(shadowViewPos.z - opaqueDistance);
+        // if(materialID == MATERIAL_WATER){
+        //     float opaqueDepth = texture(shadowtex1, gl_FragCoord.xy / shadowMapResolution).r;
+        //     float opaqueDistance = getShadowDistanceZ(opaqueDepth); // how far away from the sun is the opaque fragment shadowed by the water?
+        //     float waterDepth = abs(shadowViewPos.z - opaqueDistance);
 
-            color.rgb = 1.0 - WATER_ABSORPTION;
-            color.a = 1.0 - (exp(-avgWaterAbsorption * waterDepth));
-        }
+        //     color.rgb = 1.0 - WATER_ABSORPTION;
+        //     color.a = 1.0 - (exp(-avgWaterAbsorption * waterDepth));
+        // }
 
         color.rgb = pow(color.rgb, vec3(2.2));
     }

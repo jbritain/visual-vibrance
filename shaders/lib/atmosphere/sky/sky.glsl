@@ -39,7 +39,7 @@ vec3 sun(vec3 rayDir){
     return vec3(0.0);
 }
 
-vec3 getSky(vec3 rayDir, bool includeSun){
+vec3 getSky(vec3 color, vec3 rayDir, bool includeSun){
     vec3 lum = getValFromSkyLUT(rayDir);
 
     if (!includeSun) return lum;
@@ -53,10 +53,20 @@ vec3 getSky(vec3 rayDir, bool includeSun){
             // If the sun value is applied to this pixel, we need to calculate the transmittance to obscure it.
             sunLum *= getValFromTLUT(sunTransmittanceLUTTex, tLUTRes, atmospherePos, worldSunDir);
         }
+    } else {
+        if (color != vec3(0.0)){
+            lum += color * getValFromTLUT(sunTransmittanceLUTTex, tLUTRes, atmospherePos, rayDir);
+        }
     }
 
     lum += sunLum;
     return lum;
 }
+
+vec3 getSky(vec3 rayDir, bool includeSun){
+    return getSky(vec3(0.0), rayDir, includeSun);
+}
+
+
 
 #endif // HILLAIRE_GLSL
