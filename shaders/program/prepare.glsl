@@ -88,7 +88,7 @@ void main()
     imageStore(skyViewLUT, texelCoord, vec4(lum, 1.0));
 
     if(texelCoord == ivec2(0.0)){
-        sunlightColor = getValFromTLUT(sunTransmittanceLUTTex, tLUTRes, atmospherePos, worldSunDir) * sunIrradiance;
+        sunlightColor = sunDir == lightDir ? getValFromTLUT(sunTransmittanceLUTTex, tLUTRes, atmospherePos, worldSunDir) * sunIrradiance : getValFromTLUT(sunTransmittanceLUTTex, tLUTRes, atmospherePos, -worldSunDir) * moonIrradiance;
         skylightColor = vec3(0.0);
     }
 }

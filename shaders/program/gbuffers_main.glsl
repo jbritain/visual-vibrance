@@ -33,6 +33,7 @@
 #ifdef fsh
     #include "/lib/lighting/shading.glsl"
     #include "/lib/util/packing.glsl"
+    #include "/lib/lighting/directionalLightmap.glsl"
 
     in vec2 lmcoord;
     in vec2 texcoord;
@@ -56,6 +57,7 @@
     void main() {
         vec2 lightmap = (lmcoord * 33.05 / 32.0) - (1.05 / 32.0);
 
+
         vec4 albedo = texture(gtexture, texcoord) * glcolor;
 
         if (albedo.a < alphaTestRef) {
@@ -65,6 +67,8 @@
         albedo.rgb = pow(albedo.rgb, vec3(2.2));
 
         vec3 mappedNormal = getMappedNormal(texcoord);
+
+        
         
         // if((materialID == MATERIAL_LEAVES) && albedo.g > albedo.r){
         //     albedo.rgb *= 0.5;
@@ -89,7 +93,7 @@
         }
 
 
-
+        applyDirectionalLightmap(lightmap, viewPos, mappedNormal, tbnMatrix, material.sss);
 
         if(materialID == MATERIAL_WATER){
             color.a = 0.0;

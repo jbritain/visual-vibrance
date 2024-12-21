@@ -5,12 +5,13 @@ const float sunAngularRadius = PI/180.0;
 
 const vec3 sunIrradiance = vec3(1.0, 0.949, 0.937) * 12.6;
 const vec3 sunRadiance = sunIrradiance / sunAngularRadius;
+const vec3 moonIrradiance = vec3(0.5, 0.5, 1.0) * 0.5;
 
 // Units are in megameters.
 const float groundRadiusMM = 6.360;
 const float atmosphereRadiusMM = 6.460;
 
-vec3 atmospherePos = vec3(0.0, groundRadiusMM + (cameraPosition.y + 200) * 1e-6, 0.0);
+vec3 atmospherePos = vec3(0.0, groundRadiusMM + (cameraPosition.y + 1000) * 1e-6, 0.0);
 
 const vec2 tLUTRes = vec2(256.0, 64.0);
 const vec2 msLUTRes = vec2(32.0, 32.0);
