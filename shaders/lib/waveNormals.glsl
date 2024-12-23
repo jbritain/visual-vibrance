@@ -52,6 +52,7 @@ float waveHeight(vec2 position) {
 		// add some kind of random value to make next wave look random too
 		iter += 1232.399963;
 	}
+	
 	// calculate and return
 	return sumOfValues / sumOfWeights;
 }

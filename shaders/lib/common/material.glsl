@@ -66,6 +66,7 @@ struct Material {
   float sss;
   float porosity;
   uint metalID;
+	float ao;
 };
 
 Material materialFromSpecularMap(vec3 albedo, vec4 specularData){

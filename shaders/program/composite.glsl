@@ -20,6 +20,8 @@
     #include "/lib/waveNormals.glsl"
     #include "/lib/util/packing.glsl"
     #include "/lib/waterFog.glsl"
+    #include "/lib/atmosphere/fog.glsl"
+    #include "/lib/atmosphere/clouds.glsl"
 
     in vec2 texcoord;
 
@@ -57,7 +59,8 @@
                 0.0,
                 0.0,
                 0.0,
-                NO_METAL
+                NO_METAL,
+                0.0
             );
 
             vec3 waveNormal = mat3(gbufferModelView) * waveNormal(translucentFeetPlayerPos.xz + cameraPosition.xz, mat3(gbufferModelViewInverse) * normal);
@@ -81,18 +84,20 @@
             vec3 reflectedPos;
             vec3 reflectedColor;
 
-            vec3 shadow;
             float scatter = 0.0;
 
             if(rayIntersects(translucentViewPos, reflectedDir, 4, jitter, true, reflectedPos)){
                 reflectedColor = texture(colortex0, reflectedPos.xy).rgb;
-                shadow = vec3(0.0);
+                reflectedColor = atmosphericFog(reflectedColor, screenSpaceToViewSpace(reflectedPos));
             } else {
-                reflectedColor = getSky(mat3(gbufferModelViewInverse) * reflectedDir, false) * skyLightmap;
-                shadow = getShadowing(translucentFeetPlayerPos, waveNormal, vec2(skyLightmap), material, scatter);
+                vec3 worldReflectedDir = mat3(gbufferModelViewInverse) * reflectedDir;
+                reflectedColor = getSky(worldReflectedDir, false) * skyLightmap;
+                vec3 shadow = getShadowing(translucentFeetPlayerPos, waveNormal, vec2(skyLightmap), material, scatter);
+                reflectedColor += max0(brdf(material, waveNormal, waveNormal, translucentViewPos, scatter) * sunlightColor * shadow);
+                reflectedColor = getClouds(reflectedColor, worldReflectedDir);
             }
 
-            reflectedColor += max0(brdf(material, waveNormal, waveNormal, translucentViewPos, scatter) * sunlightColor * shadow);
+            
 
             vec3 fresnel = schlick(material, dot(waveNormal, normalize(-translucentViewPos)));
 
@@ -107,13 +112,7 @@
             } else {
                color.rgb = waterFog(color.rgb, vec3(0.0), opaqueViewPos);
             }
-        }
-        
-        
-        
-
-
-        
+        }        
     }
 
 #endif

@@ -56,6 +56,10 @@ uniform float playerMood;
 
 uniform ivec2 atlasSize;
 uniform ivec2 eyeBrightness;
+uniform ivec2 eyeBrightnessSmooth;
+
+vec2 EB = vec2(eyeBrightness) / 240.0;
+vec2 EBS = vec2(eyeBrightnessSmooth) / 240.0;
 
 uniform vec3 cameraPosition;
 uniform vec3 fogColor;

@@ -5,11 +5,16 @@
 #define WATER_SCATTERING vec3(0.01, 0.06, 0.05)
 #define WATER_DENSITY 1.0
 
-vec3 waterFog(vec3 color, vec3 a, vec3 b){
-  vec3 transmittance = exp(-WATER_ABSORPTION * WATER_DENSITY * distance(a, b));
+const vec3 waterExtinction = clamp01(WATER_ABSORPTION + WATER_SCATTERING);
 
-  vec3 radiance = sunlightColor + skylightColor;
-  vec3 scatter = (radiance - radiance * clamp01(transmittance)) * transmittance / WATER_SCATTERING;
+vec3 waterFog(vec3 color, vec3 a, vec3 b){
+  vec3 transmittance = exp(-waterExtinction * WATER_DENSITY * distance(a, b));
+
+  vec3 radiance = (sunlightColor + skylightColor) * EB.y;
+  vec3 integScatter = (radiance - radiance * clamp01(transmittance)) / waterExtinction;
+  vec3 scatter = integScatter * transmittance;
+
+  scatter *= getMiePhase(dot(normalize(b - a), lightDir));
 
   return color * transmittance;// + scatter;
   // color *= fog(vec3(0.0, cameraPosition.y, 0.0), mat3(gbufferModelViewInverse) * normalize(b - a), worldLightDir, distance(a, b));

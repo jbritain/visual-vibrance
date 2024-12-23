@@ -15,6 +15,7 @@
 
 #ifdef fsh
     #include "/lib/atmosphere/sky/sky.glsl"
+    #include "/lib/atmosphere/fog.glsl"
 
     in vec2 texcoord;
 
@@ -24,16 +25,15 @@
     void main() {
         color = texture(colortex0, texcoord);
         float depth = texture(depthtex0, texcoord).r;
-        if(depth == 1.0){
+        if(depth == 1.0 || isEyeInWater == 1){
             return;
         }
 
         vec3 viewPos = screenSpaceToViewSpace(vec3(texcoord, depth));
-        vec3 feetPlayerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
-        vec3 viewDir = normalize(viewPos);
-        vec3 worldDir = normalize(feetPlayerPos);
+
+        color.rgb = atmosphericFog(color.rgb, viewPos);
         
-        color.rgb = mix(color.rgb, getSky(worldDir, false), smoothstep(0.8 * far, far, length(viewPos)));
+        
     }
 
 #endif

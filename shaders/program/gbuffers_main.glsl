@@ -78,14 +78,15 @@
         vec4 specularData = texture(specular, texcoord);
         Material material = materialFromSpecularMap(albedo.rgb, specularData);
 
+        #ifdef GLOWING
+        material.emission = 1.0;
+        #endif
+
         if(materialID == MATERIAL_PLANTS || materialID == MATERIAL_LEAVES){
             material.sss = 1.0;
             material.f0 = vec3(0.04);
             material.roughness = 0.5;
         }
-
-
-
 
         if(materialID == MATERIAL_WATER){
             material.f0 = vec3(0.02);

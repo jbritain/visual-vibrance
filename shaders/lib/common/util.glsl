@@ -53,6 +53,10 @@ float henyeyGreenstein(float g, float costh)
   return (1.0 - g * g) / (4.0 * PI * pow(1.0 + g * g - 2.0 * g * costh, 3.0/2.0));
 }
 
+float dualHenyeyGreenstein(float g1, float g2, float costh, float weight) {
+  return mix(henyeyGreenstein(g1, costh), henyeyGreenstein(g2, costh), weight);
+}
+
 vec3 hsv(vec3 c) {
 	const vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
 	vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
