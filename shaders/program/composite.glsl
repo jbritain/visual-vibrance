@@ -63,15 +63,19 @@
                 0.0
             );
 
-            vec3 waveNormal = mat3(gbufferModelView) * waveNormal(translucentFeetPlayerPos.xz + cameraPosition.xz, mat3(gbufferModelViewInverse) * normal);
+            vec3 waveNormal = mat3(gbufferModelView) * waveNormal(translucentFeetPlayerPos.xz + cameraPosition.xz, mat3(gbufferModelViewInverse) * normal, clamp01(sin(abs(normalize(translucentFeetPlayerPos).y) * PI / 2.0)));
 
             // refraction
+            #ifdef REFRACTION
             vec3 refractedDir = normalize(refract(viewDir, normal - waveNormal, inWater ? 1.33 : rcp(1.33)));
             vec3 refractedViewPos = translucentViewPos + refractedDir * distance(translucentViewPos, opaqueViewPos);
             vec3 refractedPos = viewSpaceToScreenSpace(refractedViewPos);
             if(clamp01(refractedPos.xy) == refractedPos.xy){
                 color = texture(colortex0, refractedPos.xy);
+                opaqueDepth = texture(depthtex2, refractedPos.xy).r;
+                opaqueViewPos = screenSpaceToViewSpace(vec3(texcoord, opaqueDepth));
             } 
+            #endif
 
             // water fog when we're not in water
             if (!inWater){
@@ -86,7 +90,13 @@
 
             float scatter = 0.0;
 
-            if(rayIntersects(translucentViewPos, reflectedDir, 4, jitter, true, reflectedPos)){
+            #ifdef SCREEN_SPACE_REFLECTIONS
+            bool doReflections = true;
+            #else
+            bool doReflections = false;
+            #endif
+
+            if(doReflections && rayIntersects(translucentViewPos, reflectedDir, 4, jitter, true, reflectedPos)){
                 reflectedColor = texture(colortex0, reflectedPos.xy).rgb;
                 reflectedColor = atmosphericFog(reflectedColor, screenSpaceToViewSpace(reflectedPos));
             } else {
@@ -94,7 +104,7 @@
                 reflectedColor = getSky(worldReflectedDir, false) * skyLightmap;
                 vec3 shadow = getShadowing(translucentFeetPlayerPos, waveNormal, vec2(skyLightmap), material, scatter);
                 reflectedColor += max0(brdf(material, waveNormal, waveNormal, translucentViewPos, scatter) * sunlightColor * shadow);
-                reflectedColor = getClouds(reflectedColor, worldReflectedDir);
+                reflectedColor = mix(reflectedColor, getClouds(reflectedColor, worldReflectedDir), skyLightmap);
             }
 
             

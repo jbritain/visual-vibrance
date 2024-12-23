@@ -23,8 +23,10 @@
     void main() {
         color = texture(colortex0, texcoord);
 
+        #ifdef BLOOM
         vec3 bloom = texture(colortex2, texcoord).rgb;
-        color.rgb = mix(color.rgb, bloom, 0.01);
+        color.rgb = mix(color.rgb, bloom, 0.01 * BLOOM_STRENGTH);
+        #endif
 
         color.rgb = tonemap(color.rgb);
 

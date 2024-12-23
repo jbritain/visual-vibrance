@@ -23,6 +23,7 @@
         tbnMatrix[1] = normalize(cross(tbnMatrix[0], tbnMatrix[2]) * at_tangent.w);
 
         viewPos = (gl_ModelViewMatrix * gl_Vertex).xyz;
+
         gl_Position = gbufferProjection * vec4(viewPos, 1.0);
     }
 
@@ -56,6 +57,12 @@
 
     void main() {
         vec2 lightmap = (lmcoord * 33.05 / 32.0) - (1.05 / 32.0);
+
+        #ifdef DYNAMIC_HANDLIGHT
+            vec3 playerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
+            float dist = length(playerPos);
+            lightmap.x = max(lightmap.x, (1.0 - clamp01(smoothstep(0.0, 15.0, dist))) * max(heldBlockLightValue, heldBlockLightValue2) / 15.0);
+        #endif
 
 
         vec4 albedo = texture(gtexture, texcoord) * glcolor;
@@ -93,14 +100,17 @@
             material.roughness = 0.0;
         }
 
-
+        #ifdef DIRECTIONAL_LIGHTMAPS
         applyDirectionalLightmap(lightmap, viewPos, mappedNormal, tbnMatrix, material.sss);
+        #endif
 
         if(materialID == MATERIAL_WATER){
             color.a = 0.0;
         }  else {
             color.rgb = getShadedColor(material, mappedNormal, tbnMatrix[2], lightmap, viewPos);
             color.a = albedo.a;
+            float fresnel = maxVec3(schlick(material, dot(mappedNormal, normalize(-viewPos))));
+            color.a *= (1.0 - fresnel);
         }
 
         outData1.xy = encodeNormal(mat3(gbufferModelViewInverse) * mappedNormal);

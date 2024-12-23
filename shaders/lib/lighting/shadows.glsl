@@ -34,10 +34,10 @@ vec3 sampleShadow(vec3 shadowScreenPos){
 vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material material, out float scatter){
     scatter = 0.0;
 
-    vec4 shadowClipPos = getShadowClipPos(feetPlayerPos);
+    float fakeShadow = clamp01(smoothstep(13.5 / 15.0, 14.5 / 15.0, lightmap.y));
+
 
     float faceNoL = dot(faceNormal, lightDir);
-
     float sampleRadius = SHADOW_RADIUS;
 
     if(faceNoL <= 1e-6 && material.sss > 1e-6){
@@ -46,9 +46,16 @@ vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material m
       scatter *= henyeyGreenstein(0.4, dot(normalize(feetPlayerPos), worldSunDir));
     }
 
+    #ifndef SHADOWS
+    return vec3(fakeShadow);
+    #else
+
+    vec4 shadowClipPos = getShadowClipPos(feetPlayerPos);
+
+
     vec3 bias = getShadowBias(shadowClipPos.xyz, mat3(gbufferModelViewInverse) * faceNormal, faceNoL);
     shadowClipPos.xyz += bias;
-    float fakeShadow = clamp01(smoothstep(13.5 / 15.0, 14.5 / 15.0, lightmap.y));
+    
     vec3 shadowScreenPos = getShadowScreenPos(shadowClipPos);
 
     float distFade = pow5(
@@ -87,6 +94,8 @@ vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material m
 
     scatter -= scatter * 0.75 * clamp01(distFade);
     return mix(shadow, vec3(fakeShadow), clamp01(distFade));
+  
+  #endif
 }
 
 #endif // SHADOWS_GLSL

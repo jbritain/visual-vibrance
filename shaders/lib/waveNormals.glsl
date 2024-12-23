@@ -59,15 +59,15 @@ float waveHeight(vec2 position) {
 
 // Calculate normal at point by calculating the height at the pos and 2 additional points very close to pos
 // returned value is in world space
-vec3 waveNormal(vec2 pos, vec3 worldFaceNormal) {
+vec3 waveNormal(vec2 pos, vec3 worldFaceNormal, float heightmapFactor) {
 	vec2 ex = vec2(WAVE_E, 0);
-	float H = waveHeight(pos.xy) * WAVE_DEPTH;
+	float H = waveHeight(pos.xy) * WAVE_DEPTH * heightmapFactor;
 
 	vec3 a = vec3(pos.x, H, pos.y);
 	vec3 waveNormal = normalize(
 		cross(
-			a - vec3(pos.x - WAVE_E, waveHeight(pos.xy - ex.xy) * WAVE_DEPTH, pos.y), 
-			a - vec3(pos.x, waveHeight(pos.xy + ex.yx) * WAVE_DEPTH, pos.y + WAVE_E)
+			a - vec3(pos.x - WAVE_E, waveHeight(pos.xy - ex.xy) * WAVE_DEPTH * heightmapFactor, pos.y), 
+			a - vec3(pos.x, waveHeight(pos.xy + ex.yx) * WAVE_DEPTH * heightmapFactor, pos.y + WAVE_E)
 		)
 	);
 

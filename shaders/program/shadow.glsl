@@ -14,7 +14,7 @@
     out vec3 feetPlayerPos;
     out vec3 shadowViewPos;
 
-    void main() {
+    void main() {        
         texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
         lmcoord  = (gl_TextureMatrix[1] * gl_MultiTexCoord1).xy;
         glcolor = gl_Color;
@@ -35,6 +35,7 @@
 
 #ifdef fsh
     #include "/lib/lighting/shading.glsl"
+    #include "/lib/waterFog.glsl"
 
     in vec2 lmcoord;
     in vec2 texcoord;
@@ -53,16 +54,16 @@
             discard;
         }
 
-        // const float avgWaterAbsorption = sum3(WATER_ABSORPTION) / 3.0;
+        const float avgWaterExtinction = sum3(waterExtinction) / 3.0;
 
-        // if(materialID == MATERIAL_WATER){
-        //     float opaqueDepth = texture(shadowtex1, gl_FragCoord.xy / shadowMapResolution).r;
-        //     float opaqueDistance = getShadowDistanceZ(opaqueDepth); // how far away from the sun is the opaque fragment shadowed by the water?
-        //     float waterDepth = abs(shadowViewPos.z - opaqueDistance);
+        if(materialID == MATERIAL_WATER){
+            float opaqueDepth = texture(shadowtex1, gl_FragCoord.xy / shadowMapResolution).r;
+            float opaqueDistance = getShadowDistanceZ(opaqueDepth); // how far away from the sun is the opaque fragment shadowed by the water?
+            float waterDepth = abs(shadowViewPos.z - opaqueDistance);
 
-        //     color.rgb = 1.0 - WATER_ABSORPTION;
-        //     color.a = 1.0 - (exp(-avgWaterAbsorption * waterDepth));
-        // }
+            color.rgb = 1.0 - waterExtinction;
+            color.a = 1.0 - (exp(-avgWaterExtinction * waterDepth));
+        }
 
         color.rgb = pow(color.rgb, vec3(2.2));
     }

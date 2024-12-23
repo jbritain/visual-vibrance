@@ -1,0 +1,104 @@
+option.GLIMMER_SHADERS=Glimmer Shaders
+value.GLIMMER_SHADERS.0=By jbritain
+value.GLIMMER_SHADERS.1=By jbritain
+
+option.WEBSITE=https://
+value.WEBSITE.0=jbritain.net
+value.WEBSITE.1=jbritain.net
+
+screen.LIGHTING=Lighting & Shadows
+screen.ATMOSPHERICS=Sky & Fog
+screen.WATER=Water
+screen.POST=Post-Processing
+
+option.SHADOWS=Shadows
+
+option.shadowDistance=Shadow Distance
+option.shadowDistance.comment=The radius around the player in which things can cast shadows. §cHigh performance impact!
+value.shadowDistance.16.0=1 Chunk
+value.shadowDistance.32.0=2 Chunks    
+value.shadowDistance.48.0=3 Chunks    
+value.shadowDistance.64.0=4 Chunks    
+value.shadowDistance.80.0=5 Chunks    
+value.shadowDistance.96.0=6 Chunks    
+value.shadowDistance.112.0=7 Chunks   
+value.shadowDistance.128.0=8 Chunks   
+value.shadowDistance.144.0=9 Chunks   
+value.shadowDistance.160.0=10 Chunks  
+value.shadowDistance.176.0=11 Chunks  
+value.shadowDistance.192.0=12 Chunks  
+value.shadowDistance.208.0=13 Chunks  
+value.shadowDistance.224.0=14 Chunks  
+value.shadowDistance.240.0=15 Chunks  
+value.shadowDistance.256.0=16 Chunks  
+value.shadowDistance.272.0=17 Chunks  
+value.shadowDistance.288.0=18 Chunks  
+value.shadowDistance.304.0=19 Chunks  
+value.shadowDistance.320.0=20 Chunks  
+value.shadowDistance.336.0=21 Chunks  
+value.shadowDistance.352.0=22 Chunks  
+value.shadowDistance.368.0=23 Chunks  
+value.shadowDistance.384.0=24 Chunks  
+value.shadowDistance.400.0=25 Chunks  
+value.shadowDistance.416.0=26 Chunks  
+value.shadowDistance.432.0=27 Chunks  
+value.shadowDistance.448.0=28 Chunks  
+value.shadowDistance.464.0=29 Chunks  
+value.shadowDistance.480.0=30 Chunks  
+value.shadowDistance.496.0=31 Chunks  
+value.shadowDistance.512.0=32 Chunks
+
+option.shadowMapResolution=Shadow Quality
+option.shadowMapResolution.comment=The resolution of the shadow map. §cHigh performance impact!
+value.shadowMapResolution.128=128x
+value.shadowMapResolution.256=256x
+value.shadowMapResolution.512=512x
+value.shadowMapResolution.1024=1024x
+value.shadowMapResolution.2048=2048x
+value.shadowMapResolution.4096=4096x
+value.shadowMapResolution.8192=8192x
+
+option.SHADOW_SAMPLES=Shadow Samples
+option.SHADOW_SAMPLES.comment=The number of shadow samples taken per pixel. Higher values reduce noise. §cHigh performance impact!
+
+option.sunPathRotation=Sun Angle
+option.sunPathRotation.comment=The angle of the path the sun and moon follow through the sky. §9No performance impact!
+
+option.DIRECTIONAL_LIGHTMAPS=Directional Lightmapping
+option.DIRECTIONAL_LIGHTMAPS.comment=Attempts to guess which direction block and skylight is coming from. Works best with a resource pack that has normal maps. §2Imperceptible performance impact.
+
+option.DYNAMIC_HANDLIGHT=Dynamic Handlight
+option.DYNAMIC_HANDLIGHT.comment=Illuminates the area around the player when a light source is held. §2Imperceptible performance impact.
+
+option.PBR_MODE=PBR Support
+option.PBR_MODE.comment=LabPBR requires a supported resource pack. §6Moderate performance impact.
+value.PBR_MODE.0=Off
+value.PBR_MODE.1=LabPBR 1.3
+
+option.CLOUDS=Clouds
+option.CLOUDS.comment=§aMinimal performance impact.
+
+option.BORDER_FOG=Border Fog
+option.BORDER_FOG.comment=Fades terrain into the sky towards the edge of the render distance. §2Imperceptible performance impact.
+
+option.SCREEN_SPACE_REFLECTIONS=Screen-Space Reflections
+option.SCREEN_SPACE_REFLECTIONS.comment=Adds reflections to water. §cHigh performance impact!
+
+option.REFRACTION=Refraction
+option.REFRACTION.comment=Bends light as it enters or leaves water. §aMinimal performance impact.
+
+option.BLOOM=Bloom
+option.BLOOM.comment=Makes bright objects appear to glow. §6Moderate performance impact.
+
+option.BLOOM_RADIUS=Bloom Radius
+option.BLOOM_RADIUS.comment=How far across the screen bloom will spread out. §9No performance impact!
+
+option.BLOOM_STRENGTH=Bloom Strength
+option.BLOOM_STRENGTH.comment=How much effect the bloom has on the final colour of the screen. §9No performance impact!
+
+option.tonemap=Tonemap Operator
+option.tonemap.comment=How the final colour is graded.§2Imperceptible performance impact.
+value.tonemap.jodieReinhardTonemap=Jodie-Reinhard
+value.tonemap.uncharted2FilmicTonemap=Hable
+value.tonemap.hejlBurgessTonemap=Hejl-Burgess
+value.tonemap.ACESTonemap=ACES Approx.

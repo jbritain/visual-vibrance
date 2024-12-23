@@ -29,6 +29,9 @@ void main()
         skylightColor += getSky(dir, false);
     }
     skylightColor /= float(samples);
+
+    // skylightColor = mix(skylightColor, exp(-1.0 * 10 * skylightColor), wetness);
+    sunlightColor = mix(sunlightColor, exp(-1.0 * 10 * sunlightColor), wetness);
 }
 
 #endif

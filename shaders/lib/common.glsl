@@ -16,8 +16,6 @@ vec3 worldSunDir = mat3(gbufferModelViewInverse) * sunDir;
 vec3 lightDir = normalize(shadowLightPosition);
 vec3 worldLightDir = mat3(gbufferModelViewInverse) * lightDir;
 
-const float sunPathRotation = -40.0;
-
 layout(std430, binding = 0) buffer lightColors {
     vec3 sunlightColor;
     vec3 skylightColor;
