@@ -5,8 +5,6 @@
 layout (local_size_x = 1, local_size_y = 1) in;
 const ivec3 workGroups = ivec3(1, 1, 1);
 
-#include "/lib/common.glsl"
-
 #include "/lib/atmosphere/sky/sky.glsl"
 
 void main()
@@ -31,7 +29,7 @@ void main()
     skylightColor /= float(samples);
 
     // skylightColor = mix(skylightColor, exp(-1.0 * 10 * skylightColor), wetness);
-    sunlightColor = mix(sunlightColor, exp(-1.0 * 10 * sunlightColor), wetness);
+    // sunlightColor = mix(sunlightColor, exp(-1.0 * 10 * sunlightColor), wetness);
 }
 
 #endif

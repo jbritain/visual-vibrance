@@ -11,11 +11,11 @@ vec3 getShadedColor(Material material, vec3 mappedNormal, vec3 faceNormal, vec2 
     vec3 shadow = getShadowing(feetPlayerPos, faceNormal, lightmap, material, scatter);
 
     vec3 color = 
-        brdf(material, mappedNormal, faceNormal, viewPos, scatter) * sunlightColor *
+        brdf(material, mappedNormal, faceNormal, viewPos, scatter) * weatherSunlightColor *
         shadow
     ;
     vec3 diffuse = 
-        skylightColor * pow2(lightmap.y) * (material.ao * 0.5 + 0.5) +
+        weatherSkylightColor * pow2(lightmap.y) * (material.ao * 0.5 + 0.5) +
         pow(vec3(255, 152, 54), vec3(2.2)) * 1e-8 * max0(exp(-(1.0 - lightmap.x * 10.0))) +
         vec3(0.1) * material.ao
 

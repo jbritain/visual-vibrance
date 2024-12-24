@@ -10,7 +10,7 @@ const vec3 waterExtinction = clamp01(WATER_ABSORPTION + WATER_SCATTERING);
 vec3 waterFog(vec3 color, vec3 a, vec3 b){
   vec3 transmittance = exp(-waterExtinction * WATER_DENSITY * distance(a, b));
 
-  vec3 radiance = (sunlightColor + skylightColor) * EB.y;
+  vec3 radiance = (weatherSunlightColor + weatherSkylightColor) * EB.y;
   vec3 integScatter = (radiance - radiance * clamp01(transmittance)) / waterExtinction;
   vec3 scatter = integScatter * transmittance;
 

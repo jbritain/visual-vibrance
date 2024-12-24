@@ -57,6 +57,12 @@ vec3 raymarchScattering(vec3 pos,
 
 void main()
 {
+    #ifdef WORLD_THE_END
+        sunlightColor = vec3(0.8, 0.7, 1.0);
+        skylightColor = vec3(0.5, 0.4, 1.0) * 0.2;
+        return;
+    #endif
+
     ivec2 texelCoord = ivec2(gl_GlobalInvocationID.xy);
     float u = clamp(texelCoord.x, 0.0, skyViewLUTRes.x-1.0)/skyViewLUTRes.x;
     float v = clamp(texelCoord.y, 0.0, skyViewLUTRes.y-1.0)/skyViewLUTRes.y;

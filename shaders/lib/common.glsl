@@ -23,7 +23,14 @@ layout(std430, binding = 0) buffer lightColors {
     vec3 skylightColor;
 };
 
-const bool colortex3Clear = false;
+layout(std430, binding = 1) buffer smoothedData {
+    float sunVisibilitySmooth;
+};
+
+#define weatherSunlightColor mix(sunlightColor, sunlightColor * 0.005, wetness)
+#define weatherSkylightColor mix(skylightColor, sunlightColor * 0.02, wetness)
+
+const bool colortex4Clear = false;
 
 // BUFFER FORMATS
 /*
@@ -38,7 +45,7 @@ const bool colortex3Clear = false;
 
 #ifdef TEMPORAL_FILTER
 /*
-    const int colortex3Format = RGB16F;
+    const int colortex4Format = RGB16F;
 */
 #endif
 

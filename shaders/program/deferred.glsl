@@ -32,7 +32,9 @@
             vec3 worldDir = mat3(gbufferModelViewInverse) * normalize(viewPos);
 
             color.rgb = getSky(color.rgb, worldDir, true);
-            color.rgb = getClouds(color.rgb, worldDir);
+            #ifdef WORLD_OVERWORLD
+            color.rgb = getClouds(vec3(0.0), color.rgb, worldDir);
+            #endif
         }
     }
 

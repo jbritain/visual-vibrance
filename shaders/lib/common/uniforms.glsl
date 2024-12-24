@@ -64,6 +64,8 @@ vec2 EBS = vec2(eyeBrightnessSmooth) / 240.0;
 
 uniform vec3 cameraPosition;
 uniform vec3 fogColor;
+uniform float fogStart;
+uniform float fogEnd;
 uniform vec3 previousCameraPosition;
 uniform vec3 skyColor;
 uniform vec3 relativeEyePosition;

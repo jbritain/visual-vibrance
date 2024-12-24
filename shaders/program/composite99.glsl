@@ -16,7 +16,7 @@
 #ifdef fsh
     in vec2 texcoord;
 
-    /* RENDERTARGETS: 0,3 */
+    /* RENDERTARGETS: 0,4 */
     layout(location = 0) out vec4 color;
     layout(location = 1) out vec4 newHistory;
 
@@ -34,6 +34,7 @@
 
     void main() {
         float depth = texture(depthtex0, texcoord).r;
+        float opaqueDepth = texture(depthtex2, texcoord).r;
         vec3 viewPos = screenSpaceToViewSpace(vec3(texcoord, depth));
         vec3 feetPlayerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
         feetPlayerPos += cameraPosition;
@@ -44,7 +45,10 @@
 
         color = texture(colortex0, texcoord);
 
-        vec4 historyColor = texture(colortex3, previousScreenPos.xy);
+        bool rejectSample = clamp01(previousScreenPos.xy) != previousScreenPos.xy;
+        rejectSample = rejectSample || opaqueDepth != depth;
+
+        vec4 historyColor = texture(colortex4, previousScreenPos.xy);
 
         vec2 iResolution = rcp(resolution);
 
@@ -60,7 +64,7 @@
 
         historyColor.rgb = clamp(historyColor.rgb, minCol, maxCol);
 
-        color = mix(color, historyColor, 0.7);
+        color = mix(color, historyColor, 0.7 * float(!rejectSample));
 
         newHistory = color;
         

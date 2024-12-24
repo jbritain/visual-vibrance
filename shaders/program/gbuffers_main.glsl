@@ -58,6 +58,10 @@
     void main() {
         vec2 lightmap = (lmcoord * 33.05 / 32.0) - (1.05 / 32.0);
 
+        #ifdef WORLD_THE_END
+        lightmap.y = 1.0;
+        #endif
+
         #ifdef DYNAMIC_HANDLIGHT
             vec3 playerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
             float dist = length(playerPos);
@@ -74,13 +78,6 @@
         albedo.rgb = pow(albedo.rgb, vec3(2.2));
 
         vec3 mappedNormal = getMappedNormal(texcoord);
-
-        
-        
-        // if((materialID == MATERIAL_LEAVES) && albedo.g > albedo.r){
-        //     albedo.rgb *= 0.5;
-
-        // }
 
         vec4 specularData = texture(specular, texcoord);
         Material material = materialFromSpecularMap(albedo.rgb, specularData);

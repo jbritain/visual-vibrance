@@ -1,6 +1,6 @@
 #include "/lib/version.glsl"
 
-#define csh
+#define fsh
 #define WORLD_OVERWORLD
 
-#include "/program/prepare.glsl"
+#include "/program/gbuffers_weather.glsl"

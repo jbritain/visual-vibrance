@@ -83,6 +83,12 @@ value.PBR_MODE.1=LabPBR 1.3
 option.CLOUDS=Clouds
 option.CLOUDS.comment=§aMinimal performance impact.
 
+option.ATMOSPHERIC_FOG=Atmospheric Fog
+option.ATMOSPHERIC_FOG.comment=Makes terrain fade into the distance.
+
+option.CLOUDY_FOG=Morning Fog
+option.CLOUDY_FOG.comment=Adds a mist-like fog sitting over the ground in the morning.
+
 option.BORDER_FOG=Border Fog
 option.BORDER_FOG.comment=Fades terrain into the sky towards the edge of the render distance. §2Imperceptible performance impact.
 

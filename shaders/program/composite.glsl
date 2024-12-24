@@ -36,6 +36,8 @@
         float skyLightmap = data1.z;
         int materialID = int(data1.a * 255 + 0.5) + 1000;
 
+        bool isWater = materialID == MATERIAL_WATER;
+        bool inWater = isEyeInWater == 1;
 
         float translucentDepth = texture(depthtex0, texcoord).r;
         float opaqueDepth = texture(depthtex2, texcoord).r;
@@ -46,9 +48,6 @@
         vec3 viewDir = normalize(translucentViewPos);
 
         vec3 translucentFeetPlayerPos = (gbufferModelViewInverse * vec4(translucentViewPos, 1.0)).xyz;
-
-        bool isWater = materialID == MATERIAL_WATER;
-        bool inWater = isEyeInWater == 1;
 
         if(isWater){
             Material material = Material(
@@ -72,7 +71,7 @@
             vec3 refractedDir = normalize(refract(viewDir, refractionNormal, inWater ? 1.33 : rcp(1.33)));
             vec3 refractedViewPos = translucentViewPos + refractedDir * distance(translucentViewPos, opaqueViewPos);
             vec3 refractedPos = viewSpaceToScreenSpace(refractedViewPos);
-            if(true || clamp01(refractedPos.xy) == refractedPos.xy){
+            if(clamp01(refractedPos.xy) == refractedPos.xy && texture(depthtex2, refractedPos.xy).r > translucentDepth){
                 color = texture(colortex0, refractedPos.xy);
                 opaqueDepth = texture(depthtex2, refractedPos.xy).r;
                 opaqueViewPos = screenSpaceToViewSpace(vec3(texcoord, opaqueDepth));
@@ -105,8 +104,8 @@
                 vec3 worldReflectedDir = mat3(gbufferModelViewInverse) * reflectedDir;
                 reflectedColor = getSky(worldReflectedDir, false) * skyLightmap;
                 vec3 shadow = getShadowing(translucentFeetPlayerPos, waveNormal, vec2(skyLightmap), material, scatter);
-                reflectedColor += max0(brdf(material, waveNormal, waveNormal, translucentViewPos, scatter) * sunlightColor * shadow);
-                reflectedColor = mix(reflectedColor, getClouds(reflectedColor, worldReflectedDir), skyLightmap);
+                reflectedColor += max0(brdf(material, waveNormal, waveNormal, translucentViewPos, scatter) * weatherSunlightColor * shadow);
+                reflectedColor = mix(reflectedColor, getClouds(translucentFeetPlayerPos, reflectedColor, worldReflectedDir), skyLightmap);
             }
 
             
@@ -124,7 +123,7 @@
             } else {
                color.rgb = waterFog(color.rgb, vec3(0.0), opaqueViewPos);
             }
-        }        
+        }
     }
 
 #endif

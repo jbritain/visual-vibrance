@@ -1,6 +1,6 @@
 #include "/lib/version.glsl"
 
-#define csh
+#define vsh
 #define WORLD_THE_END
 
-#include "/program/prepare.glsl"
+#include "/program/gbuffers_weather.glsl"

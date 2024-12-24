@@ -39,7 +39,25 @@ vec3 sun(vec3 rayDir){
     return vec3(0.0);
 }
 
+float fogify(float x, float w) {
+	return w / (x * x + w);
+}
+
+
+vec3 endSky(vec3 dir, bool includeSun){
+  return vec3(0.5, 0.4, 1.0) * 8.0 * clamp01(dot(dir, worldLightDir) * 0.5 + 0.5) * 0.01 + 
+  step(0.9989, dot(dir, worldLightDir)) * step(dot(dir, worldLightDir), 0.999) * 100 * float(includeSun);
+}
+
 vec3 getSky(vec3 color, vec3 rayDir, bool includeSun){
+    #if !defined WORLD_OVERWORLD && !defined WORLD_THE_END
+    return pow(mix(skyColor, fogColor, fogify(max0(dot(rayDir, vec3(0.0, 1.0, 0.0))), 0.25)), vec3(2.2));
+    #endif
+
+    #ifdef WORLD_THE_END
+    return endSky(rayDir, includeSun);
+    #endif
+
     vec3 lum = getValFromSkyLUT(rayDir);
 
     if (!includeSun) return lum;

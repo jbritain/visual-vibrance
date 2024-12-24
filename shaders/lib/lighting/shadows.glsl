@@ -34,6 +34,10 @@ vec3 sampleShadow(vec3 shadowScreenPos){
 vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material material, out float scatter){
     scatter = 0.0;
 
+    #ifdef WORLD_THE_NETHER
+    return vec3(0.0);
+    #endif
+
     float fakeShadow = clamp01(smoothstep(13.5 / 15.0, 14.5 / 15.0, lightmap.y));
 
 

@@ -32,13 +32,15 @@ vec3 multipleScattering(float density, float costh, float g1, float g2, vec3 ext
   return radiance;
 }
 
-vec3 getClouds(vec3 color, vec3 worldDir){
+vec3 getClouds(vec3 origin, vec3 color, vec3 worldDir){
   #ifndef CLOUDS
   return color;
   #endif
 
+  origin += cameraPosition;
+
   vec3 point;
-  if(!rayPlaneIntersection(cameraPosition, worldDir, CLOUD_PLANE_ALTITUDE, point)) return color;
+  if(!rayPlaneIntersection(origin, worldDir, CLOUD_PLANE_ALTITUDE, point)) return color;
 
   point.z += worldTime;
 
@@ -71,8 +73,11 @@ vec3 getClouds(vec3 color, vec3 worldDir){
 
 
   vec3 transmittance = exp(-totalDensityAlongRay * CLOUD_EXTINCTION_COLOR);
+  transmittance = mix(transmittance, vec3(1.0), exp(-distance(point, cameraPosition) * 0.004));
+
   vec3 integScatter = (radiance - radiance * clamp01(transmittance)) / CLOUD_EXTINCTION_COLOR;
   vec3 scatter = integScatter * transmittance;
+  scatter = mix(scatter, vec3(0.0), exp(-distance(point, cameraPosition) * 0.004));
 
   return color * transmittance + scatter;
 }
