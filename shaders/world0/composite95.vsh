@@ -2,4 +2,4 @@
 
 #define vsh
 
-#include "/program/composite99.glsl"
+#include "/program/bloomUpsample.glsl"

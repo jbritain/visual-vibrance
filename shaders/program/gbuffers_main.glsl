@@ -84,6 +84,7 @@
 
         vec4 specularData = texture(specular, texcoord);
         Material material = materialFromSpecularMap(albedo.rgb, specularData);
+        material.ao = texture(normals, texcoord).z;
 
         #ifdef GLOWING
         material.emission = 1.0;

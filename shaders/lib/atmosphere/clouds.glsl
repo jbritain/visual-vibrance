@@ -9,28 +9,6 @@ float remap(float val, float oMin, float oMax, float nMin, float nMax){
   return mix(nMin, nMax, smoothstep(oMin, oMax, val));
 }
 
-// O is the ray origin, D is the direction
-// height is the height of the plane
-bool rayPlaneIntersection(vec3 O, vec3 D, float height, inout vec3 point){
-  vec3 N = vec3(0.0, sign(O.y - height), 0.0); // plane normal vector
-  vec3 P = vec3(0.0, height, 0.0); // point on the plane
-
-  float NoD = dot(N, D);
-  if(NoD == 0.0){
-    return false;
-  }
-
-  float t = dot(N, P - O) / NoD;
-
-  point = O + t*D;
-
-  if(t < 0){
-    return false;
-  }
-
-  return true;
-}
-
 vec3 multipleScattering(float density, float costh, float g1, float g2, vec3 extinction, int octaves, float lobeWeight, float attenuation, float contribution, float phaseAttenuation){
   vec3 radiance = vec3(0.0);
 

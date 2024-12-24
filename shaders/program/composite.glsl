@@ -67,10 +67,12 @@
 
             // refraction
             #ifdef REFRACTION
-            vec3 refractedDir = normalize(refract(viewDir, normal - waveNormal, inWater ? 1.33 : rcp(1.33)));
+            vec3 refractionNormal = normal - waveNormal;
+
+            vec3 refractedDir = normalize(refract(viewDir, refractionNormal, inWater ? 1.33 : rcp(1.33)));
             vec3 refractedViewPos = translucentViewPos + refractedDir * distance(translucentViewPos, opaqueViewPos);
             vec3 refractedPos = viewSpaceToScreenSpace(refractedViewPos);
-            if(clamp01(refractedPos.xy) == refractedPos.xy){
+            if(true || clamp01(refractedPos.xy) == refractedPos.xy){
                 color = texture(colortex0, refractedPos.xy);
                 opaqueDepth = texture(depthtex2, refractedPos.xy).r;
                 opaqueViewPos = screenSpaceToViewSpace(vec3(texcoord, opaqueDepth));

@@ -25,13 +25,14 @@
     void main() {
         color = texture(colortex0, texcoord);
         float depth = texture(depthtex0, texcoord).r;
-        if(depth == 1.0 || isEyeInWater == 1){
+        if(isEyeInWater == 1){
             return;
         }
 
         vec3 viewPos = screenSpaceToViewSpace(vec3(texcoord, depth));
 
-        color.rgb = atmosphericFog(color.rgb, viewPos);
+        // color.rgb = atmosphericFog(color.rgb, viewPos);
+        color.rgb = cloudyFog(color.rgb, mat3(gbufferModelViewInverse) * viewPos, depth);
         
         
     }

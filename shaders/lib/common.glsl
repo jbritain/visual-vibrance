@@ -1,6 +1,8 @@
 #ifndef COMMON_GLSL
 #define COMMON_GLSL
 
+#include "/lib/common/settings.glsl"
+
 #include "/lib/common/syntax.glsl"
 #include "/lib/common/material.glsl"
 #include "/lib/common/uniforms.glsl"
@@ -8,7 +10,7 @@
 #include "/lib/common/spaceConversions.glsl"
 #include "/lib/common/materialIDs.glsl"
 
-#include "/lib/common/settings.glsl"
+
 
 vec3 sunDir = normalize(sunPosition);
 vec3 worldSunDir = mat3(gbufferModelViewInverse) * sunDir;
@@ -21,10 +23,23 @@ layout(std430, binding = 0) buffer lightColors {
     vec3 skylightColor;
 };
 
+const bool colortex3Clear = false;
+
 // BUFFER FORMATS
 /*
     const int colortex0Format = RGB16F;
+*/
+
+#ifdef BLOOM
+/*
     const int colortex2Format = RGB16F;
 */
+#endif
+
+#ifdef TEMPORAL_FILTER
+/*
+    const int colortex3Format = RGB16F;
+*/
+#endif
 
 #endif // COMMON_GLSL

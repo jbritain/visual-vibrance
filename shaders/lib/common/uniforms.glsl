@@ -50,6 +50,7 @@ uniform float rainStrength;
 uniform float screenBrightness;
 uniform float viewHeight;
 uniform float viewWidth;
+vec2 resolution = vec2(viewWidth, viewHeight);
 uniform float wetness;
 uniform float sunAngle;
 uniform float playerMood;

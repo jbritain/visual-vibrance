@@ -75,4 +75,26 @@ vec3 rgb(vec3 c) {
 	return c.z * mix(K.xxx, clamp01(p - K.xxx), c.y);
 }
 
+// O is the ray origin, D is the direction
+// height is the height of the plane
+bool rayPlaneIntersection(vec3 O, vec3 D, float height, inout vec3 point){
+  vec3 N = vec3(0.0, sign(O.y - height), 0.0); // plane normal vector
+  vec3 P = vec3(0.0, height, 0.0); // point on the plane
+
+  float NoD = dot(N, D);
+  if(NoD == 0.0){
+    return false;
+  }
+
+  float t = dot(N, P - O) / NoD;
+
+  point = O + t*D;
+
+  if(t < 0){
+    return false;
+  }
+
+  return true;
+}
+
 #endif // UTIL_GLSL

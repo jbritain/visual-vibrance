@@ -1,15 +1,20 @@
 option.GLIMMER_SHADERS=Glimmer Shaders
-value.GLIMMER_SHADERS.0=By jbritain
-value.GLIMMER_SHADERS.1=By jbritain
+value.GLIMMER_SHADERS.0=§dBy jbritain
+value.GLIMMER_SHADERS.1=§dBy jbritain
 
 option.WEBSITE=https://
-value.WEBSITE.0=jbritain.net
-value.WEBSITE.1=jbritain.net
+value.WEBSITE.0=§djbritain.net
+value.WEBSITE.1=§djbritain.net
 
 screen.LIGHTING=Lighting & Shadows
 screen.ATMOSPHERICS=Sky & Fog
 screen.WATER=Water
 screen.POST=Post-Processing
+
+profile.potato=§cPotato
+profile.toaster=§6Toaster
+profile.igpu=§aIntegrated Graphics
+profile.dgpu=§bDedicated Graphics
 
 option.SHADOWS=Shadows
 
@@ -95,6 +100,9 @@ option.BLOOM_RADIUS.comment=How far across the screen bloom will spread out. §9
 
 option.BLOOM_STRENGTH=Bloom Strength
 option.BLOOM_STRENGTH.comment=How much effect the bloom has on the final colour of the screen. §9No performance impact!
+
+option.TEMPORAL_FILTER=Temporal Filtering
+option.TEMPORAL_FILTER.comment=Uses data from previous frames to reduce noise. Can result in blurriness and ghosting. §2Imperceptible performance impact. §7Threat Interactive has no idea what he is talking about.
 
 option.tonemap=Tonemap Operator
 option.tonemap.comment=How the final colour is graded.§2Imperceptible performance impact.

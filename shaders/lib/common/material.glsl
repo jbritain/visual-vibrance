@@ -58,42 +58,56 @@ vec3 getMetalf82(uint metalID, vec3 albedo){
 }
 
 struct Material {
-  vec3 albedo;
-  float emission;
-  vec3 f0;
-  vec3 f82;
-  float roughness;
-  float sss;
-  float porosity;
-  uint metalID;
+	vec3 albedo;
+	float emission;
+	vec3 f0;
+	vec3 f82;
+	float roughness;
+	float sss;
+	float porosity;
+	uint metalID;
 	float ao;
 };
 
 Material materialFromSpecularMap(vec3 albedo, vec4 specularData){
-  Material material;
-  material.albedo = albedo;
+	Material material;
 
-  material.roughness = pow2(1.0 - specularData.r);
-  if(specularData.g <= 229.0/255.0){
-    material.f0 = vec3(specularData.g);
-    material.metalID = NO_METAL;
-  } else {
-    material.metalID = int(specularData.g * 255 + 0.5) - 229;
-    material.f0 = getMetalf0(material.metalID, material.albedo);
-    material.f82 = getMetalf82(material.metalID, material.albedo);
-  }
+	material.albedo = albedo;
 
-  if(specularData.b <= 0.25){
-    material.porosity = specularData.b * 4.0;
-    material.sss = 0.0;
-  } else {
-    material.porosity = (1.0 - specularData.r) * specularData.g; // fall back to using roughness and base reflectance for porosity
-    material.sss = (specularData.b - 0.25) * 4.0/3.0;
-  }
+	#if PBR_MODE == 0
+	material.roughness = 1.0;
+	material.f0 = vec3(0.0);
+	material.f82 = vec3(0.0);
+	material.metalID = NO_METAL;
+	material.porosity = 0.0;
+	material.sss = 0.0;
+	material.emission = 0.0;
+	material.ao = 1.0;
 
-  material.emission = specularData.a < 1.0 ? specularData.a : 0.0;
+	return material;
+	#endif
 
-  return material;
+	material.roughness = pow2(1.0 - specularData.r);
+	if(specularData.g <= 229.0/255.0){
+		material.f0 = vec3(specularData.g);
+		material.metalID = NO_METAL;
+	} else {
+		material.metalID = int(specularData.g * 255 + 0.5) - 229;
+		material.f0 = getMetalf0(material.metalID, material.albedo);
+		material.f82 = getMetalf82(material.metalID, material.albedo);
+	}
+
+	if(specularData.b <= 0.25){
+		material.porosity = specularData.b * 4.0;
+		material.sss = 0.0;
+	} else {
+		material.porosity = (1.0 - specularData.r) * specularData.g; // fall back to using roughness and base reflectance for porosity
+		material.sss = (specularData.b - 0.25) * 4.0/3.0;
+	}
+
+	material.emission = specularData.a < 1.0 ? specularData.a : 0.0;
+
+	return material;
 }
 
 #endif // MATERIAL_GLSL

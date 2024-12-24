@@ -28,12 +28,8 @@
         color.rgb = mix(color.rgb, bloom, 0.01 * BLOOM_STRENGTH);
         #endif
 
+        color.rgb *= 2.0;
         color.rgb = tonemap(color.rgb);
-
-        
-
-        // color.rgb = skylightColor;
-        color.rgb = pow(color.rgb, vec3(rcp(2.2)));
     }
 
 #endif
