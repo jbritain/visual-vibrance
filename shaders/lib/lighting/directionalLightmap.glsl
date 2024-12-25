@@ -1,6 +1,21 @@
+/*
+    Copyright (c) 2024 Josh Britain (jbritain)
+    Licensed under the MIT license
+
+      _____   __   _                          
+     / ___/  / /  (_)  __ _   __ _  ___   ____
+    / (_ /  / /  / /  /  ' \ /  ' \/ -_) / __/
+    \___/  /_/  /_/  /_/_/_//_/_/_/\__/ /_/   
+    
+    By jbritain
+    https://jbritain.net
+                                            
+*/
+
 #ifndef DIRECTIONAL_LIGHTMAP_GLSL
 #define DIRECTIONAL_LIGHTMAP_GLSL
 
+// based on snippet by NinjaMike
 void applyDirectionalLightmap(inout vec2 lightmap, vec3 viewPos, vec3 mappedNormal, mat3 tbnMatrix, float sss){
   vec3 dFdViewposX = dFdx(viewPos);
   vec3 dFdViewposY = dFdy(viewPos);

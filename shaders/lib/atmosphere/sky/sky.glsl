@@ -3,6 +3,12 @@
 
 #include "/lib/atmosphere/sky/hillaireCommon.glsl"
 
+/* 
+    'Production Sky Rendering' by Andrew Helmer
+    https://www.shadertoy.com/view/slSXRW
+*/
+
+
 vec3 getValFromSkyLUT(vec3 rayDir) {
     float height = atmospherePos.y;
     vec3 up = vec3(0.0, 1.0, 0.0);

@@ -7,6 +7,12 @@ layout(rgba16f) uniform image2D sunTransmittanceLUT;
 
 #include "/lib/atmosphere/sky/hillaireCommon.glsl"
 
+/* 
+    'Production Sky Rendering' by Andrew Helmer
+    https://www.shadertoy.com/view/slSXRW
+*/
+
+
 const float sunTransmittanceSteps = 40.0;
 
 vec3 getSunTransmittance(vec3 pos, vec3 sunDir) {

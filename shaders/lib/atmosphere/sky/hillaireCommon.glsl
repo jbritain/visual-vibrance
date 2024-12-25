@@ -1,6 +1,11 @@
 #ifndef HILLAIRE_COMMON_GLSL
 #define HILLAIRE_COMMON_GLSL
 
+/* 
+    'Production Sky Rendering' by Andrew Helmer
+    https://www.shadertoy.com/view/slSXRW
+*/
+
 const float sunAngularRadius = PI/180.0;
 
 const vec3 sunIrradiance = vec3(1.0, 0.949, 0.937) * 12.6;

@@ -21,5 +21,8 @@ Glimmer is a Minecraft shaderpack designed to be simple and performant without l
 - Andrew Hilmer, for his [Shadertoy implementation](https://www.shadertoy.com/view/slSXRW) of Sébastien Hillaire's ['A Scalable and Production Ready Sky and Atmosphere Rendering Technique'](https://github.com/sebh/UnrealEngineSkyAtmosphere)
 - [Belmu](https://github.com/BelmuTM) - Reference code for SSR
 - [Emin](https://github.com/EminGT) - Shadow bias calculation from [Complementary](https://github.com/ComplementaryDevelopment/ComplementaryReimagined)
+- [NinjaMike](https://github.com/NinjaMike) - Directional lightmapping method
+- [sixthsurge](https://github.com/sixthsurge) - A decent amount of code reference from [Photon](https://github.com/sixthsurge/photon)
+- [Null](https://github.com/Null-MC/) - Help porting in the atmospheric scattering code
 - As always, the members of the ShaderLABS Discord server who have helped me get this far learning how to do all this
 - Many other people, there are links scattered throughout the code

@@ -7,6 +7,12 @@ layout(rgba16f) uniform image2D multipleScatteringLUT;
 
 #include "/lib/atmosphere/sky/hillaireCommon.glsl"
 
+/* 
+    'Production Sky Rendering' by Andrew Helmer
+    https://www.shadertoy.com/view/slSXRW
+*/
+
+
 const float mulScattSteps = 20.0;
 const int sqrtSamples = 8;
 

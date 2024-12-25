@@ -11,6 +11,12 @@ layout(rgba16f) uniform image2D skyViewLUT;
 
 #include "/lib/atmosphere/sky/hillaireCommon.glsl"
 
+/* 
+    'Production Sky Rendering' by Andrew Helmer
+    https://www.shadertoy.com/view/slSXRW
+*/
+
+
 const int numScatteringSteps = 32;
 vec3 raymarchScattering(vec3 pos, 
                               vec3 rayDir, 
