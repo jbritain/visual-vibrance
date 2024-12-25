@@ -4,6 +4,9 @@
 
 Glimmer is a Minecraft shaderpack designed to be simple and performant without looking like it.
 
+[![modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/modrinth_vector.svg)](https://modrinth.com/mod/glimmer-shaders)
+[![discord](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-plural_vector.svg)](https://discord.gg/b9SHNcvs6c)
+
 ## Features
 - 'Potato', 'Toaster', 'Integrated Graphics' and 'Dedicated Graphics' presets, designed to run on anything from your fridge to a NASA supercomputer.
 - Complete LabPBR 1.3 compliance.
@@ -26,3 +29,6 @@ Glimmer is a Minecraft shaderpack designed to be simple and performant without l
 - [Null](https://github.com/Null-MC/) - Help porting in the atmospheric scattering code
 - As always, the members of the ShaderLABS Discord server who have helped me get this far learning how to do all this
 - Many other people, there are links scattered throughout the code
+
+## Get in touch
+If you have an issue with Glimmer or just want to chat, you can [join my Discord server](https://discord.gg/b9SHNcvs6c) or find me in `#jbritains-shaderpacks` in the [shaderLABS Discord server](https://discord.gg/RpzWN9S).
