@@ -75,6 +75,8 @@
             discard;
         }
 
+        albedo.rgb = mix(albedo.rgb, entityColor.rgb, entityColor.a);
+
         albedo.rgb = pow(albedo.rgb, vec3(2.2));
 
         vec3 mappedNormal = getMappedNormal(texcoord);
@@ -82,10 +84,6 @@
         vec4 specularData = texture(specular, texcoord);
         Material material = materialFromSpecularMap(albedo.rgb, specularData);
         material.ao = texture(normals, texcoord).z;
-
-        #ifdef GLOWING
-        material.emission = 1.0;
-        #endif
 
         if(materialID == MATERIAL_PLANTS || materialID == MATERIAL_LEAVES){
             material.sss = 1.0;

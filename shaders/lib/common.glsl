@@ -30,7 +30,7 @@ layout(std430, binding = 1) buffer smoothedData {
 #define weatherSunlightColor mix(sunlightColor, sunlightColor * 0.005, wetness)
 #define weatherSkylightColor mix(skylightColor, sunlightColor * 0.02, wetness)
 
-const bool colortex4Clear = false;
+const bool colortex3Clear = false;
 
 // BUFFER FORMATS
 /*
@@ -45,7 +45,7 @@ const bool colortex4Clear = false;
 
 #ifdef TEMPORAL_FILTER
 /*
-    const int colortex4Format = RGB16F;
+    const int colortex3Format = RGB16F;
 */
 #endif
 

@@ -2,7 +2,7 @@
 #define FOG_GLSL
 
 vec3 atmosphericFog(vec3 color, vec3 viewPos){
-  color = mix(weatherSkylightColor, color.rgb, exp(-length(viewPos) * 0.004 * (EBS.y)));
+  color = mix(weatherSkylightColor, color.rgb, exp(-length(viewPos) * 0.0004 * (EBS.y)));
   return color;
 }
 
@@ -10,7 +10,8 @@ vec3 atmosphericFog(vec3 color, vec3 viewPos){
 // above this height there is no fog
 #define HEIGHT_FOG_TOP_HEIGHT 150
 // below this height there is a constant fog density
-#define HEIGHT_FOG_BOTTOM_HEIGHT 63
+#define HEIGHT_FOG_MIDDLE_HEIGHT 63
+#define HEIGHT_FOG_BOTTOM_HEIGHT 50
 
 float getFogDensity(float height){
   return (1.0 - smoothstep(HEIGHT_FOG_BOTTOM_HEIGHT, HEIGHT_FOG_TOP_HEIGHT, height)) * FOG_DENSITY;
@@ -30,6 +31,7 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth){
   }
 
   float localTopHeight = HEIGHT_FOG_TOP_HEIGHT - cameraPosition.y;
+  float localMiddleHeight = HEIGHT_FOG_MIDDLE_HEIGHT - cameraPosition.y;
   float localBottomHeight = HEIGHT_FOG_BOTTOM_HEIGHT - cameraPosition.y;
 
   vec3 dir = normalize(playerPos);
@@ -41,12 +43,11 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth){
 
   float totalDensity;
 
-  // linear falloff part
+  // top part
     vec3 a = vec3(0.0);
     vec3 b = vec3(0.0);
 
-
-    if(!rayPlaneIntersection(vec3(0.0), dir, localBottomHeight, a)){
+    if(!rayPlaneIntersection(vec3(0.0), dir, localMiddleHeight, a)){
       a = vec3(0.0);
     }
     if(!rayPlaneIntersection(vec3(0.0), dir, localTopHeight, b)){
@@ -59,7 +60,10 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth){
       b = swap;
     }
 
-    if(length(playerPos) < length(b) && depth != 1.0){ // terrain in the way
+    if(length(playerPos) < length(a)){
+      a = vec3(0.0);
+      b = vec3(0.0);
+    } else if(length(playerPos) < length(b) && depth != 1.0){ // terrain in the way
       b = playerPos;
     }
     
@@ -67,15 +71,12 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth){
     float densityA = getFogDensity(a.y + cameraPosition.y);
     float densityB = getFogDensity(b.y + cameraPosition.y);
 
-    totalDensity = max0(distance(a, b) * (densityA + densityB) / 2) * fogFactor;
+  totalDensity = max0(distance(a, b) * (densityA + densityB) / 2) * fogFactor;
 
-  // constant density part
-    if(dir.y > 0.0){
+    if(!rayPlaneIntersection(vec3(0.0), dir, localBottomHeight, a)){
       a = vec3(0.0);
-    } else {
-      a = playerPos;
     }
-    if(!rayPlaneIntersection(vec3(0.0), dir, localBottomHeight, b)){
+    if(!rayPlaneIntersection(vec3(0.0), dir, localMiddleHeight, b)){
       b = vec3(0.0);
     }
 
@@ -85,14 +86,14 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth){
       b = swap;
     }
 
-    if(length(playerPos) < length(b) && depth != 1.0){ // terrain in the way
+    if(length(playerPos) < length(a)){
+      a = vec3(0.0);
+      b = vec3(0.0);
+    } else if(length(playerPos) < length(b) && depth != 1.0){ // terrain in the way
       b = playerPos;
     }
 
-    densityA = getFogDensity(a.y + cameraPosition.y);
-    densityB = getFogDensity(b.y + cameraPosition.y);
-
-    totalDensity += max0(distance(a, b) * (densityA + densityB) / 2) * fogFactor;
+  totalDensity += distance(a, b) * FOG_DENSITY * fogFactor;
 
   float transmittance = exp(-totalDensity);
 

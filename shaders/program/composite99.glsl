@@ -16,7 +16,7 @@
 #ifdef fsh
     in vec2 texcoord;
 
-    /* RENDERTARGETS: 0,4 */
+    /* RENDERTARGETS: 0,3 */
     layout(location = 0) out vec4 color;
     layout(location = 1) out vec4 newHistory;
 
@@ -48,7 +48,7 @@
         bool rejectSample = clamp01(previousScreenPos.xy) != previousScreenPos.xy;
         rejectSample = rejectSample || opaqueDepth != depth;
 
-        vec4 historyColor = texture(colortex4, previousScreenPos.xy);
+        vec4 historyColor = texture(colortex3, previousScreenPos.xy);
 
         vec2 iResolution = rcp(resolution);
 

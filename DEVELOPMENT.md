@@ -3,8 +3,7 @@
     0: Main Scene Colour          
     1: Encoded Normal, Sky Lightmap, Block ID
     2: Bloom Colour
-    3: Unused
-    4: History buffer
+    3: History buffer
 
 ---Passes---
     setup           : Compute transmittance LUT for atmosphere
@@ -18,7 +17,6 @@
     composite5      : Fog
     composite90-98  : Bloom
     composite99     : Temporal filter
-
-    
-
 ```
+
+Glimmer makes use of a primarily forward rendered pipeline, with the exception of water, which is done deferred. Likewise, fog is also handled in a deferred manner.

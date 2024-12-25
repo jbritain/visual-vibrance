@@ -17,9 +17,9 @@
     #include "/lib/util/screenSpaceRayTrace.glsl"
     #include "/lib/atmosphere/sky/sky.glsl"
     #include "/lib/lighting/shading.glsl"
-    #include "/lib/waveNormals.glsl"
+    #include "/lib/water/waveNormals.glsl"
     #include "/lib/util/packing.glsl"
-    #include "/lib/waterFog.glsl"
+    #include "/lib/water/waterFog.glsl"
     #include "/lib/atmosphere/fog.glsl"
     #include "/lib/atmosphere/clouds.glsl"
 
@@ -68,7 +68,7 @@
             #ifdef REFRACTION
             vec3 refractionNormal = normal - waveNormal;
 
-            vec3 refractedDir = normalize(refract(viewDir, refractionNormal, inWater ? 1.33 : rcp(1.33)));
+            vec3 refractedDir = normalize(refract(viewDir, refractionNormal, rcp(1.33))); // when in water it should be rcp(1.33) but unless I use the actual normal (which results in snell's window) this results in no refraction
             vec3 refractedViewPos = translucentViewPos + refractedDir * distance(translucentViewPos, opaqueViewPos);
             vec3 refractedPos = viewSpaceToScreenSpace(refractedViewPos);
             if(clamp01(refractedPos.xy) == refractedPos.xy && texture(depthtex2, refractedPos.xy).r > translucentDepth){

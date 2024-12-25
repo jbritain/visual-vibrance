@@ -2,6 +2,5 @@
 
 #define fsh
 #define WORLD_OVERWORLD
-#define GLOWING
 
-#include "/program/gbuffers_main.glsl"
+#include "/program/gbuffers_glowing.glsl"

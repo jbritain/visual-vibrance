@@ -35,7 +35,7 @@
 
 #ifdef fsh
     #include "/lib/lighting/shading.glsl"
-    #include "/lib/waterFog.glsl"
+    #include "/lib/water/waterFog.glsl"
 
     in vec2 lmcoord;
     in vec2 texcoord;
