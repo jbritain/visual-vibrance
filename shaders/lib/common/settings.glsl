@@ -6,13 +6,15 @@ const bool shadowHardwareFiltering = true;
 #define DYNAMIC_HANDLIGHT
 #define DIRECTIONAL_LIGHTMAPS
 
+#define WAVING_BLOCKS
+
 #define SHADOWS
 const float shadowDistance = 64.0; // [16.0 32.0 48.0 64.0 80.0 96.0 112.0 128.0 144.0 160.0 176.0 192.0 208.0 224.0 240.0 256.0 272.0 288.0 304.0 320.0 336.0 352.0 368.0 384.0 400.0 416.0 432.0 448.0 464.0 480.0 496.0 512.0]
 const int shadowMapResolution = 512; // [128 256 512 1024 2048 4096 8192]
 const float sunPathRotation = -40.0; // [-90.0 -85.0 -80.0 -75.0 -70.0 -65.0 -60.0 -55.0 -50.0 -45.0 -40.0 -35.0 -30.0 -25.0 -20.0 -15.0 -10.0 -5.0 0.0 5.0 10.0 15.0 20.0 25.0 30.0 35.0 40.0 45.0 50.0 55.0 60.0 65.0 70.0 75.0 80.0 85.0 90.0]
 #define SHADOW_DISTORTION 0.85
-#define SHADOW_RADIUS 0.002
-#define SHADOW_SAMPLES 4 // [1 2 4 8 16 32]
+#define SHADOW_RADIUS 0.003
+#define SHADOW_SAMPLES 1 // [1 2 4 8 16 32]
 
 #define PBR_MODE 1 // [0 1]
 
@@ -29,7 +31,7 @@ const float sunPathRotation = -40.0; // [-90.0 -85.0 -80.0 -75.0 -70.0 -65.0 -60
 
 
 #define SCREEN_SPACE_REFLECTIONS
-// #define CHEAP_SSR
+#define CHEAP_SSR
 
 #define REFRACTION
 

@@ -15,9 +15,11 @@
 #include "/lib/common.glsl"
 
 #ifdef vsh
+    #include "/lib/sway.glsl"
 
     in vec2 mc_Entity;
     in vec4 at_tangent;
+    in vec3 at_midBlock;
 
     out vec2 lmcoord;
     out vec2 texcoord;
@@ -37,6 +39,11 @@
         tbnMatrix[1] = normalize(cross(tbnMatrix[0], tbnMatrix[2]) * at_tangent.w);
 
         viewPos = (gl_ModelViewMatrix * gl_Vertex).xyz;
+        #ifdef WAVING_BLOCKS
+        vec3 feetPlayerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
+        feetPlayerPos = getSway(materialID, feetPlayerPos + cameraPosition, at_midBlock) - cameraPosition;
+        viewPos = (gbufferModelView * vec4(feetPlayerPos, 1.0)).xyz;
+        #endif
 
         gl_Position = gbufferProjection * vec4(viewPos, 1.0);
     }
@@ -99,7 +106,7 @@
         Material material = materialFromSpecularMap(albedo.rgb, specularData);
         material.ao = texture(normals, texcoord).z;
 
-        if(materialID == MATERIAL_PLANTS || materialID == MATERIAL_LEAVES){
+        if(materialID == MATERIAL_PLANTS || materialID == MATERIAL_LEAVES || materialID == MATERIAL_TALL_PLANT_UPPER || materialID == MATERIAL_TALL_PLANT_LOWER){
             material.sss = 1.0;
             material.f0 = vec3(0.04);
             material.roughness = 0.5;

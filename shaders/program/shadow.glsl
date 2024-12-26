@@ -16,9 +16,11 @@
 #include "/lib/shadowSpace.glsl"
 
 #ifdef vsh
+    #include "/lib/sway.glsl"
 
     in vec2 mc_Entity;
     in vec4 at_tangent;
+    in vec3 at_midBlock;
 
     out vec2 lmcoord;
     out vec2 texcoord;
@@ -37,6 +39,11 @@
         materialID = int(mc_Entity.x + 0.5);
 
         shadowViewPos = (gl_ModelViewMatrix * gl_Vertex).xyz;
+        #ifdef WAVING_BLOCKS
+        vec3 feetPlayerPos = (shadowModelViewInverse * vec4(shadowViewPos, 1.0)).xyz;
+        feetPlayerPos = getSway(materialID, feetPlayerPos + cameraPosition, at_midBlock) - cameraPosition;
+        shadowViewPos = (shadowModelView * vec4(feetPlayerPos, 1.0)).xyz;
+        #endif
         gl_Position = gl_ProjectionMatrix * vec4(shadowViewPos, 1.0);
 
         

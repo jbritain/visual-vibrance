@@ -47,8 +47,9 @@ bool rayIntersects(vec3 viewOrigin, vec3 viewDir, int maxSteps, float jitter, bo
 	}
 
 	#ifdef CHEAP_SSR
-	rayPos = viewSpaceToScreenSpace(viewOrigin + 7.0 * viewDir);
-	return clamp01(rayPos.xy) == rayPos.xy && getDepth(rayPos.xy) < 1.0;
+	rayPos = viewSpaceToScreenSpace(viewOrigin + 76.0 * viewDir);
+	float rayDepth = getDepth(rayPos.xy);
+	return clamp01(rayPos.xy) == rayPos.xy && rayDepth < 1.0 && length(screenSpaceToViewSpace(vec3(rayPos.xy, rayDepth))) > length(viewOrigin);
 
 	#endif
 
