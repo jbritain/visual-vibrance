@@ -40,7 +40,7 @@
 
         shadowViewPos = (gl_ModelViewMatrix * gl_Vertex).xyz;
         #ifdef WAVING_BLOCKS
-        vec3 feetPlayerPos = (shadowModelViewInverse * vec4(shadowViewPos, 1.0)).xyz;
+        feetPlayerPos = (shadowModelViewInverse * vec4(shadowViewPos, 1.0)).xyz;
         feetPlayerPos = getSway(materialID, feetPlayerPos + cameraPosition, at_midBlock) - cameraPosition;
         shadowViewPos = (shadowModelView * vec4(feetPlayerPos, 1.0)).xyz;
         #endif
@@ -57,6 +57,7 @@
 #ifdef fsh
     #include "/lib/lighting/shading.glsl"
     #include "/lib/water/waterFog.glsl"
+    #include "/lib/water/waveNormals.glsl"
 
     in vec2 lmcoord;
     in vec2 texcoord;
@@ -64,6 +65,7 @@
     in mat3 tbnMatrix;
     flat in int materialID;
     in vec3 shadowViewPos;
+    in vec3 feetPlayerPos;
 
     /* RENDERTARGETS: 0 */
     layout(location = 0) out vec4 color;
@@ -84,6 +86,19 @@
 
             color.rgb = 1.0 - waterExtinction;
             color.a = 1.0 - (exp(-avgWaterExtinction * waterDepth));
+
+            #ifdef CAUSTICS
+                vec3 waveNormal = waveNormal(feetPlayerPos.xz + cameraPosition.xz, vec3(0.0, 1.0, 0.0), 1.0);
+                vec3 refracted = refract(-worldLightDir, waveNormal, 1.0/1.33);
+
+                vec3 oldPos = feetPlayerPos - worldLightDir * waterDepth;
+                vec3 newPos = feetPlayerPos + refracted * waterDepth;
+
+                float oldArea = length(dFdx(oldPos)) * length(dFdy(oldPos));
+                float newArea = length(dFdx(newPos)) * length(dFdy(newPos));
+                color.a *= (1.0 - oldArea / newArea);
+            #endif
+            
         }
 
         color.rgb = pow(color.rgb, vec3(2.2));

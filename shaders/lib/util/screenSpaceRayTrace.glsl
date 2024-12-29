@@ -29,7 +29,7 @@ void binarySearch(inout vec3 rayPos, vec3 rayDir){
 	for (int i = 0; i < BINARY_REFINEMENTS; i++){
 		float depth = getDepth(rayPos.xy);
 		float intersect = sign(depth - rayPos.z);
-		lastGoodPos = intersect == 1.0 ? rayPos : lastGoodPos; // update last good pos if still inside
+		lastGoodPos = intersect == 1.0 && depth != 1.0 ? rayPos : lastGoodPos; // update last good pos if still inside
 		
 		rayPos += intersect * rayDir; // goes back if we're in geometry and forward if we're not
 		rayDir *= BINARY_REDUCTION; // scale down the ray
@@ -46,7 +46,7 @@ bool rayIntersects(vec3 viewOrigin, vec3 viewDir, int maxSteps, float jitter, bo
 		return false;
 	}
 
-	#ifdef CHEAP_SSR
+	#if REFLECTION_MODE == 1
 	rayPos = viewSpaceToScreenSpace(viewOrigin + 76.0 * viewDir);
 	float rayDepth = getDepth(rayPos.xy);
 	return clamp01(rayPos.xy) == rayPos.xy && rayDepth < 1.0 && length(screenSpaceToViewSpace(vec3(rayPos.xy, rayDepth))) > length(viewOrigin);
@@ -83,26 +83,26 @@ bool rayIntersects(vec3 viewOrigin, vec3 viewDir, int maxSteps, float jitter, bo
 		float depth3 = getDepth(rayPos3.xy);
 		float depth4 = getDepth(rayPos4.xy);
 
-		if(depth < rayPos.z && abs(depthLenience - (rayPos.z - depth)) < depthLenience && rayPos.z > handDepth){
+		if(depth < rayPos.z && abs(depthLenience - (rayPos.z - depth)) < depthLenience && rayPos.z > handDepth && depth < 1.0){
 			intersect = true;
 			break;
 		}
 		if(clamp01(rayPos2) != rayPos2) return false; // we went offscreen
-		if(depth2 < rayPos2.z && abs(depthLenience - (rayPos2.z - depth2)) < depthLenience && rayPos2.z > handDepth){
+		if(depth2 < rayPos2.z && abs(depthLenience - (rayPos2.z - depth2)) < depthLenience && rayPos2.z > handDepth && depth2 < 1.0){
 			
 			intersect = true;
 			rayPos = rayPos2;
 			break;
 		}
 		if(clamp01(rayPos3) != rayPos3) return false; // we went offscreen
-		if(depth3 < rayPos3.z && abs(depthLenience - (rayPos3.z - depth3)) < depthLenience && rayPos3.z > handDepth){
+		if(depth3 < rayPos3.z && abs(depthLenience - (rayPos3.z - depth3)) < depthLenience && rayPos3.z > handDepth && depth3 < 1.0){
 			
 			intersect = true;
 			rayPos = rayPos3;
 			break;
 		}
 		if(clamp01(rayPos4) != rayPos4) return false; // we went offscreen
-		if(depth4 < rayPos4.z && abs(depthLenience - (rayPos4.z - depth4)) < depthLenience && rayPos4.z > handDepth){
+		if(depth4 < rayPos4.z && abs(depthLenience - (rayPos4.z - depth4)) < depthLenience && rayPos4.z > handDepth && depth4 < 1.0){
 			intersect = true;
 			rayPos = rayPos4;
 			break;

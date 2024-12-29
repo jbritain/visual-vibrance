@@ -56,12 +56,18 @@ vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material m
 
 
     float faceNoL = dot(faceNormal, lightDir);
-    float sampleRadius = SHADOW_RADIUS;
+    float sampleRadius = SHADOW_SOFTNESS * 0.003;
 
     if(faceNoL <= 1e-6 && material.sss > 1e-6){
       scatter = max0(1.0 - faceNoL) * material.sss;
       sampleRadius *= (1.0 + 7.0 * material.sss);
-      scatter *= henyeyGreenstein(0.4, dot(normalize(feetPlayerPos), worldSunDir));
+
+      float VoL = dot(normalize(feetPlayerPos), worldSunDir);
+      float phase1 = henyeyGreenstein(0.4, VoL) * 0.75;
+      float phase2 = henyeyGreenstein(0.1, VoL) * 0.5;
+      // float phase3 = henyeyGreenstein(0.6, VoL);
+
+      scatter *= max(phase1, phase2);
     }
 
     #ifndef SHADOWS
@@ -94,7 +100,7 @@ vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material m
 
 		// scatter falloff
 		float scatterSampleAngle = noise * 2 * PI;
-		vec2 scatterSampleOffset = vec2(sin(scatterSampleAngle), cos(scatterSampleAngle)) * (SHADOW_RADIUS / SHADOW_SAMPLES);
+		vec2 scatterSampleOffset = vec2(sin(scatterSampleAngle), cos(scatterSampleAngle)) * (sampleRadius / SHADOW_SAMPLES);
 		float blockerDepthDifference = max0(shadowScreenPos.z - texture(shadowtex0, shadowScreenPos.xy + scatterSampleOffset).r);
 		float blockerDistance = blockerDepthDifference * 512;
 

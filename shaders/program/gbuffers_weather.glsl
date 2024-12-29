@@ -42,32 +42,16 @@
 // ===========================================================================================
 
 #ifdef fsh
-    #include "/lib/lighting/shading.glsl"
-    #include "/lib/util/packing.glsl"
-    #include "/lib/lighting/directionalLightmap.glsl"
-
     in vec2 lmcoord;
     in vec2 texcoord;
     in vec4 glcolor;
     in vec3 viewPos;
 
-    /* RENDERTARGETS: 0,1 */
+    /* RENDERTARGETS: 0 */
     layout(location = 0) out vec4 color;
-    layout(location = 1) out vec4 outData1;
 
     void main() {
-
-        color = texture(gtexture, texcoord) * glcolor;
-
-        if (color.a < alphaTestRef) {
-            discard;
-        }
-
-        if(color.b > color.r){ // rain, not snow
-            color = vec4(vec3(1.0), 0.1);
-        }
-
-        outData1 = vec4(0.0);
+        discard;
     }
 
 #endif

@@ -87,7 +87,7 @@ vec3 getClouds(vec3 origin, vec3 color, vec3 worldDir){
 
 
   vec3 transmittance = exp(-totalDensityAlongRay * CLOUD_EXTINCTION_COLOR);
-  transmittance = mix(transmittance, vec3(1.0), exp(-distance(point, cameraPosition) * 0.004));
+  transmittance = mix(transmittance, vec3(1.0), 1.0 - smoothstep(0.0, 0.2, worldDir.y)); // fade clouds towards horizon
 
   vec3 integScatter = (radiance - radiance * clamp01(transmittance)) / CLOUD_EXTINCTION_COLOR;
   vec3 scatter = integScatter * transmittance;

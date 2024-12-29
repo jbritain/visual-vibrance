@@ -55,7 +55,7 @@ value.shadowDistance.496.0=31 Chunks
 value.shadowDistance.512.0=32 Chunks
 
 option.shadowMapResolution=Shadow Quality
-option.shadowMapResolution.comment=The resolution of the shadow map. §cHigh performance impact!
+option.shadowMapResolution.comment=The resolution of the shadow map (how pixelated it is). §cHigh performance impact!
 value.shadowMapResolution.128=128x
 value.shadowMapResolution.256=256x
 value.shadowMapResolution.512=512x
@@ -66,6 +66,9 @@ value.shadowMapResolution.8192=8192x
 
 option.SHADOW_SAMPLES=Shadow Samples
 option.SHADOW_SAMPLES.comment=The number of shadow samples taken per pixel. Higher values reduce noise. §cHigh performance impact!
+
+option.SHADOW_SOFTNESS=Shadow Softness
+option.SHADOW_SOFTNESS.comment=How soft shadows will appear. Higher softness values hide pixelated shadows better at the cost of noise. §9No performance impact!
 
 option.sunPathRotation=Sun Angle
 option.sunPathRotation.comment=The angle of the path the sun and moon follow through the sky. §9No performance impact!
@@ -87,17 +90,29 @@ option.CLOUDS.comment=§aMinimal performance impact.
 option.ATMOSPHERIC_FOG=Atmospheric Fog
 option.ATMOSPHERIC_FOG.comment=Makes terrain fade into the distance. §2Imperceptible performance impact.
 
-option.CLOUDY_FOG=Morning Fog
-option.CLOUDY_FOG.comment=Adds a mist-like fog sitting over the ground in the morning. §6Moderate performance impact.
+option.CLOUDY_FOG=Fancy Fog
+option.CLOUDY_FOG.comment=Adds a mist-like fog sitting over the ground in the morning and when it rains. §6Moderate performance impact.
 
 option.BORDER_FOG=Border Fog
 option.BORDER_FOG.comment=Fades terrain into the sky towards the edge of the render distance. §2Imperceptible performance impact.
 
-option.SCREEN_SPACE_REFLECTIONS=Screen-Space Reflections
-option.SCREEN_SPACE_REFLECTIONS.comment=Adds reflections to water. §cHigh performance impact!
+option.REFLECTION_MODE=Reflection
+option.REFLECTION_MODE.comment=Adds reflections to water. The 'fast' option guesses where the reflection might be, and is often innacurate, while SSR traces through the scene to find an intersection point. §cHigh performance impact!
+value.REFLECTION_MODE.0=Off
+value.REFLECTION_MODE.1=Fast
+value.REFLECTION_MODE.2=SSR
+
+option.SSR_STEPS=SSR Steps
+option.SSR_STEPS.comment=Higher values will reduce noise in water reflections §ewhen SSR is enabled §fat the cost of performance. §6Moderate performance impact. §7Note that each step takes 4 samples.
+
+option.FADE_REFLECTIONS=Fade Reflections @ Edges
+option.FADE_REFLECTIONS.comment=Fades reflections into the sky as they approach the edge of the screen to prevent the otherwise hard cutoff. §2Imperceptible performance impact.
 
 option.REFRACTION=Refraction
 option.REFRACTION.comment=Bends light as it enters or leaves water. §aMinimal performance impact.
+
+option.CAUSTICS=Caustics
+option.CAUSTICS.comment=Emulates how light refracting through water appears to cast a shadow. §eRequires shadows to be enabled, and will look bad at lower shadow quality settings. §aMinimal performance impact.
 
 option.BLOOM=Bloom
 option.BLOOM.comment=Makes bright objects appear to glow. §6Moderate performance impact.
@@ -109,7 +124,7 @@ option.BLOOM_STRENGTH=Bloom Strength
 option.BLOOM_STRENGTH.comment=How much effect the bloom has on the final colour of the screen. §9No performance impact!
 
 option.TEMPORAL_FILTER=Temporal Filtering
-option.TEMPORAL_FILTER.comment=Uses data from previous frames to reduce noise. Can result in blurriness and ghosting. §2Imperceptible performance impact. §7Threat Interactive has no idea what he is talking about.
+option.TEMPORAL_FILTER.comment=Uses data from previous frames to reduce noise. Can result in blurriness and ghosting. §2Imperceptible performance impact. §7Please don't buy into Threat Interactive's anti TAA campaign. §7He is right that many modern games are using it as a crutch but has no credibility and does not understand graphics programming. §7The real issue is that most studios do not give developers the time necessary to properly optimise their games.
 
 option.WAVING_BLOCKS=Waving Blocks
 option.WAVING_BLOCKS.comment=Makes plants sway in the breeze. §aMinimal performance impact.

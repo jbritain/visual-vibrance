@@ -66,6 +66,8 @@ vec3 getSky(vec3 color, vec3 rayDir, bool includeSun){
 
     vec3 lum = getValFromSkyLUT(rayDir);
 
+    lum = mix(lum, weatherSkylightColor, wetness);
+
     if (!includeSun) return lum;
 
     vec3 sunLum = sun(rayDir);
@@ -82,6 +84,8 @@ vec3 getSky(vec3 color, vec3 rayDir, bool includeSun){
             lum += color * getValFromTLUT(sunTransmittanceLUTTex, tLUTRes, atmospherePos, rayDir);
         }
     }
+
+    lum = mix(lum, weatherSkylightColor, wetness);
 
     lum += sunLum;
     return lum;

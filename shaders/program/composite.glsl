@@ -82,7 +82,7 @@
             #ifdef REFRACTION
             vec3 refractionNormal = normal - waveNormal;
 
-            vec3 refractedDir = normalize(refract(viewDir, refractionNormal, rcp(1.33))); // when in water it should be rcp(1.33) but unless I use the actual normal (which results in snell's window) this results in no refraction
+            vec3 refractedDir = normalize(refract(viewDir, refractionNormal, !inWater ? rcp(1.33) : 1.33)); // when in water it should be rcp(1.33) but unless I use the actual normal (which results in snell's window) this results in no refraction
             vec3 refractedViewPos = translucentViewPos + refractedDir * distance(translucentViewPos, opaqueViewPos);
             vec3 refractedPos = viewSpaceToScreenSpace(refractedViewPos);
             if(clamp01(refractedPos.xy) == refractedPos.xy && texture(depthtex2, refractedPos.xy).r > translucentDepth){
@@ -105,21 +105,41 @@
 
             float scatter = 0.0;
 
-            #ifdef SCREEN_SPACE_REFLECTIONS
+            #if REFLECTION_MODE > 0
             bool doReflections = true;
             #else
             bool doReflections = false;
             #endif
 
-            if(doReflections && rayIntersects(translucentViewPos, reflectedDir, 4, jitter, true, reflectedPos)){
+            float fadeFactor = 0.0;
+
+            if(doReflections && rayIntersects(translucentViewPos, reflectedDir, SSR_STEPS, jitter, true, reflectedPos)){
                 reflectedColor = texture(colortex0, reflectedPos.xy).rgb;
-                reflectedColor = atmosphericFog(reflectedColor, screenSpaceToViewSpace(reflectedPos));
-            } else {
+                vec3 viewReflectedPos = screenSpaceToViewSpace(reflectedPos);
+                vec3 playerReflectedPos = mat3(gbufferModelViewInverse) * viewReflectedPos;
+                #ifdef ATMOSPHERIC_FOG
+                reflectedColor = atmosphericFog(reflectedColor, viewReflectedPos);
+                #endif
+                #ifdef CLOUDY_FOG
+                reflectedColor = cloudyFog(reflectedColor, playerReflectedPos, reflectedPos.z);
+                #endif
+                #ifdef FADE_REFLECTIONS
+                fadeFactor = 1.0 - smoothstep(0.9, 1.0, maxVec2(abs(reflectedPos.xy - 0.5)) * 2);
+                #else
+                fadeFactor = 1.0;
+                #endif
+            }
+
+            if(fadeFactor < 1.0){
                 vec3 worldReflectedDir = mat3(gbufferModelViewInverse) * reflectedDir;
-                reflectedColor = getSky(worldReflectedDir, false) * skyLightmap;
+                vec3 skyReflection = getSky(worldReflectedDir, false) * skyLightmap;
                 vec3 shadow = getShadowing(translucentFeetPlayerPos, waveNormal, vec2(skyLightmap), material, scatter);
-                reflectedColor += max0(brdf(material, waveNormal, waveNormal, translucentViewPos, scatter) * weatherSunlightColor * shadow);
-                reflectedColor = mix(reflectedColor, getClouds(translucentFeetPlayerPos, reflectedColor, worldReflectedDir), skyLightmap);
+                skyReflection += max0(brdf(material, waveNormal, waveNormal, translucentViewPos, scatter) * weatherSunlightColor * shadow);
+                skyReflection = mix(skyReflection, getClouds(translucentFeetPlayerPos, skyReflection, worldReflectedDir), skyLightmap);
+
+                skyReflection = mix(skyReflection, weatherSkylightColor, wetness);
+
+                reflectedColor = mix(skyReflection, reflectedColor, fadeFactor);
             }
 
             

@@ -15,6 +15,8 @@
 #ifndef FOG_GLSL
 #define FOG_GLSL
 
+#include "/lib/atmosphere/clouds.glsl"
+
 vec3 atmosphericFog(vec3 color, vec3 viewPos){
   color = mix(weatherSkylightColor, color.rgb, exp(-length(viewPos) * 0.0004 * (EBS.y)));
   return color;
@@ -28,7 +30,14 @@ vec3 atmosphericFog(vec3 color, vec3 viewPos){
 #define HEIGHT_FOG_BOTTOM_HEIGHT 50
 
 float getFogDensity(float height){
-  return (1.0 - smoothstep(HEIGHT_FOG_BOTTOM_HEIGHT, HEIGHT_FOG_TOP_HEIGHT, height)) * FOG_DENSITY;
+  float topHeight = mix(HEIGHT_FOG_TOP_HEIGHT, CLOUD_PLANE_ALTITUDE, wetness);
+
+  if(height > HEIGHT_FOG_MIDDLE_HEIGHT){
+    return (1.0 - smoothstep(HEIGHT_FOG_MIDDLE_HEIGHT, topHeight, height)) * FOG_DENSITY;
+  } else {
+    return FOG_DENSITY;
+  }
+  
 }
 
 vec3 cloudyFog(vec3 color, vec3 playerPos, float depth){
@@ -39,6 +48,9 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth){
   } else {
     fogFactor = 1.0 - smoothstep(0, 1000, worldTime);
   }
+
+  fogFactor += wetness;
+  fogFactor += thunderStrength;
 
   if(fogFactor < 1e-6){
     return color;
