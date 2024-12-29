@@ -42,6 +42,11 @@ void main()
     }
     skylightColor /= float(samples);
 
+    if(lightningBoltPosition.xyz != vec3(0.0)){
+        skylightColor += vec3(20.0, 20.0, 40.0);
+        sunlightColor += vec3(20.0, 20.0, 40.0);
+    }
+
     // skylightColor = mix(skylightColor, exp(-1.0 * 10 * skylightColor), wetness);
     // sunlightColor = mix(sunlightColor, exp(-1.0 * 10 * sunlightColor), wetness);
 }

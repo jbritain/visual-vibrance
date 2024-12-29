@@ -16,16 +16,19 @@
 #define SWAY_GLSL
 
 vec3 getWave(vec3 pos){
-  float magnitude = 0.1;
+  float t = frameTimeCounter * (1.0 + wetness * 0.5 + thunderStrength * 0.5) * 0.3;
 
-  float d0 = sin(frameTimeCounter);
-  float d1 = sin(frameTimeCounter * 0.5);
-  float d2 = sin(frameTimeCounter * 0.25);
+  float magnitude = (sin(((pos.y + pos.x) * 0.5 + t * PI / ((88.0)))) * 0.05 + 0.15) * 0.35;
 
-  vec3 wave;
-  wave.x = sin(0.2 + d0 + d1 - pos.x + pos.y + pos.z) * magnitude;
-  wave.y = sin(0.05 + d1 + d2 + pos.x - pos.y + pos.z) * magnitude * 0.2;
-  wave.z = sin(0.4 + d2 + d0 + pos.x + pos.y - pos.z) * magnitude;
+  float d0 = sin(t * 20.0 * PI / 112.0 * 3.0 - 1.5);
+  float d1 = sin(t * 20.0 * PI / 152.0 * 3.0 - 1.5);
+  float d2 = sin(t * 20.0 * PI / 192.0 * 3.0 - 1.5);
+  float d3 = sin(t * 20.0 * PI / 142.0 * 3.0 - 1.5);
+
+  vec3 wave = vec3(0.0);
+  wave.x += (sin((t * 20.0 * PI / 16.0) + (pos.x + d0) * 0.5 + (pos.z + d1) * 0.5 + pos.y)) * magnitude;
+  wave.z += (sin((t * 20.0 * PI / 18.0) + (pos.z + d2) * 0.5 + (pos.x + d3) * 0.5 + pos.y)) * magnitude;
+  wave.y += (sin((t * 20.0 * PI / 10.0) + (pos.z + d2)       + (pos.x + d3)       + pos.y)) * magnitude * 0.5;
 
   return wave;
 }

@@ -65,6 +65,8 @@ vec3 getClouds(vec3 origin, vec3 color, vec3 worldDir){
 
   density *= 0.01;
 
+  density *= 1.0 + thunderStrength * 8.0;
+
   // angles relative to sun
   float costh = dot(worldDir, worldLightDir);
   float sinth = sqrt(1.0 - pow2(costh));

@@ -10,6 +10,7 @@
     setup1          : Compute multiple scattering LUT for atmosphere
 
     prepare         : Compute sky view LUT
+    prepare1        : Compute skylight colour by taking several hemisphere samples
 
     deferred        : Render sky
 
