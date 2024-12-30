@@ -11,11 +11,12 @@ Glimmer is a Minecraft shaderpack designed to be simple and performant without l
 ## Features
 - 'Potato', 'Toaster', 'Integrated Graphics' and 'Dedicated Graphics' presets, designed to run on anything from your fridge to a NASA supercomputer.
 - Complete LabPBR 1.3 compliance.
+- 'Infinite Ocean', adding water stretching out of render distance.
 - Shadows, using either the shadow map or approximated from the lightmap.
 - Screen space reflections and refractions.
 - Procedural 2D clouds.
 - Temporal filtering to reduce noise at low sample counts.
-- Bloom
+- Bloom.
 
 ## Compatibility
 - OpenGL 4.3+ - MacOS is *not supported*, nor is the Raspberry Pi. Most modern GPUs (integrated or dedicated) should work fine.
@@ -28,6 +29,7 @@ Glimmer is a Minecraft shaderpack designed to be simple and performant without l
 - [NinjaMike](https://github.com/NinjaMike) - Directional lightmapping method
 - [sixthsurge](https://github.com/sixthsurge) - A decent amount of code reference from [Photon](https://github.com/sixthsurge/photon)
 - [Null](https://github.com/Null-MC/) - Help porting in the atmospheric scattering code
+- [BuilderB0y](https://github.com/builderb0y) from whom I shamelessly stole the idea of an infinite ocean plane
 - As always, the members of the ShaderLABS Discord server who have helped me get this far learning how to do all this
 - Many other people, there are links scattered throughout the code
 

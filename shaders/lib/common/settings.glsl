@@ -38,6 +38,8 @@ const float sunPathRotation = -40.0; // [-90.0 -85.0 -80.0 -75.0 -70.0 -65.0 -60
 #define REFRACTION
 // #define CAUSTICS
 
+// #define INFINITE_OCEAN
+
 #define GLIMMER_SHADERS 1 // [1 2]
 #define WEBSITE 1 // [1 2]
 

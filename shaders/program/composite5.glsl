@@ -67,6 +67,17 @@ void main(){
         vec3 viewPos = screenSpaceToViewSpace(vec3(texcoord, depth));
         dhOverride(depth, viewPos, false);
 
+        #ifdef INFINITE_OCEAN
+        if(depth == 1.0){
+            vec3 feetPlayerPos;
+            if(rayPlaneIntersection(vec3(0.0, 0.0, 0.0), normalize(mat3(gbufferModelViewInverse) * viewPos), 63.0 - cameraPosition.y, feetPlayerPos)){
+                viewPos = (gbufferModelView * vec4(feetPlayerPos, 1.0)).xyz;
+                depth = 0.5;
+                
+            }
+        }
+        #endif
+
         color.rgb = defaultFog(color.rgb, viewPos);
 
         #ifdef WORLD_OVERWORLD

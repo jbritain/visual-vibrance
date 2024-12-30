@@ -68,7 +68,18 @@
 
         vec3 translucentFeetPlayerPos = (gbufferModelViewInverse * vec4(translucentViewPos, 1.0)).xyz;
 
+        #ifdef INFINITE_OCEAN
+        if(translucentDepth == 1.0 && !inWater){
+            if(rayPlaneIntersection(vec3(0.0, 0.0, 0.0), normalize(translucentFeetPlayerPos), 63.0 - cameraPosition.y, translucentFeetPlayerPos)){
+                translucentViewPos = (gbufferModelView * vec4(translucentFeetPlayerPos, 1.0)).xyz;
+                normal = mat3(gbufferModelView) * vec3(0.0, 1.0, 0.0);
+                isWater = true;
+            }
+        }
+        #endif
+
         if(isWater){
+
             Material material = Material(
                 vec3(0.0),
                 0.0,
