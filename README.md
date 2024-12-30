@@ -11,6 +11,7 @@ Glimmer is a Minecraft shaderpack designed to be simple and performant without l
 ## Features
 - 'Potato', 'Toaster', 'Integrated Graphics' and 'Dedicated Graphics' presets, designed to run on anything from your fridge to a NASA supercomputer.
 - Complete LabPBR 1.3 compliance.
+- Distant Horizons support!
 - 'Infinite Ocean', adding water stretching out of render distance.
 - Shadows, using either the shadow map or approximated from the lightmap.
 - Screen space reflections and refractions.
