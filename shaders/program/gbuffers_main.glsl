@@ -115,6 +115,7 @@
         if(materialID == MATERIAL_WATER){
             material.f0 = vec3(0.02);
             material.roughness = 0.0;
+            material.albedo = vec3(0.0);
         }
 
         #ifdef DIRECTIONAL_LIGHTMAPS

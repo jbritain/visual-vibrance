@@ -60,6 +60,15 @@
     layout(location = 1) out vec4 outData1;
 
     void main() {
+        if(length(viewPos) < far - 16){
+            discard;
+            return;
+        }
+
+        if(texture(depthtex0, gl_FragCoord.xy / resolution).r < 1.0){
+            discard;
+        }
+
         vec2 lightmap = (lmcoord * 33.05 / 32.0) - (1.05 / 32.0);
 
         #ifdef WORLD_THE_END

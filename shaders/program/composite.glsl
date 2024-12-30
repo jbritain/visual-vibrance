@@ -39,6 +39,8 @@
 
     in vec2 texcoord;
 
+    #include "/lib/dh.glsl"
+
     /* RENDERTARGETS: 0 */
     layout(location = 0) out vec4 color;
 
@@ -58,6 +60,9 @@
 
         vec3 translucentViewPos = screenSpaceToViewSpace(vec3(texcoord, translucentDepth));
         vec3 opaqueViewPos = screenSpaceToViewSpace(vec3(texcoord, opaqueDepth));
+
+        dhOverride(translucentDepth, translucentViewPos, false);
+        dhOverride(opaqueDepth, opaqueViewPos, true);
 
         vec3 viewDir = normalize(translucentViewPos);
 
@@ -107,6 +112,12 @@
 
             #if REFLECTION_MODE > 0
             bool doReflections = true;
+
+            #ifdef DISTANT_HORIZONS
+            if(DH_MASK){
+                doReflections = false;
+            }
+            #endif
             #else
             bool doReflections = false;
             #endif
