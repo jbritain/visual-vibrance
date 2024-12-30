@@ -60,6 +60,9 @@ void main(){
     void main() {
         color = texture(colortex0, texcoord);
         float depth = texture(depthtex0, texcoord).r;
+        vec4 data1 = texture(colortex1, texcoord);
+        int materialID = int(data1.a * 255 + 0.5) + 1000;
+        bool isWater = materialID == MATERIAL_WATER;
         if(isEyeInWater == 1){
             return;
         }
@@ -73,7 +76,7 @@ void main(){
             if(rayPlaneIntersection(vec3(0.0, 0.0, 0.0), normalize(mat3(gbufferModelViewInverse) * viewPos), 63.0 - cameraPosition.y, feetPlayerPos)){
                 viewPos = (gbufferModelView * vec4(feetPlayerPos, 1.0)).xyz;
                 depth = 0.5;
-                
+                isWater = true;
             }
         }
         #endif
@@ -82,7 +85,7 @@ void main(){
 
         #ifdef WORLD_OVERWORLD
         #ifdef ATMOSPHERIC_FOG
-        if(depth != 1.0) color.rgb = atmosphericFog(color.rgb, viewPos);
+        if(depth != 1.0 && !isWater) color.rgb = atmosphericFog(color.rgb, viewPos);
         #endif
         #ifdef CLOUDY_FOG
         color.rgb = cloudyFog(color.rgb, mat3(gbufferModelViewInverse) * viewPos, depth);

@@ -78,6 +78,8 @@
         }
         #endif
 
+        vec3 worldNormal = mat3(gbufferModelViewInverse) * normal;
+
         if(isWater){
 
             Material material = Material(
@@ -92,7 +94,10 @@
                 0.0
             );
 
-            vec3 waveNormal = mat3(gbufferModelView) * waveNormal(translucentFeetPlayerPos.xz + cameraPosition.xz, mat3(gbufferModelViewInverse) * normal, clamp01(sin(abs(normalize(translucentFeetPlayerPos).y) * PI / 2.0)));
+            vec3 waveNormal = mat3(gbufferModelView) * waveNormal(translucentFeetPlayerPos.xz + cameraPosition.xz, worldNormal, clamp01(abs(dot(normal, viewDir))));
+            // if(dot(waveNormal, viewDir) > 0.0){
+            //     waveNormal = normal;
+            // }
 
             // refraction
             #ifdef REFRACTION
