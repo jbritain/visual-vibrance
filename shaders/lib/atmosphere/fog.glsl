@@ -18,7 +18,7 @@
 #include "/lib/atmosphere/clouds.glsl"
 
 vec3 atmosphericFog(vec3 color, vec3 viewPos){
-  color = mix(weatherSkylightColor, color.rgb, exp(-length(viewPos) * 0.0004 * (EBS.y)));
+  color = mix(weatherSkylightColor, color.rgb, clamp01(exp(-length(viewPos) * 0.0004 * (EBS.y))));
   return color;
 }
 

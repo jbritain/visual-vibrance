@@ -16,7 +16,7 @@ const vec3 moonIrradiance = vec3(0.5, 0.5, 1.0) * 0.5;
 const float groundRadiusMM = 6.360;
 const float atmosphereRadiusMM = 6.460;
 
-vec3 atmospherePos = vec3(0.0, groundRadiusMM + (cameraPosition.y + 1000) * 1e-6, 0.0);
+vec3 atmospherePos = vec3(0.0, groundRadiusMM + (cameraPosition.y + 5000) * 1e-6, 0.0);
 
 const vec2 tLUTRes = vec2(256.0, 64.0);
 const vec2 msLUTRes = vec2(32.0, 32.0);

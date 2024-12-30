@@ -68,7 +68,7 @@ void main(){
         dhOverride(depth, viewPos, false);
 
         #ifdef INFINITE_OCEAN
-        if(depth == 1.0){
+        if(depth == 1.0 && cameraPosition.y > 63.0){
             vec3 feetPlayerPos;
             if(rayPlaneIntersection(vec3(0.0, 0.0, 0.0), normalize(mat3(gbufferModelViewInverse) * viewPos), 63.0 - cameraPosition.y, feetPlayerPos)){
                 viewPos = (gbufferModelView * vec4(feetPlayerPos, 1.0)).xyz;
