@@ -137,7 +137,7 @@ uniform sampler2D perlinNoiseTex;
     uniform mat4 dhProjection;
     uniform mat4 dhProjectionInverse;
     
-    uniform sampler2D dhDepthTex;
+    uniform sampler2D dhDepthTex0;
     uniform sampler2D dhDepthTex1;
 #endif
 

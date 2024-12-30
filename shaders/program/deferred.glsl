@@ -33,6 +33,8 @@
 
     in vec2 texcoord;
 
+    #include "/lib/dh.glsl"
+
     /* RENDERTARGETS: 0 */
     layout(location = 0) out vec4 color;
 
@@ -42,6 +44,10 @@
         float depth = texture(depthtex0, texcoord).r;
         if(depth == 1.0){
             vec3 viewPos = screenSpaceToViewSpace(vec3(texcoord, depth)); 
+            dhOverride(depth, viewPos, false);
+            if(DH_MASK){
+                return;
+            }
 
             vec3 worldDir = mat3(gbufferModelViewInverse) * normalize(viewPos);
 

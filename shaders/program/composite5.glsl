@@ -52,6 +52,8 @@ void main(){
 
     in vec2 texcoord;
 
+    #include "/lib/dh.glsl"
+
     /* RENDERTARGETS: 0 */
     layout(location = 0) out vec4 color;
 
@@ -63,6 +65,7 @@ void main(){
         }
 
         vec3 viewPos = screenSpaceToViewSpace(vec3(texcoord, depth));
+        dhOverride(depth, viewPos, false);
 
         color.rgb = defaultFog(color.rgb, viewPos);
 

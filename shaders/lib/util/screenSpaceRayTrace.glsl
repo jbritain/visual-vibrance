@@ -42,6 +42,8 @@ void binarySearch(inout vec3 rayPos, vec3 rayDir){
 // https://gist.github.com/BelmuTM/af0fe99ee5aab386b149a53775fe94a3
 bool rayIntersects(vec3 viewOrigin, vec3 viewDir, int maxSteps, float jitter, bool refine, out vec3 rayPos){
 
+	// TODO: DISTANT HORIZONS
+
 	if(viewDir.z > 0.0 && viewDir.z >= -viewOrigin.z){
 		return false;
 	}
