@@ -65,4 +65,7 @@ const bool colortex3Clear = false;
 */
 #endif
 
+#ifdef INFINITE_OCEAN
+#endif
+
 #endif // COMMON_GLSL

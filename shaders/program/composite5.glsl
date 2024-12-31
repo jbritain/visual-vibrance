@@ -26,7 +26,11 @@ void main(){
     }
 
     vec2 lightScreenPos = viewSpaceToScreenSpace(shadowLightPosition).xy;
-    float sunVisibility = 1.0 - float(clamp01(lightScreenPos) != lightScreenPos || texture(depthtex0, lightScreenPos).r < 1.0);
+    float sunVisibility = float(texture(depthtex0, lightScreenPos).r == 1.0);
+
+    if(clamp01(lightScreenPos) != lightScreenPos){
+        sunVisibility = EB.y;
+    }
 
     sunVisibilitySmooth = mix(sunVisibility, sunVisibilitySmooth, clamp01(exp2(frameTime * -1.0)));
 }
@@ -70,7 +74,7 @@ void main(){
         vec3 viewPos = screenSpaceToViewSpace(vec3(texcoord, depth));
         dhOverride(depth, viewPos, false);
 
-        #ifdef INFINITE_OCEAN
+        #if defined INFINITE_OCEAN && defined WORLD_OVERWORLD
         if(depth == 1.0 && cameraPosition.y > 63.0){
             vec3 feetPlayerPos;
             if(rayPlaneIntersection(vec3(0.0, 0.0, 0.0), normalize(mat3(gbufferModelViewInverse) * viewPos), 63.0 - cameraPosition.y, feetPlayerPos)){

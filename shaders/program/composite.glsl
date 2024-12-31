@@ -68,12 +68,13 @@
 
         vec3 translucentFeetPlayerPos = (gbufferModelViewInverse * vec4(translucentViewPos, 1.0)).xyz;
 
-        #ifdef INFINITE_OCEAN
+        #if defined INFINITE_OCEAN && defined WORLD_OVERWORLD
         if(translucentDepth == 1.0 && !inWater && cameraPosition.y > 63.0){
             if(rayPlaneIntersection(vec3(0.0, 0.0, 0.0), normalize(translucentFeetPlayerPos), 63.0 - cameraPosition.y, translucentFeetPlayerPos)){
                 translucentViewPos = (gbufferModelView * vec4(translucentFeetPlayerPos, 1.0)).xyz;
                 normal = mat3(gbufferModelView) * vec3(0.0, 1.0, 0.0);
                 isWater = true;
+                color.rgb = vec3(0.0);
             }
         }
         #endif
@@ -113,6 +114,8 @@
             } 
             #endif
 
+
+
             // water fog when we're not in water
             if (!inWater){
                 color.rgb = waterFog(color.rgb, translucentViewPos, opaqueViewPos);
@@ -140,6 +143,10 @@
 
             float fadeFactor = 0.0;
 
+            // note that we are incorrectly applying fog to reflections here
+            // we do fog from the camera when we should really do fog from the reflection position
+            // but it looks passable and is much easier
+
             if(doReflections && rayIntersects(translucentViewPos, reflectedDir, SSR_STEPS, jitter, true, reflectedPos)){
                 reflectedColor = texture(colortex0, reflectedPos.xy).rgb;
                 vec3 viewReflectedPos = screenSpaceToViewSpace(reflectedPos);
@@ -163,8 +170,10 @@
                 vec3 shadow = getShadowing(translucentFeetPlayerPos, waveNormal, vec2(skyLightmap), material, scatter);
                 skyReflection += max0(brdf(material, waveNormal, waveNormal, translucentViewPos, scatter) * weatherSunlightColor * shadow);
                 skyReflection = mix(skyReflection, getClouds(translucentFeetPlayerPos, skyReflection, worldReflectedDir), skyLightmap);
-
-                skyReflection = mix(skyReflection, weatherSkylightColor, wetness);
+                #ifdef CLOUDY_FOG
+                vec3 playerReflectedPos = translucentFeetPlayerPos + worldReflectedDir * far;
+                skyReflection = cloudyFog(skyReflection, playerReflectedPos, reflectedPos.z);
+                #endif
 
                 reflectedColor = mix(skyReflection, reflectedColor, fadeFactor);
             }
