@@ -95,7 +95,7 @@
                 0.0
             );
 
-            vec3 waveNormal = mat3(gbufferModelView) * waveNormal(translucentFeetPlayerPos.xz + cameraPosition.xz, worldNormal, clamp01(abs(dot(normal, viewDir))));
+            vec3 waveNormal = mat3(gbufferModelView) * waveNormal(translucentFeetPlayerPos.xz + cameraPosition.xz, worldNormal, sin(PI * 0.5 * clamp01(abs(dot(normal, viewDir)))));
             // if(dot(waveNormal, viewDir) > 0.0){
             //     waveNormal = normal;
             // }

@@ -39,6 +39,12 @@
         tbnMatrix[1] = normalize(cross(tbnMatrix[0], tbnMatrix[2]) * at_tangent.w);
 
         viewPos = (gl_ModelViewMatrix * gl_Vertex).xyz;
+
+        #ifdef GBUFFERS_HAND
+        gl_Position = ftransform();
+        return;
+        #endif
+
         #ifdef WAVING_BLOCKS
         vec3 feetPlayerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
         feetPlayerPos = getSway(materialID, feetPlayerPos + cameraPosition, at_midBlock) - cameraPosition;
