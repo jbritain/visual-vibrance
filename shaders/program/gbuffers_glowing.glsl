@@ -35,6 +35,7 @@
         normal = gl_NormalMatrix * gl_Normal;
 
         viewPos = (gl_ModelViewMatrix * gl_Vertex).xyz;
+        viewPos += normal * 1e-3; // z fighting fix
 
         gl_Position = gbufferProjection * vec4(viewPos, 1.0);
     }
