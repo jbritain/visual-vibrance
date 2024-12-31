@@ -126,6 +126,8 @@ vec3 upSample(sampler2D sourceTexture, vec2 coord){
   usample += (a + c + g + i);
   usample /= 16.0;
 
+  usample = max(usample, 0.0001);
+
   return usample;
 }
 
