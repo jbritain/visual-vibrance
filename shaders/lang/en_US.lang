@@ -171,6 +171,9 @@ value.PBR_MODE.1=LabPBR 1.3
 option.CLOUDS=Clouds
 option.CLOUDS.comment=§aMinimal performance impact.
 
+option.BLOCKY_CLOUDS=Blocky Clouds
+option.BLOCKY_CLOUDS.comment=Makes clouds have clearly defined square shapes in them. This was originally a bug, but people liked it, so now it's a feature! §9No performance impact!
+
 option.ATMOSPHERIC_FOG=Atmospheric Fog
 option.ATMOSPHERIC_FOG.comment=Makes terrain fade into the distance. §2Imperceptible performance impact.
 
