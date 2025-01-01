@@ -45,7 +45,7 @@
         if(depth == 1.0){
             vec3 viewPos = screenSpaceToViewSpace(vec3(texcoord, depth)); 
             dhOverride(depth, viewPos, false);
-            if(DH_MASK){
+            if(dhMask){
                 return;
             }
 

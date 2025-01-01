@@ -15,7 +15,7 @@
 #ifndef DH_GLSL
 #define DH_GLSL
 
-bool DH_MASK = false;
+bool dhMask = false;
 
 #ifdef DISTANT_HORIZONS
 
@@ -43,7 +43,7 @@ void dhOverride(inout float depth, inout vec3 viewPos, bool opaque){
 
     if(depth == 1.0) return;
 
-    DH_MASK = true;
+    dhMask = true;
 
     vec3 screenPos = vec3(texcoord, depth);
 
