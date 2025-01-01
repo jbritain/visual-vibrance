@@ -29,6 +29,7 @@
 
 #ifdef fsh
     #include "/lib/post/tonemap.glsl"
+    #include "/lib/post/processing.glsl"
 
     in vec2 texcoord;
 
@@ -44,6 +45,8 @@
 
         color.rgb *= 2.0;
         color.rgb = tonemap(color.rgb);
+
+        color = postProcess(color);
     }
 
 #endif
