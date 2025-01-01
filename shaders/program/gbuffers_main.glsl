@@ -129,7 +129,7 @@
         #endif
 
         if(materialID == MATERIAL_WATER){
-            color.a = 0.0;
+            color = vec4(0.0);
         }  else {
             color.rgb = getShadedColor(material, mappedNormal, tbnMatrix[2], lightmap, viewPos);
             color.a = albedo.a;

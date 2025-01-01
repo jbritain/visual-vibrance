@@ -58,7 +58,11 @@ vec3 getClouds(vec3 origin, vec3 color, vec3 worldDir){
 
   point.z += worldTime;
 
+  #ifdef BLOCKY_CLOUDS
+  float density = smoothstep(mix(0.25, 0.0, wetness), mix(0.75, 0.25, wetness), texelFetch(perlinNoiseTex, ivec2(mod(point.xz / 30000, 1.0) * 256), 0).r);
+  #else
   float density = smoothstep(mix(0.25, 0.0, wetness), mix(0.75, 0.25, wetness), texture(perlinNoiseTex, mod(point.xz / 30000, 1.0)).r);
+  #endif
   density = remap(density, texture(perlinNoiseTex, mod(point.xz / 1000, 1.0)).g, 1.0, 0.0, 1.0);
 
   density = pow2(density);
