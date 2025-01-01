@@ -18,7 +18,9 @@ profile.igpu=§aIntegrated Graphics
 profile.dgpu=§bDedicated Graphics
 
 option.CONTRAST=Contrast
+option.CONTRAST.comment=§9No performance impact!
 option.SATURATION=Saturation
+option.SATURATION.comment=§9No performance impact!
 
 option.EXPOSURE=Exposure
 option.EXPOSURE.comment=Controls the final brightness of the screen. §9No performance impact!

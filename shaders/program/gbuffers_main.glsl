@@ -119,6 +119,7 @@
         }
 
         if(materialID == MATERIAL_WATER){
+            mappedNormal = tbnMatrix[2];
             material.f0 = vec3(0.02);
             material.roughness = 0.0;
             material.albedo = vec3(0.0);
