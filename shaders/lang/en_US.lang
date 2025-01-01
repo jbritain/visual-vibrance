@@ -17,6 +17,9 @@ profile.toaster=§6Toaster
 profile.igpu=§aIntegrated Graphics
 profile.dgpu=§bDedicated Graphics
 
+option.CONTRAST=Contrast
+option.SATURATION=Saturation
+
 option.EXPOSURE=Exposure
 option.EXPOSURE.comment=Controls the final brightness of the screen. §9No performance impact!
 value.EXPOSURE.0=0.0
