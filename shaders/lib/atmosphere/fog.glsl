@@ -24,16 +24,14 @@ vec3 atmosphericFog(vec3 color, vec3 viewPos){
 
 #define FOG_DENSITY 0.01
 // above this height there is no fog
-#define HEIGHT_FOG_TOP_HEIGHT 150
+#define HEIGHT_FOG_TOP_HEIGHT mix(150, CLOUD_PLANE_ALTITUDE, wetness)
 // below this height there is a constant fog density
 #define HEIGHT_FOG_MIDDLE_HEIGHT 30
 #define HEIGHT_FOG_BOTTOM_HEIGHT 0
 
 float getFogDensity(float height){
-  float topHeight = mix(HEIGHT_FOG_TOP_HEIGHT, CLOUD_PLANE_ALTITUDE, wetness);
-
   if(height > HEIGHT_FOG_MIDDLE_HEIGHT){
-    return (1.0 - smoothstep(HEIGHT_FOG_MIDDLE_HEIGHT, topHeight, height)) * FOG_DENSITY;
+    return (1.0 - smoothstep(HEIGHT_FOG_MIDDLE_HEIGHT, HEIGHT_FOG_TOP_HEIGHT, height)) * FOG_DENSITY;
   } else {
     return FOG_DENSITY;
   }
@@ -49,7 +47,7 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth){
     fogFactor = 1.0 - smoothstep(0, 1000, worldTime);
   }
 
-  fogFactor += wetness;
+  fogFactor += wetness * 0.1;
   fogFactor += thunderStrength;
 
   if(fogFactor < 1e-6){
