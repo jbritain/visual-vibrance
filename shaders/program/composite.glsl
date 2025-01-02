@@ -80,6 +80,7 @@
                 infiniteOceanMask = true;
                 translucentViewPos = (gbufferModelView * vec4(translucentFeetPlayerPos, 1.0)).xyz;
                 normal = mat3(gbufferModelView) * vec3(0.0, 1.0, 0.0);
+                worldNormal = vec3(0.0, 1.0, 0.0);
                 isWater = true;
                 color.rgb = vec3(0.0);
             }
@@ -87,7 +88,6 @@
         #endif
 
         if(isWater){
-
             Material material = Material(
                 vec3(0.0),
                 0.0,
@@ -129,7 +129,6 @@
 
             // water fog when we're not in water
             if (!inWater){
-
                 // so basically dh terrain doesn't get the shadow cast on it by water
                 // since we have already shaded it, we can't really account for this properly
                 // so we just add fog based on the distance between the terrain and the water's surface going towards the sun
