@@ -121,6 +121,11 @@ vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos, f
 		Rs *= material.albedo;
 	}
 
+	// this was causing some weird issues
+	if(NoL < 1e-6){
+		Rs = vec3(0.0);
+	}
+
 	vec3 Rd = material.albedo * (1.0 - F) * clamp01(NoL + scatter);
 
 	return Rs + Rd;
