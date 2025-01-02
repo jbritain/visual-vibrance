@@ -29,9 +29,14 @@ void main(){
 
 
     vec2 lightScreenPos = viewSpaceToScreenSpace(shadowLightPosition).xy;
+    
+    // isn't this some fun syntax
+    float sunVisibility = float(texture(depthtex0, lightScreenPos).r == 1.0
     #ifdef DISTANT_HORIZONS
-    float sunVisibility = float(texture(depthtex0, lightScreenPos).r == 1.0 && texture(dhDepthTex0, lightScreenPos).r == 1.0);
+     && texture(dhDepthTex0, lightScreenPos).r == 1.0
     #endif
+    );
+    
 
     if(clamp01(lightScreenPos) != lightScreenPos){
         #ifdef SHADOWS
