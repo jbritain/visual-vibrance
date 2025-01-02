@@ -18,7 +18,16 @@
 #include "/lib/atmosphere/clouds.glsl"
 
 vec3 atmosphericFog(vec3 color, vec3 viewPos){
-  color = mix(weatherSkylightColor, color.rgb, clamp01(exp(-length(viewPos) * 0.0004 * (EBS.y))));
+  float transmittance = clamp01(exp(-length(viewPos) * 0.0004 * (EBS.y)));
+  vec3 fogColor = weatherSkylightColor;
+
+  #ifdef DISTANT_HORIZONS
+  fogColor = mix(fogColor, getSky(normalize(mat3(gbufferModelViewInverse) * viewPos), false), smoothstep(dhFarPlane, dhFarPlane * 2.0, length(viewPos)));
+  #else
+  fogColor = mix(fogColor, getSky(normalize(mat3(gbufferModelViewInverse) * viewPos), false), smoothstep(far, far * 2.0, length(viewPos)));
+  #endif
+
+  color = mix(fogColor, color.rgb, transmittance);
   return color;
 }
 

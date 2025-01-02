@@ -133,6 +133,7 @@ uniform sampler2D perlinNoiseTex;
 
 #ifdef DISTANT_HORIZONS
     uniform int dhRenderDistance;
+    uniform float dhFarPlane;
 
     uniform mat4 dhProjection;
     uniform mat4 dhProjectionInverse;
