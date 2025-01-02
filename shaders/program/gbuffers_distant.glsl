@@ -76,17 +76,45 @@
         #endif
 
 
-        vec4 albedo = texture(gtexture, texcoord) * glcolor;
+        vec4 albedo = glcolor;
 
         if (albedo.a < alphaTestRef) {
             discard;
         }
 
+        int materialID = materialID;
+        if(materialID == MATERIAL_WATER && albedo.a == 1.0){
+            materialID = 0;
+        }
+
+        vec3 feetPlayerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
+        vec3 worldPos = feetPlayerPos + cameraPosition;
+        vec3 noisePos = mod(worldPos * 4.0, 64.0);
+        vec3 worldNormal = mat3(gbufferModelViewInverse) * normal;
+        ivec2 noiseCoord;
+        if(abs(worldNormal.x) > 0.5){
+            noiseCoord = ivec2(noisePos.yz);
+        } else if (abs(worldNormal.y) > 0.5){
+            noiseCoord = ivec2(noisePos.xz);
+        } else {
+            noiseCoord = ivec2(noisePos.xy);
+        }
+
+        albedo.rgb *= texelFetch(noisetex, noiseCoord, 0).r * 0.1 + 0.9;
+
+
         albedo.rgb = pow(albedo.rgb, vec3(2.2));
 
-        vec4 specularData = texture(specular, texcoord);
-        Material material = materialFromSpecularMap(albedo.rgb, specularData);
-        material.ao = texture(normals, texcoord).z;
+        Material material;
+        material.albedo = albedo.rgb;
+        material.roughness = 1.0;
+        material.f0 = vec3(0.0);
+        material.f82 = vec3(0.0);
+        material.metalID = NO_METAL;
+        material.porosity = 0.0;
+        material.sss = 0.0;
+        material.emission = 0.0;
+        material.ao = 0.0;
 
         if(materialID == MATERIAL_PLANTS || materialID == MATERIAL_LEAVES || materialID == MATERIAL_TALL_PLANT_UPPER || materialID == MATERIAL_TALL_PLANT_LOWER){
             material.sss = 1.0;
@@ -100,7 +128,7 @@
         }
 
         if(materialID == MATERIAL_WATER){
-            color.a = 0.0;
+            color = vec4(0.0);
         }  else {
             color.rgb = getShadedColor(material, normal, normal, lightmap, viewPos);
             color.a = albedo.a;

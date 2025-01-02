@@ -14,25 +14,6 @@
 
 #include "/lib/common.glsl"
 
-#ifdef csh
-
-layout (local_size_x = 1, local_size_y = 1) in;
-const ivec3 workGroups = ivec3(1, 1, 1);
-
-void main(){
-    if(frameCounter == 0){
-        sunVisibilitySmooth = 0.0;
-        return;
-    }
-
-    vec2 lightScreenPos = viewSpaceToScreenSpace(shadowLightPosition).xy;
-    float sunVisibility = 1.0 - float(clamp01(lightScreenPos) != lightScreenPos || texture(depthtex0, lightScreenPos).r < 1.0);
-
-    sunVisibilitySmooth = mix(sunVisibility, sunVisibilitySmooth, clamp01(exp2(frameTime * -1.0)));
-}
-
-#endif
-
 #ifdef vsh
 
     out vec2 texcoord;

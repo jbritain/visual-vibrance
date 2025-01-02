@@ -28,6 +28,10 @@
 // ===========================================================================================
 
 #ifdef fsh
+    in vec2 texcoord;
+
+    #include "/lib/dh.glsl"
+
     #include "/lib/util/screenSpaceRayTrace.glsl"
     #include "/lib/atmosphere/sky/sky.glsl"
     #include "/lib/lighting/shading.glsl"
@@ -37,9 +41,7 @@
     #include "/lib/atmosphere/fog.glsl"
     #include "/lib/atmosphere/clouds.glsl"
 
-    in vec2 texcoord;
-
-    #include "/lib/dh.glsl"
+    
 
     /* RENDERTARGETS: 0 */
     layout(location = 0) out vec4 color;
@@ -48,7 +50,8 @@
         color = texture(colortex0, texcoord);
         vec4 data1 = texture(colortex1, texcoord);
 
-        vec3 normal = mat3(gbufferModelView) * decodeNormal(data1.xy);
+        vec3 worldNormal = decodeNormal(data1.xy);
+        vec3 normal = mat3(gbufferModelView) * worldNormal;
         float skyLightmap = data1.z;
         int materialID = int(data1.a * 255 + 0.5) + 1000;
 
@@ -67,6 +70,7 @@
         vec3 viewDir = normalize(translucentViewPos);
 
         vec3 translucentFeetPlayerPos = (gbufferModelViewInverse * vec4(translucentViewPos, 1.0)).xyz;
+        vec3 opaqueFeetPlayerPos = (gbufferModelViewInverse * vec4(opaqueViewPos, 1.0)).xyz;
 
         bool infiniteOceanMask = false;
 
@@ -81,8 +85,6 @@
             }
         }
         #endif
-
-        vec3 worldNormal = mat3(gbufferModelViewInverse) * normal;
 
         if(isWater){
 
@@ -105,23 +107,45 @@
 
             // refraction
             #ifdef REFRACTION
-            vec3 refractionNormal = normal - waveNormal;
+                vec3 refractionNormal = normal - waveNormal;
 
-            vec3 refractedDir = normalize(refract(viewDir, refractionNormal, !inWater ? rcp(1.33) : 1.33)); // when in water it should be rcp(1.33) but unless I use the actual normal (which results in snell's window) this results in no refraction
-            vec3 refractedViewPos = translucentViewPos + refractedDir * distance(translucentViewPos, opaqueViewPos);
-            vec3 refractedPos = viewSpaceToScreenSpace(refractedViewPos);
-            if(clamp01(refractedPos.xy) == refractedPos.xy && texture(depthtex2, refractedPos.xy).r > translucentDepth){
-                color = texture(colortex0, refractedPos.xy);
-                opaqueDepth = texture(depthtex2, refractedPos.xy).r;
-                opaqueViewPos = screenSpaceToViewSpace(vec3(texcoord, opaqueDepth));
-            } 
+                vec3 refractedDir = normalize(refract(viewDir, refractionNormal, !inWater ? rcp(1.33) : 1.33)); // when in water it should be rcp(1.33) but unless I use the actual normal (which results in snell's window) this results in no refraction
+                vec3 refractedViewPos = translucentViewPos + refractedDir * distance(translucentViewPos, opaqueViewPos);
+                vec3 refractedPos = viewSpaceToScreenSpace(refractedViewPos);
+
+                float refractedDepth = texture(depthtex2, refractedPos.xy).r;
+                refractedViewPos = screenSpaceToViewSpace(vec3(refractedPos.xy, refractedDepth));
+
+                dhOverride(refractedDepth, refractedViewPos, true);
+
+                if(clamp01(refractedPos.xy) == refractedPos.xy && refractedDepth > translucentDepth){
+                    color = texture(colortex0, refractedPos.xy);
+                    opaqueDepth = texture(depthtex2, refractedPos.xy).r;
+                    opaqueViewPos = refractedViewPos;
+                } 
             #endif
 
 
 
             // water fog when we're not in water
             if (!inWater){
-                color.rgb = waterFog(color.rgb, translucentViewPos, opaqueViewPos);
+
+                // so basically dh terrain doesn't get the shadow cast on it by water
+                // since we have already shaded it, we can't really account for this properly
+                // so we just add fog based on the distance between the terrain and the water's surface going towards the sun
+                // it looks plausible
+                // also I am lazy so this maths only works for water facing upward
+                // which is like 90% of water anyway
+                // and it still looks terrible because I can't tell terrain that's underwater not to use the lightmap
+                // as a fallback for shadows (which is bad because it makes it really dark underwater)
+                float dhFactor = 0.0;
+                if(dhMask && worldNormal.y > 0.5){
+                    float cost = dot(worldLightDir, vec3(0.0, 1.0, 0.0));
+                    dhFactor = (translucentFeetPlayerPos.y - opaqueFeetPlayerPos.y) / cost;
+                }
+
+
+                color.rgb = waterFog(color.rgb, translucentViewPos, opaqueViewPos, dhFactor);
             }
 
             // SSR
@@ -172,7 +196,10 @@
                 vec3 worldReflectedDir = mat3(gbufferModelViewInverse) * reflectedDir;
                 vec3 skyReflection = getSky(worldReflectedDir, false) * skyLightmap;
                 vec3 shadow = getShadowing(translucentFeetPlayerPos, waveNormal, vec2(skyLightmap), material, scatter);
-                skyReflection += max0(brdf(material, waveNormal, waveNormal, translucentViewPos, scatter) * weatherSunlightColor * shadow);
+                if(minVec3(shadow) > 0.0 && dot(waveNormal, lightDir) > 0.0){
+                    skyReflection += max0(brdf(material, waveNormal, waveNormal, translucentViewPos, scatter) * weatherSunlightColor * shadow);
+                }
+                
                 skyReflection = mix(skyReflection, getClouds(translucentFeetPlayerPos, skyReflection, worldReflectedDir), skyLightmap);
                 #ifdef CLOUDY_FOG
                 vec3 playerReflectedPos = translucentFeetPlayerPos + worldReflectedDir * far;

@@ -17,6 +17,8 @@
 
 #include "/lib/common/settings.glsl"
 
+#include "/lib/common/debug.glsl"
+
 #include "/lib/common/syntax.glsl"
 #include "/lib/common/uniforms.glsl"
 #include "/lib/common/util.glsl"

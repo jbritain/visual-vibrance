@@ -21,18 +21,27 @@
 
 const vec3 waterExtinction = clamp01(WATER_ABSORPTION + WATER_SCATTERING);
 
-vec3 waterFog(vec3 color, vec3 a, vec3 b){
+vec3 waterFog(vec3 color, vec3 a, vec3 b, float dhFactor){
+  if(dhFactor > 0.0){
+    vec3 sunTransmittance = exp(-waterExtinction * WATER_DENSITY * dhFactor);
+    color.rgb *= sunTransmittance;
+  }
+
   vec3 transmittance = exp(-waterExtinction * WATER_DENSITY * distance(a, b));
 
-  vec3 radiance = (weatherSunlightColor + weatherSkylightColor) * EB.y;
-  vec3 integScatter = (radiance - radiance * clamp01(transmittance)) / waterExtinction;
-  vec3 scatter = integScatter * transmittance;
+  // vec3 radiance = (weatherSunlightColor + weatherSkylightColor) * EB.y;
+  // vec3 integScatter = (radiance - radiance * clamp01(transmittance)) / waterExtinction;
+  // vec3 scatter = integScatter * transmittance;
 
-  scatter *= getMiePhase(dot(normalize(b - a), lightDir));
+  // scatter *= getMiePhase(dot(normalize(b - a), lightDir));
 
   return color * transmittance;// + scatter;
   // color *= fog(vec3(0.0, cameraPosition.y, 0.0), mat3(gbufferModelViewInverse) * normalize(b - a), worldLightDir, distance(a, b));
   return color;
+}
+
+vec3 waterFog(vec3 color, vec3 a, vec3 b){
+  return waterFog(color, a, b, 0.0);
 }
 
 #endif

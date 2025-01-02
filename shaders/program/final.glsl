@@ -33,6 +33,8 @@
 
     in vec2 texcoord;
 
+    uniform sampler2D debugtex;
+
     layout(location = 0) out vec4 color;
 
     void main() {
@@ -47,6 +49,10 @@
         color.rgb = tonemap(color.rgb);
 
         color = postProcess(color);
+
+        #ifdef DEBUG_ENABLE
+        color = texture(debugtex, texcoord);
+        #endif
     }
 
 #endif

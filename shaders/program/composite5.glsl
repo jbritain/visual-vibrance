@@ -13,6 +13,7 @@
 */
 
 #include "/lib/common.glsl"
+#include "/lib/shadowSpace.glsl"
 
 #ifdef csh
 
@@ -25,14 +26,26 @@ void main(){
         return;
     }
 
+
+
     vec2 lightScreenPos = viewSpaceToScreenSpace(shadowLightPosition).xy;
-    float sunVisibility = float(texture(depthtex0, lightScreenPos).r == 1.0);
+    #ifdef DISTANT_HORIZONS
+    float sunVisibility = float(texture(depthtex0, lightScreenPos).r == 1.0 && texture(dhDepthTex0, lightScreenPos).r == 1.0);
+    #endif
 
     if(clamp01(lightScreenPos) != lightScreenPos){
+        #ifdef SHADOWS
+        vec4 shadowClipPos = getShadowClipPos(vec3(0.0));
+        vec3 shadowScreenPos = getShadowScreenPos(shadowClipPos);
+
+        sunVisibility = shadow2D(shadowtex0HW, shadowScreenPos).r;
+        #else
         sunVisibility = EB.y;
+        #endif
     }
 
-    sunVisibilitySmooth = mix(sunVisibility, sunVisibilitySmooth, clamp01(exp2(frameTime * -1.0)));
+
+    sunVisibilitySmooth = mix(sunVisibility, sunVisibilitySmooth, clamp01(exp2(frameTime * -10.0)));
 }
 
 #endif

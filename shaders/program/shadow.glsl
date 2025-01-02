@@ -55,10 +55,6 @@
 // ===========================================================================================
 
 #ifdef fsh
-    #include "/lib/lighting/shading.glsl"
-    #include "/lib/water/waterFog.glsl"
-    #include "/lib/water/waveNormals.glsl"
-
     in vec2 lmcoord;
     in vec2 texcoord;
     in vec4 glcolor;
@@ -66,6 +62,11 @@
     flat in int materialID;
     in vec3 shadowViewPos;
     in vec3 feetPlayerPos;
+
+    #include "/lib/dh.glsl"
+    #include "/lib/lighting/shading.glsl"
+    #include "/lib/water/waterFog.glsl"
+    #include "/lib/water/waveNormals.glsl"
 
     /* RENDERTARGETS: 0 */
     layout(location = 0) out vec4 color;
