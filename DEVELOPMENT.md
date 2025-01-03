@@ -13,6 +13,7 @@
     prepare1        : Compute skylight colour by taking several hemisphere samples
 
     deferred        : Render sky
+    deferred1       : Distant Horizons SSAO
 
     composite       : Water & water fog
     composite5      : Fog

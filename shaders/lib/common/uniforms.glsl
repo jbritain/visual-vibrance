@@ -130,6 +130,7 @@ uniform sampler2D multipleScatteringLUTTex;
 uniform sampler2D skyViewLUTTex;
 
 uniform sampler2D perlinNoiseTex;
+uniform sampler2D blueNoiseTex;
 
 #ifdef DISTANT_HORIZONS
     uniform int dhRenderDistance;

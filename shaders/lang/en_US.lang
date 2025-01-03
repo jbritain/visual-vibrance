@@ -11,6 +11,7 @@ screen.ATMOSPHERICS=Sky & Fog
 screen.WATER=Water
 screen.POST=Post-Processing
 screen.WORLD=World
+screen.DH=Distant Horizons
 
 profile.potato=§cPotato
 profile.toaster=§6Toaster
@@ -223,6 +224,12 @@ option.WAVING_BLOCKS.comment=Makes plants sway in the breeze. §aMinimal perform
 
 option.INFINITE_OCEAN=Infinite Ocean
 option.INFINITE_OCEAN.comment=Adds an ocean that stretches out to infinity. §6Moderate performance impact.
+
+option.DH_AO=Ambient Occlusion
+option.DH_AO.comment=Makes edges of blocks more defined on Distant Horizons terrain. §6Moderate performance impact.
+
+option.DH_AO_SAMPLES=AO Samples
+option.DH_AO_SAMPLES.comment=Higher values will run worse but reduce noise. §6Moderate performance impact.
 
 option.tonemap=Tonemap Operator
 option.tonemap.comment=How the final colour is graded.§2Imperceptible performance impact.

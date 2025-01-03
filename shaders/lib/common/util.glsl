@@ -97,4 +97,44 @@ bool rayPlaneIntersection(vec3 O, vec3 D, float height, inout vec3 point){
   return true;
 }
 
+vec2 vogelDiscSample(int stepIndex, int stepCount, float noise) {
+    float rotation = noise * 2 * PI;
+    const float goldenAngle = 2.4;
+
+    float r = sqrt(stepIndex + 0.5) / sqrt(float(stepCount));
+    float theta = stepIndex * goldenAngle + rotation;
+
+    return r * vec2(cos(theta), sin(theta));
+}
+
+// fast acos and sqrt from ebin
+
+#define fsqrt(x) intBitsToFloat(0x1FBD1DF5 + (floatBitsToInt(x) >> 1))
+float facos(float x) {
+	float ax = abs(x);
+	float res = -0.156583 * ax + PI;
+	res *= fsqrt(1.0 - ax);
+	return x >= 0 ? res : PI - res;
+}
+
+#define BLUE_NOISE_RESOLUTION 1024
+
+vec4 blueNoise(vec2 texcoord){
+  ivec2 sampleCoord = ivec2(texcoord * vec2(viewWidth, viewHeight));
+  sampleCoord = sampleCoord % ivec2(BLUE_NOISE_RESOLUTION);
+
+  return texelFetch(blueNoiseTex, sampleCoord, 0);
+}
+
+vec4 blueNoise(in vec2 texcoord, int frame){
+  const float g = 1.6180339887498948482;
+  float a1 = rcp(g);
+  float a2 = rcp(pow2(g));
+
+  vec2 offset = vec2(mod(0.5 + a1 * frame, 1.0), mod(0.5 + a2 * frame, 1.0));
+  texcoord += offset;
+
+  return blueNoise(texcoord);
+}
+
 #endif // UTIL_GLSL

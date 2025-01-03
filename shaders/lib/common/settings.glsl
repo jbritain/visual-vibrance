@@ -45,6 +45,13 @@ const float sunPathRotation = -40.0; // [-90.0 -85.0 -80.0 -75.0 -70.0 -65.0 -60
 
 // #define INFINITE_OCEAN
 
+#define DH_AO
+#ifdef DH_AO
+#endif
+#define DH_AO_BIAS 0.025
+#define DH_AO_RADIUS 4.0
+#define DH_AO_SAMPLES 32 // [4 8 16 32 64]
+
 #define GLIMMER_SHADERS 1 // [1 2]
 #define WEBSITE 1 // [1 2]
 

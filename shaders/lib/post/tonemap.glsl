@@ -4,7 +4,7 @@
 vec3 jodieReinhardTonemap(vec3 v){
     float l = luminance(v);
     vec3 tv = v / (1.0f + v);
-    return mix(v / (1.0f + l), tv, tv);
+    return pow(mix(v / (1.0f + l), tv, tv), vec3(rcp(2.2)));
 }
 
 vec3 uncharted2TonemapPartial(vec3 x)
@@ -25,7 +25,7 @@ vec3 uncharted2FilmicTonemap(vec3 v)
 
     vec3 W = vec3(11.2f);
     vec3 white_scale = vec3(1.0f) / uncharted2TonemapPartial(W);
-    return curr * white_scale;
+    return pow(curr * white_scale, vec3(rcp(2.2)));
 }
 
 
@@ -41,7 +41,7 @@ vec3 ACESTonemap(vec3 v) {
     float c = 2.43;
     float d = 0.59;
     float e = 0.14;
-    return clamp01((v*(a*v+b))/(v*(c*v+d)+e));
+    return pow(clamp01((v*(a*v+b))/(v*(c*v+d)+e)), vec3(rcp(2.2)));
 }
 
 #define tonemap hejlBurgessTonemap // [jodieReinhardTonemap uncharted2FilmicTonemap hejlBurgessTonemap ACESTonemap]

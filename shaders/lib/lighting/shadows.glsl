@@ -17,16 +17,6 @@
 
 #include "/lib/shadowSpace.glsl"
 
-vec2 vogelDiscSample(int stepIndex, int stepCount, float noise) {
-    float rotation = noise * 2 * PI;
-    const float goldenAngle = 2.4;
-
-    float r = sqrt(stepIndex + 0.5) / sqrt(float(stepCount));
-    float theta = stepIndex * goldenAngle + rotation;
-
-    return r * vec2(cos(theta), sin(theta));
-}
-
 vec3 sampleShadow(vec3 shadowScreenPos){
 	float transparentShadow = shadow2D(shadowtex0HW, shadowScreenPos).r;
 

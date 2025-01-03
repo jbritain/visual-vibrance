@@ -30,7 +30,7 @@ void main()
     // take a few evenly distributed hemisphere samples
     for(int i = 0; i < samples; i++){
         float phi = float(i) * 2.0 * PI / float(samples);
-        float theta = acos(1.0 - 2.0 * float(i) + 0.5) / float(samples);
+        float theta = facos(1.0 - 2.0 * float(i) + 0.5) / float(samples);
 
         vec3 dir = vec3(
             sin(theta) * cos(phi),
