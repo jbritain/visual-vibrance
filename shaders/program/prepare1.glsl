@@ -23,19 +23,19 @@ const ivec3 workGroups = ivec3(1, 1, 1);
 
 void main()
 {
-    const int samples = 4;
+    const int samples = 16;
 
-    // skylightColor += getSky(vec3(0.0, 1.0, 0.0), false);
-
-    // take a few evenly distributed hemisphere samples
+    // take a few hemisphere samples
     for(int i = 0; i < samples; i++){
-        float phi = float(i) * 2.0 * PI / float(samples);
-        float theta = facos(1.0 - 2.0 * float(i) + 0.5) / float(samples);
+        vec2 noise = blueNoise(vec2(0.0), i).rg;
+        float phi = 2.0 * PI * noise.r;
+        float cosTheta = noise.g;
+        float sinTheta = fsqrt(1.0 - pow2(cosTheta));
 
         vec3 dir = vec3(
-            sin(theta) * cos(phi),
-            sin(theta) * sin(phi),
-            cos(theta)
+            sinTheta * cos(phi),
+            sinTheta * sin(phi),
+            cosTheta
         );
 
         skylightColor += getSky(dir, false);
