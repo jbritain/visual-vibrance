@@ -130,7 +130,9 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth){
 
   float transmittance = exp(-totalDensity);
 
-  vec3 fogColor = weatherSkylightColor * EBS.y + weatherSunlightColor * 0.5 * getMiePhase(dot(dir, worldLightDir)) * sunVisibilitySmooth;
+  float sunVisibility = (depth == 1.0 ? 1.0 : sunVisibilitySmooth);
+
+  vec3 fogColor = weatherSkylightColor * EBS.y + weatherSunlightColor * 0.5 * getMiePhase(dot(dir, worldLightDir)) * sunVisibility;
 
   color = mix(fogColor, color, transmittance);
   return color;
