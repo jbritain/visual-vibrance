@@ -19,7 +19,7 @@
 
     in vec2 mc_Entity;
     in vec4 at_tangent;
-    in vec3 at_midBlock;
+    in vec4 at_midBlock;
 
     out vec2 lmcoord;
     out vec2 texcoord;
@@ -27,12 +27,15 @@
     out mat3 tbnMatrix;
     flat out int materialID;
     out vec3 viewPos;
+    out float emission;
 
     void main() {
         materialID = int(mc_Entity.x + 0.5);
         texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
         lmcoord = (gl_TextureMatrix[1] * gl_MultiTexCoord1).xy;
         glcolor = gl_Color;
+
+        emission = at_midBlock.w / 15.0;
 
         tbnMatrix[0] = normalize(gl_NormalMatrix * at_tangent.xyz);
         tbnMatrix[2] = normalize(gl_NormalMatrix * gl_Normal);
@@ -47,7 +50,7 @@
 
         #ifdef WAVING_BLOCKS
         vec3 feetPlayerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
-        feetPlayerPos = getSway(materialID, feetPlayerPos + cameraPosition, at_midBlock) - cameraPosition;
+        feetPlayerPos = getSway(materialID, feetPlayerPos + cameraPosition, at_midBlock.xyz) - cameraPosition;
         viewPos = (gbufferModelView * vec4(feetPlayerPos, 1.0)).xyz;
         #endif
 
@@ -69,6 +72,7 @@
     in mat3 tbnMatrix;
     flat in int materialID;
     in vec3 viewPos;
+    in float emission;
 
     vec3 getMappedNormal(vec2 texcoord){
         vec3 mappedNormal = texture(normals, texcoord).rgb;
@@ -111,6 +115,12 @@
         vec4 specularData = texture(specular, texcoord);
         Material material = materialFromSpecularMap(albedo.rgb, specularData);
         material.ao = texture(normals, texcoord).z;
+        #ifndef MC_TEXTURE_FORMAT_LAB_PBR
+            if(material.emission == 0.0){
+                material.emission = emission * luminance(albedo.rgb);
+            }
+            
+        #endif
 
         if(materialID == MATERIAL_PLANTS || materialID == MATERIAL_LEAVES || materialID == MATERIAL_TALL_PLANT_UPPER || materialID == MATERIAL_TALL_PLANT_LOWER){
             material.sss = 1.0;

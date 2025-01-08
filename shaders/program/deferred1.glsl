@@ -86,7 +86,6 @@
 
         occlusion /= DH_AO_SAMPLES;
 
-        show(1.0 - occlusion);
         color.rgb *= 1.0 - occlusion;
         #endif
 
