@@ -116,7 +116,7 @@
         Material material = materialFromSpecularMap(albedo.rgb, specularData);
         material.ao = texture(normals, texcoord).z;
         #ifndef MC_TEXTURE_FORMAT_LAB_PBR
-            if(material.emission == 0.0){
+            if(material.emission == 0.0 && (renderStage == MC_RENDER_STAGE_TERRAIN_SOLID || renderStage == MC_RENDER_STAGE_TERRAIN_TRANSLUCENT)){
                 material.emission = emission * luminance(albedo.rgb);
             }
             
