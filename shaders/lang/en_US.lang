@@ -1,10 +1,13 @@
 option.GLIMMER_SHADERS=Glimmer Shaders
-value.GLIMMER_SHADERS.0=§dBy jbritain
 value.GLIMMER_SHADERS.1=§dBy jbritain
+value.GLIMMER_SHADERS.2=§dBy jbritain
 
 option.WEBSITE=https://
-value.WEBSITE.0=§djbritain.net
 value.WEBSITE.1=§djbritain.net
+value.WEBSITE.2=§djbritain.net
+
+option.DEBUG_ENABLE=Debug Mode
+option.DEBUG_ENABLE.comment=Renders whatever the show() function is called on to the screen.
 
 screen.LIGHTING=Lighting & Shadows
 screen.ATMOSPHERICS=Sky & Fog
