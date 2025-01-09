@@ -6,20 +6,24 @@ option.WEBSITE=https://
 value.WEBSITE.1=§djbritain.net
 value.WEBSITE.2=§djbritain.net
 
-option.DEBUG_ENABLE=Debug Mode
-option.DEBUG_ENABLE.comment=Renders whatever the show() function is called on to the screen.
-
 screen.LIGHTING=Lighting & Shadows
 screen.ATMOSPHERICS=Sky & Fog
 screen.WATER=Water
 screen.POST=Post-Processing
 screen.WORLD=World
 screen.DH=Distant Horizons
+screen.DEBUG=Development
 
 profile.potato=§cPotato
 profile.toaster=§6Toaster
 profile.igpu=§aIntegrated Graphics
 profile.dgpu=§bDedicated Graphics
+
+option.DEBUG_ENABLE=Debug Mode
+option.DEBUG_ENABLE.comment=Renders whatever the show() function is called on to the screen.
+
+option.FREEZE_TIME=Freeze Time
+option.FREEZE_TIME.comment=Disables all animations built into the shader, like water waves.
 
 option.CONTRAST=Contrast
 option.CONTRAST.comment=§9No performance impact!

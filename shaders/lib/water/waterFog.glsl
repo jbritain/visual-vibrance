@@ -27,16 +27,14 @@ vec3 waterFog(vec3 color, vec3 a, vec3 b, float dhFactor){
     color.rgb *= sunTransmittance;
   }
 
-  vec3 transmittance = exp(-waterExtinction * WATER_DENSITY * distance(a, b));
+  vec3 opticalDepth = waterExtinction * WATER_DENSITY * distance(a, b);
+  vec3 transmittance = exp(-opticalDepth);
 
-  // vec3 radiance = (weatherSunlightColor + weatherSkylightColor) * EB.y;
-  // vec3 integScatter = (radiance - radiance * clamp01(transmittance)) / waterExtinction;
-  // vec3 scatter = integScatter * transmittance;
 
-  // scatter *= getMiePhase(dot(normalize(b - a), lightDir));
+  vec3 scatter = clamp01((transmittance - 1.0) / -opticalDepth) * WATER_SCATTERING * (sunVisibilitySmooth * sunlightColor * getMiePhase(dot(normalize(b - a), lightDir)) + EBS.y * skylightColor);
+  
 
-  return color * transmittance;// + scatter;
-  // color *= fog(vec3(0.0, cameraPosition.y, 0.0), mat3(gbufferModelViewInverse) * normalize(b - a), worldLightDir, distance(a, b));
+  return color * transmittance + scatter;
   return color;
 }
 

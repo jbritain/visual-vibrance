@@ -31,9 +31,9 @@ void main(){
     vec2 lightScreenPos = viewSpaceToScreenSpace(shadowLightPosition).xy;
     
     // isn't this some fun syntax
-    float sunVisibility = float(texture(depthtex0, lightScreenPos).r == 1.0
+    float sunVisibility = float(texture(depthtex1, lightScreenPos).r == 1.0
     #ifdef DISTANT_HORIZONS
-     && texture(dhDepthTex0, lightScreenPos).r == 1.0
+     && texture(dhDepthTex1, lightScreenPos).r == 1.0
     #endif
     );
     
@@ -43,7 +43,7 @@ void main(){
         vec4 shadowClipPos = getShadowClipPos(vec3(0.0));
         vec3 shadowScreenPos = getShadowScreenPos(shadowClipPos);
 
-        sunVisibility = shadow2D(shadowtex0HW, shadowScreenPos).r;
+        sunVisibility = shadow2D(shadowtex1HW, shadowScreenPos).r;
         #else
         sunVisibility = EB.y;
         #endif

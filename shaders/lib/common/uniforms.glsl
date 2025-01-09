@@ -42,7 +42,13 @@ uniform float darknessLightFactor;
 uniform float maxBlindnessDarkness;
 uniform float eyeAltitude;
 uniform float frameTime;
+
+#ifdef FREEZE_TIME
+const float frameTimeCounter = 0.0;
+#else
 uniform float frameTimeCounter;
+#endif
+
 uniform float far;
 uniform float near;
 uniform float nightVision;
