@@ -73,7 +73,7 @@ vec3 waveNormal(vec2 pos, vec3 worldFaceNormal, float heightmapFactor) {
 
 	// rotate to align with face normal since the normal calculation assumes a surface facing straight up
 	waveNormal = rotate(waveNormal, vec3(0.0, 1.0, 0.0), worldFaceNormal);
-	return waveNormal;
+	return normalize(waveNormal);
 }
 
 #endif // WAVE_NORMALS_GLSL

@@ -44,10 +44,10 @@ struct BloomTile {
 };
 
 BloomTile tileA = BloomTile(vec2(0.0), 1, 0.5); // 1/2 scale
-BloomTile tileB = BloomTile(vec2(0.5 + 2/viewWidth, 0.0), 2, 0.25); // 1/4 scale
-BloomTile tileC = BloomTile(vec2(0.75 + 4/viewWidth, 0.0), 3, 0.125); // 1/8 scale
-BloomTile tileD = BloomTile(vec2(0.875 + 6/viewWidth, 0.0), 4, 0.0625); // 1/16 scale
-BloomTile tileE = BloomTile(vec2(0.9375 + 8/viewWidth, 0.0), 5, 0.03125); // 1/32 scale
+BloomTile tileB = BloomTile(vec2(0.5 + 2/(viewWidth * BLOOM_QUALITY), 0.0), 2, 0.25); // 1/4 scale
+BloomTile tileC = BloomTile(vec2(0.75 + 4/(viewWidth * BLOOM_QUALITY), 0.0), 3, 0.125); // 1/8 scale
+BloomTile tileD = BloomTile(vec2(0.875 + 6/(viewWidth * BLOOM_QUALITY), 0.0), 4, 0.0625); // 1/16 scale
+BloomTile tileE = BloomTile(vec2(0.9375 + 8/(viewWidth * BLOOM_QUALITY), 0.0), 5, 0.03125); // 1/32 scale
 
 BloomTile tiles[5] = BloomTile[5](tileA, tileB, tileC, tileD, tileE);
 
@@ -58,8 +58,8 @@ vec3 downSample(sampler2D sourceTexture, vec2 coord, bool doKarisAverage){
     // - l - m -
     // g - h - i
 
-  float x = 1.0 / float(viewWidth);
-  float y = 1.0 / float(viewHeight);
+  float x = 1.0 / float(viewWidth * BLOOM_QUALITY);
+  float y = 1.0 / float(viewHeight * BLOOM_QUALITY);
 
   vec3 a = texture(sourceTexture, vec2(coord.x - 2*x, coord.y + 2*y)).rgb;
   vec3 b = texture(sourceTexture, vec2(coord.x,       coord.y + 2*y)).rgb;
@@ -106,8 +106,8 @@ vec3 upSample(sampler2D sourceTexture, vec2 coord){
     // -- * | 2 4 2 |
     // 16   | 1 2 1 |
 
-  float x = BLOOM_RADIUS / viewWidth;
-  float y = BLOOM_RADIUS / viewHeight;
+  float x = BLOOM_RADIUS / (viewWidth * BLOOM_QUALITY);
+  float y = BLOOM_RADIUS / (viewHeight * BLOOM_QUALITY);
 
   vec3 a = texture(sourceTexture, vec2(coord.x - x, coord.y + y)).rgb;
   vec3 b = texture(sourceTexture, vec2(coord.x,     coord.y + y)).rgb;

@@ -135,6 +135,10 @@
             material.albedo = vec3(0.0);
         }
 
+        if(materialID == MATERIAL_LAVA){
+            material.emission = 1.0;
+        }
+
         #ifdef DIRECTIONAL_LIGHTMAPS
         applyDirectionalLightmap(lightmap, viewPos, mappedNormal, tbnMatrix, material.sss);
         #endif
