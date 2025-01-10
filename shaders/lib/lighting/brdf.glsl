@@ -113,13 +113,15 @@ vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos, f
 	float D = pow2(alpha) / (PI * pow2(denominator));
 	float G = geometrySmith(N, V, L, material.roughness);
 
+	if(material.metalID != NO_METAL){
+		F *= material.albedo;
+	}
+
 	vec3 Rs = (F * D * G) / (4.0 * NoV + 1e-6);
 
 	Rs = min(Rs, vec3(500.0)); // prevent specular blowing bloom out
 
-	if(material.metalID != NO_METAL){
-		Rs *= material.albedo;
-	}
+
 
 	// this was causing some weird issues
 	if(NoL < 1e-6){
