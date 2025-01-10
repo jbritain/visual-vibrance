@@ -16,7 +16,7 @@
 #define SWAY_GLSL
 
 vec3 getWave(vec3 pos){
-  float t = frameTimeCounter * (1.0 + wetness * 0.5 + thunderStrength * 0.5) * 0.3;
+  float t = (frameTimeCounter + weatherFrameTimeCounter) * 0.3;
 
   float magnitude = (sin(((pos.y + pos.x) * 0.5 + t * PI / ((88.0)))) * 0.05 + 0.15) * 0.35;
 

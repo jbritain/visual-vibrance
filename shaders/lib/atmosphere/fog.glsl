@@ -74,7 +74,7 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth){
     return color;
   }
 
-  float totalDensity;
+  float opticalDepth;
 
   // top part
     vec3 a = vec3(0.0);
@@ -104,7 +104,7 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth){
     float densityA = getFogDensity(a.y + cameraPosition.y);
     float densityB = getFogDensity(b.y + cameraPosition.y);
 
-  totalDensity = max0(distance(a, b) * (densityA + densityB) / 2) * fogFactor;
+  opticalDepth = max0(distance(a, b) * (densityA + densityB) / 2) * fogFactor;
 
     if(!rayPlaneIntersection(vec3(0.0), dir, localBottomHeight, a)){
       a = vec3(0.0);
@@ -126,16 +126,17 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth){
       b = playerPos;
     }
 
-  totalDensity += distance(a, b) * FOG_DENSITY * fogFactor;
+  opticalDepth += distance(a, b) * FOG_DENSITY * fogFactor;
 
-  float transmittance = exp(-totalDensity);
+  float transmittance = exp(-opticalDepth);
 
   float sunVisibility = (depth == 1.0 ? 1.0 : sunVisibilitySmooth);
 
-  vec3 fogColor = weatherSkylightColor * EBS.y + weatherSunlightColor * 0.5 * getMiePhase(dot(dir, worldLightDir)) * sunVisibility;
+  vec3 radiance = sunlightColor * sunVisibilitySmooth * getMiePhase(dot(normalize(playerPos), worldLightDir)) + skylightColor * EBS.y;
 
-  color = mix(fogColor, color, transmittance);
-  return color;
+  vec3 scatter = (radiance - radiance * clamp01(transmittance));
+
+  return color * transmittance + scatter;
 }
 
 vec3 defaultFog(vec3 color, vec3 viewPos){

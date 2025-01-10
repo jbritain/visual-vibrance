@@ -242,7 +242,8 @@ option.DH_AO_SAMPLES=AO Samples
 option.DH_AO_SAMPLES.comment=Higher values will run worse but reduce noise. §6Moderate performance impact.
 
 option.tonemap=Tonemap Operator
-option.tonemap.comment=How the final colour is graded.§2Imperceptible performance impact.
+option.tonemap.comment=How the final colour is graded. §2Imperceptible performance impact.
+value.tonemap.agxTonemap=AGX (Punchy)
 value.tonemap.jodieReinhardTonemap=Jodie-Reinhard
 value.tonemap.uncharted2FilmicTonemap=Hable
 value.tonemap.hejlBurgessTonemap=Hejl-Burgess

@@ -53,6 +53,8 @@ void main()
         sunlightColor += vec3(20.0, 20.0, 40.0);
     }
 
+    weatherFrameTimeCounter += frameTime * (wetness + thunderStrength) * 2.0;
+
     // skylightColor = mix(skylightColor, exp(-1.0 * 10 * skylightColor), wetness);
     // sunlightColor = mix(sunlightColor, exp(-1.0 * 10 * sunlightColor), wetness);
 }

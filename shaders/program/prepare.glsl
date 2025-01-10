@@ -100,7 +100,7 @@ void main()
     imageStore(skyViewLUT, texelCoord, vec4(lum, 1.0));
 
     if(texelCoord == ivec2(0.0)){
-        sunlightColor = sunDir == lightDir ? getValFromTLUT(sunTransmittanceLUTTex, tLUTRes, atmospherePos, worldSunDir) * sunIrradiance : getValFromTLUT(sunTransmittanceLUTTex, tLUTRes, atmospherePos, -worldSunDir) * moonIrradiance;
+        sunlightColor = isDay ? getValFromTLUT(sunTransmittanceLUTTex, tLUTRes, atmospherePos, worldSunDir) * sunIrradiance : getValFromTLUT(sunTransmittanceLUTTex, tLUTRes, atmospherePos, -worldSunDir) * moonIrradiance;
 
         sunlightColor *= smoothstep(0.0, 0.1, worldLightDir.y); // fade out sunlight to stop hard transition between sun and moon
 

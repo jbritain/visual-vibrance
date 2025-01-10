@@ -104,7 +104,7 @@ vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos, f
 	float HoV = dot(H, V);
 
 	float alpha = max(1e-3, material.roughness);
-	float NoHSquared = getNoHSquared(NoL, NoV, VoL, sunAngularRadius);
+	float NoHSquared = getNoHSquared(NoL, NoV, VoL, isDay? sunAngularRadius : moonAngularRadius);
 
 	vec3 F = clamp01(schlick(material, HoV));
 
@@ -116,10 +116,6 @@ vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos, f
 	vec3 Rs = (F * D * G) / (4.0 * NoV + 1e-6);
 
 	Rs = min(Rs, vec3(500.0)); // prevent specular blowing bloom out
-
-	if(material.metalID != NO_METAL){
-		Rs *= material.albedo;
-	}
 
 	// this was causing some weird issues
 	if(NoL < 1e-6){
