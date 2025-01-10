@@ -135,6 +135,6 @@ vec3 agxTonemap(vec3 col){
     return col;
 }
 
-#define tonemap agxTonemap // [agxTonemap jodieReinhardTonemap uncharted2FilmicTonemap hejlBurgessTonemap ACESTonemap]
+#define tonemap uncharted2FilmicTonemap // [agxTonemap jodieReinhardTonemap uncharted2FilmicTonemap hejlBurgessTonemap ACESTonemap]
 
 #endif // TONEMAP_GLSL
