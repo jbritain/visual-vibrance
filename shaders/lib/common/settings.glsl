@@ -54,6 +54,11 @@ const float sunPathRotation = -40.0; // [-90.0 -85.0 -80.0 -75.0 -70.0 -65.0 -60
 #define DH_AO_RADIUS 4.0
 #define DH_AO_SAMPLES 32 // [4 8 16 32 64]
 
+// #define PARALLAX
+#define POM_SAMPLES 32
+#define POM_HEIGHT 0.25
+#define PARALLAX_SHADOW_SAMPLES 32
+
 #define GLIMMER_SHADERS 1 // [1 2]
 #define WEBSITE 1 // [1 2]
 

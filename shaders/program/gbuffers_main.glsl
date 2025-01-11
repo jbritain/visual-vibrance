@@ -20,6 +20,7 @@
     in vec2 mc_Entity;
     in vec4 at_tangent;
     in vec4 at_midBlock;
+    in vec2 mc_midTexCoord;
 
     out vec2 lmcoord;
     out vec2 texcoord;
@@ -28,6 +29,12 @@
     flat out int materialID;
     out vec3 viewPos;
     out float emission;
+
+    #ifdef PARALLAX
+        flat out vec2 singleTexSize;
+        flat out ivec2 pixelTexSize;
+        flat out vec4 textureBounds;
+    #endif
 
     void main() {
         materialID = int(mc_Entity.x + 0.5);
@@ -54,6 +61,14 @@
         viewPos = (gbufferModelView * vec4(feetPlayerPos, 1.0)).xyz;
         #endif
 
+        #ifdef PARALLAX
+            vec2 halfSize      = abs(texcoord - mc_midTexCoord);
+            textureBounds = vec4(mc_midTexCoord.xy - halfSize, mc_midTexCoord.xy + halfSize);
+
+            singleTexSize = halfSize * 2.0;
+            pixelTexSize  = ivec2(singleTexSize * atlasSize);
+        #endif
+
         gl_Position = gbufferProjection * vec4(viewPos, 1.0);
     }
 
@@ -74,6 +89,13 @@
     in vec3 viewPos;
     in float emission;
 
+    #ifdef PARALLAX
+        flat in vec2 singleTexSize;
+        flat in ivec2 pixelTexSize;
+        flat in vec4 textureBounds;
+        #include "/lib/parallax.glsl"
+    #endif
+
     vec3 getMappedNormal(vec2 texcoord){
         vec3 mappedNormal = texture(normals, texcoord).rgb;
         mappedNormal = mappedNormal * 2.0 - 1.0;
@@ -87,6 +109,28 @@
     layout(location = 1) out vec4 outData1;
 
     void main() {
+
+        float parallaxShadow = 1.0;
+        #ifdef PARALLAX
+        vec3 parallaxPos;
+        vec2 dx = dFdx(texcoord);
+        vec2 dy = dFdy(texcoord);
+        vec2 texcoord = texcoord;
+        if(
+            materialID != MATERIAL_LAVA &&
+            (
+                renderStage == MC_RENDER_STAGE_TERRAIN_SOLID ||
+                renderStage ==  MC_RENDER_STAGE_ENTITIES ||
+                renderStage == MC_RENDER_STAGE_TERRAIN_TRANSLUCENT
+            )
+        ){
+            texcoord = getParallaxTexcoord(texcoord, viewPos, tbnMatrix, parallaxPos, dx, dy, 0.0);
+
+            float pomJitter = interleavedGradientNoise(floor(gl_FragCoord.xy), frameCounter);
+            parallaxShadow = getParallaxShadow(parallaxPos, tbnMatrix, dx, dy, pomJitter) ? smoothstep(0.0, 32.0, length(viewPos)) : 1.0; 
+        }
+        #endif
+
         vec2 lightmap = (lmcoord * 33.05 / 32.0) - (1.05 / 32.0);
 
         #ifdef WORLD_THE_END
@@ -143,10 +187,12 @@
         applyDirectionalLightmap(lightmap, viewPos, mappedNormal, tbnMatrix, material.sss);
         #endif
 
+        parallaxShadow = mix(parallaxShadow, 1.0, material.sss * 0.5);
+
         if(materialID == MATERIAL_WATER){
             color = vec4(0.0);
         }  else {
-            color.rgb = getShadedColor(material, mappedNormal, tbnMatrix[2], lightmap, viewPos);
+            color.rgb = getShadedColor(material, mappedNormal, tbnMatrix[2], lightmap, viewPos, parallaxShadow);
             color.a = albedo.a;
             if(albedo.a != 1.0){
                 float fresnel = maxVec3(schlick(material, dot(mappedNormal, normalize(-viewPos))));
