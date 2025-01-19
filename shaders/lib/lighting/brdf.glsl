@@ -105,13 +105,18 @@ vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos, f
 
 	float alpha = max(1e-3, material.roughness);
 	float NoHSquared = getNoHSquared(NoL, NoV, VoL, isDay? sunAngularRadius : moonAngularRadius);
+	// float NoHSquared = pow2(dot(N, H));
+
+
 
 	vec3 F = clamp01(schlick(material, HoV));
 
 	// trowbridge-reitz ggx
 	float denominator = NoHSquared * (pow2(alpha) - 1.0) + 1.0;
-	float D = pow2(alpha) / (PI * pow2(denominator));
-	float G = geometrySmith(N, V, L, material.roughness);
+
+	float D = max0(pow2(alpha) / (PI * pow2(denominator)));
+
+	float G = max0(geometrySmith(N, V, L, material.roughness));
 
 	if(material.metalID != NO_METAL){
 		F *= material.albedo;
@@ -119,8 +124,8 @@ vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos, f
 
 	vec3 Rs = (F * D * G) / (4.0 * NoV + 1e-6);
 
-	Rs = min(Rs, vec3(500.0)); // prevent specular blowing bloom out
 
+	Rs = clamp(Rs, vec3(0.0), vec3(500.0));
 
 
 	// this was causing some weird issues
