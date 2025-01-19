@@ -11,6 +11,8 @@ screen.ATMOSPHERICS=Sky & Fog
 screen.WATER=Water
 screen.POST=Post-Processing
 screen.WORLD=World
+screen.MATERIALS=Materials
+screen.PARALLAX=Parallax (POM)
 screen.DH=Distant Horizons
 screen.DEBUG=Development
 
@@ -240,6 +242,24 @@ option.DH_AO.comment=Makes edges of blocks more defined on Distant Horizons terr
 
 option.DH_AO_SAMPLES=AO Samples
 option.DH_AO_SAMPLES.comment=Higher values will run worse but reduce noise. §6Moderate performance impact.
+
+option.PARALLAX=Parallax
+option.PARALLAX.comment=Makes blocks and entities appear to have depth. §6Moderate performance impact.
+
+option.PARALLAX_HEIGHT=Parallax Height
+option.PARALLAX_HEIGHT.comment=How far into the block a depth of 1.0 should be. §9No performance impact!
+
+option.PARALLAX_DISTANCE=Parallax Render Distance
+option.PARALLAX_DISTANCE.comment=How far away parallax should stop rendering. §6Moderate performance impact.
+
+option.PARALLAX_SAMPLES=Parallax Samples
+option.PARALLAX_SAMPLES.comment=How many samples should be taken when computing parallax. Higher values reduce jagged edges but have a performance cost. §6Moderate performance impact.
+
+option.PARALLAX_SHADOW=Parallax Self-Shadow
+option.PARALLAX_SHADOW.comment=Allows parallax to cast a shadow. §6Moderate performance impact.
+
+option.PARALLAX_SHADOW_SAMPLES=Self-Shadow Samples
+option.PARALLAX_SHADOW_SAMPLES.comment=How many samples should be taken when computing parallax shadows. §6Moderate performance impact. 
 
 option.tonemap=Tonemap Operator
 option.tonemap.comment=How the final colour is graded. §2Imperceptible performance impact.

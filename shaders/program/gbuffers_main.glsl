@@ -126,8 +126,10 @@
         ){
             texcoord = getParallaxTexcoord(texcoord, viewPos, tbnMatrix, parallaxPos, dx, dy, 0.0);
 
+            #ifdef PARALLAX_SHADOW
             float pomJitter = interleavedGradientNoise(floor(gl_FragCoord.xy), frameCounter);
-            parallaxShadow = getParallaxShadow(parallaxPos, tbnMatrix, dx, dy, pomJitter) ? smoothstep(0.0, 32.0, length(viewPos)) : 1.0; 
+            parallaxShadow = getParallaxShadow(parallaxPos, tbnMatrix, dx, dy, pomJitter, viewPos); 
+            #endif
         }
         #endif
 

@@ -32,13 +32,20 @@ vec2 atlasToLocal(vec2 texcoord){
 }
 
 vec2 getParallaxTexcoord(vec2 texcoord, vec3 viewPos, mat3 tbnMatrix, out vec3 previousPos, vec2 dx, vec2 dy, float jitter){
+  float distFade = smoothstep(PARALLAX_DISTANCE * PARALLAX_DISTANCE_CURVE, PARALLAX_DISTANCE, length(viewPos));
+
+  if(distFade >= 1.0){
+    previousPos = vec3(-1.0);
+    return texcoord;
+  }
+
   vec3 viewDir = normalize(-viewPos) * tbnMatrix;
 
   float currentDepth = getDepth(texcoord, dx, dy);
 
-  const float layerDepth = rcp(POM_SAMPLES); // depth per layer
+  const float layerDepth = rcp(PARALLAX_SAMPLES * (1.0 - distFade)); // depth per layer
 
-  vec3 rayStep = vec3(viewDir.xy * rcp(-viewDir.z) * POM_HEIGHT, 1.0) * layerDepth;
+  vec3 rayStep = vec3(viewDir.xy * rcp(-viewDir.z) * PARALLAX_HEIGHT * (1.0 - distFade), 1.0) * layerDepth;
   vec3 pos = vec3(atlasToLocal(texcoord), 0.0);
 
   float depth = getDepth(texcoord, dx, dy);
@@ -73,25 +80,31 @@ vec2 getParallaxTexcoord(vec2 texcoord, vec3 viewPos, mat3 tbnMatrix, out vec3 p
   return localToAtlas(previousPos.xy);
 }
 
-bool getParallaxShadow(vec3 pos, mat3 tbnMatrix, vec2 dx, vec2 dy, float jitter){
+float getParallaxShadow(vec3 pos, mat3 tbnMatrix, vec2 dx, vec2 dy, float jitter, vec3 viewPos){
+  float distFade = smoothstep(PARALLAX_DISTANCE * PARALLAX_DISTANCE_CURVE, PARALLAX_DISTANCE, length(viewPos));
+
+  if(distFade >= 1.0){
+    return 1.0;
+  }
+
   float NoL = clamp01(dot(normalize(shadowLightPosition), tbnMatrix[2]));
   if(NoL < 0.01){
-    return false;
+    return 0.0;
   }
 
   vec3 lightDir = normalize(shadowLightPosition) * tbnMatrix;
-  vec3 rayStep = vec3(lightDir.xy * rcp(lightDir.z) * POM_HEIGHT, -1.0) * pos.z * rcp(PARALLAX_SHADOW_SAMPLES);
+  vec3 rayStep = vec3(lightDir.xy * rcp(lightDir.z) * PARALLAX_HEIGHT, -1.0) * pos.z * rcp(PARALLAX_SHADOW_SAMPLES * (1.0 - distFade));
 
-  if(getDepth(localToAtlas(pos.xy), dx, dy) < pos.z) return true;
+  if(getDepth(localToAtlas(pos.xy), dx, dy) < pos.z) return distFade;
 
   pos += rayStep * jitter;
 
   for(int i = 0; i < PARALLAX_SHADOW_SAMPLES; i++){
-    if(getDepth(localToAtlas(pos.xy), dx, dy) < pos.z) return true;
+    if(getDepth(localToAtlas(pos.xy), dx, dy) < pos.z) return distFade;
     pos += rayStep;
   }
 
-  return false;
+  return 1.0;
 }
 
 #endif
