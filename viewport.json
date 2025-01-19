@@ -1,0 +1,178 @@
+{
+    "version": "430 compatibility",
+
+    "dimensions": [
+        {
+            "folder": "world0",
+            "define": "WORLD_OVERWORLD"
+        }
+    ],
+
+    "global_header": "glimmer.h",
+
+    "passes": {
+        "shadow": {
+            "vertex": "/program/gbuffer/shadow.vsh",
+            "fragment": "/program/gbuffer/shadow.fsh"
+        },
+
+        "setup": [
+            {"compute": "/program/setup/generateSunTransmittanceLUT.csh"},
+            {"compute": "/program/setup/generateMultipleScatteringLUT.csh"}
+        ],
+
+        "prepare": [
+            {"compute": "/program/prepare/generateSkyViewLUT.csh"},
+            {"compute": "/program/prepare/getSkylightColor.csh"}
+        ],
+
+        "deferred": [
+            {
+                "vertex": "/program/fullscreen.vsh",
+                "fragment": "/program/deferred/renderSky.fsh"
+            },
+
+            {
+                "vertex": "/program/fullscreen.vsh",
+                "fragment": "/program/deferred/dhAO.fsh"
+            },
+
+            {
+                "compute": "/program/deferred/sunVisibility.csh"
+            }
+        ],
+
+        "gbuffers": {
+            "textured_lit": {
+                "vertex": "/program/gbuffer/main.vsh",
+                "fragment": "/program/gbuffer/main.fsh"
+            },
+            "hand": {
+                "vertex": "/program/gbuffer/main.vsh",
+                "fragment": "/program/gbuffer/main.fsh"
+            },
+            "beaconbeam": {
+                "vertex": "/program/gbuffer/glowing.vsh",
+                "fragment": "/program/gbuffer/glowing.fsh"
+            },
+            "lightning": {
+                "vertex": "/program/gbuffer/glowing.vsh",
+                "fragment": "/program/gbuffer/glowing.fsh"
+            },
+            "skybasic": {
+                "vertex": "/program/gbuffer/basic.vsh",
+                "fragment": "/program/gbuffer/skybasic.fsh"
+            },
+            "skytextured": {
+                "vertex": "/program/gbuffer/basic.vsh",
+                "fragment": "/program/gbuffer/skytextured.fsh"
+            }
+            ,
+            "weather": {
+                "vertex": "/program/gbuffer/basic.vsh",
+                "fragment": "/program/gbuffer/weather.fsh"
+            }
+        },
+
+        "composite": [
+            {
+                "vertex": "/program/fullscreen.vsh",
+                "fragment": "/program/composite/compositeTranslucents.fsh"
+            },
+
+            {
+                "vertex": "/program/fullscreen.vsh",
+                "fragment": "/program/composite/applyFog.fsh"
+            },
+
+            {
+                "vertex": "/program/fullscreen.vsh",
+                "fragment": "/program/composite/applyExposure.fsh"
+            },
+
+            {
+                "vertex": "/program/fullscreen.vsh",
+                "fragment": "/program/composite/bloomDownsample.fsh",
+                "defines": {
+                    "TILE_INDEX": "0"
+                }
+            },
+
+            {
+                "vertex": "/program/fullscreen.vsh",
+                "fragment": "/program/composite/bloomDownsample.fsh",
+                "defines": {
+                    "TILE_INDEX": "1"
+                }
+            },
+
+            {
+                "vertex": "/program/fullscreen.vsh",
+                "fragment": "/program/composite/bloomDownsample.fsh",
+                "defines": {
+                    "TILE_INDEX": "2"
+                }
+            },
+
+            {
+                "vertex": "/program/fullscreen.vsh",
+                "fragment": "/program/composite/bloomDownsample.fsh",
+                "defines": {
+                    "TILE_INDEX": "3"
+                }
+            },
+
+            {
+                "vertex": "/program/fullscreen.vsh",
+                "fragment": "/program/composite/bloomDownsample.fsh",
+                "defines": {
+                    "TILE_INDEX": "4"
+                }
+            },
+
+            {
+                "vertex": "/program/fullscreen.vsh",
+                "fragment": "/program/composite/bloomUpsample.fsh",
+                "defines": {
+                    "TILE_INDEX": "3"
+                }
+            },
+
+            {
+                "vertex": "/program/fullscreen.vsh",
+                "fragment": "/program/composite/bloomUpsample.fsh",
+                "defines": {
+                    "TILE_INDEX": "2"
+                }
+            },
+
+            {
+                "vertex": "/program/fullscreen.vsh",
+                "fragment": "/program/composite/bloomUpsample.fsh",
+                "defines": {
+                    "TILE_INDEX": "1"
+                }
+            },
+
+            {
+                "vertex": "/program/fullscreen.vsh",
+                "fragment": "/program/composite/bloomUpsample.fsh",
+                "defines": {
+                    "TILE_INDEX": "0"
+                }
+            },
+
+            {
+                "vertex": "/program/fullscreen.vsh",
+                "fragment": "/program/composite/temporalFilter.fsh"
+            }
+        ],
+
+        "final": {
+            "vertex": "/program/fullscreen.vsh",
+            "fragment": "/program/final.fsh"
+        }
+
+
+    }
+}

@@ -1,5 +1,8 @@
 # Glimmer
 
+> [!NOTE]
+> This branch is intended to test a script I created called Viewport, designed to streamline the organisation of shader passes. 
+
 ![](/assets/glimmer-banner.png)
 
 Glimmer is a Minecraft shaderpack designed to be simple and performant without looking like it.
