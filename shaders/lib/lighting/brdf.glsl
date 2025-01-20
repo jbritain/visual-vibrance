@@ -133,11 +133,10 @@ vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos, v
 		Rs = vec3(0.0);
 	}
 
-	Rs *= shadow;
 
-	vec3 Rd = material.albedo * (1.0 - F) * clamp01(NoL * shadow + scatter);
+	vec3 Rd = material.albedo * (1.0 - F) * clamp01(NoL);
 
-	return Rs + Rd;
+	return (Rs + Rd) * shadow + (scatter * material.albedo);
 }
 
 #endif // BRDF_GLSL

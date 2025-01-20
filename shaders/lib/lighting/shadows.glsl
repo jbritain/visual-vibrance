@@ -96,13 +96,15 @@ vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material m
 
 		scatter *= mix(1.0 - smoothstep(blockerDistance, 0.0, 2.0), 1.0, distFade);
     
+    if(faceNoL > 1e-6){
+      for (int i = 0; i < SHADOW_SAMPLES; i++) {
+        vec3 offset = vec3(vogelDiscSample(i, SHADOW_SAMPLES, noise), 0.0) * sampleRadius;
+        shadow += sampleShadow(shadowScreenPos + offset);
+      }
 
-		for (int i = 0; i < SHADOW_SAMPLES; i++) {
-			vec3 offset = vec3(vogelDiscSample(i, SHADOW_SAMPLES, noise), 0.0) * sampleRadius;
-			shadow += sampleShadow(shadowScreenPos + offset);
-		}
+      shadow /= float(SHADOW_SAMPLES);
+    }
 
-		shadow /= float(SHADOW_SAMPLES);
 	}
 
 
