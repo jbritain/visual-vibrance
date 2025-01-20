@@ -25,9 +25,7 @@ vec3 getShadedColor(Material material, vec3 mappedNormal, vec3 faceNormal, vec2 
     vec3 shadow = shadowFactor > 1e-6 ? getShadowing(feetPlayerPos, faceNormal, lightmap, material, scatter) * shadowFactor : vec3(0.0);
 
     vec3 color = 
-        brdf(material, mappedNormal, faceNormal, viewPos, scatter) * weatherSunlightColor *
-        shadow
-    ;
+        brdf(material, mappedNormal, faceNormal, viewPos, shadow, scatter) * weatherSunlightColor;
 
     float ambient = 0.05;
     #ifdef WORLD_THE_NETHER
