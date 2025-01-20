@@ -201,7 +201,7 @@
                 vec3 skyReflection = getSky(worldReflectedDir, false) * skyLightmap;
                 vec3 shadow = getShadowing(translucentFeetPlayerPos, waveNormal, vec2(skyLightmap), material, scatter);
                 if(minVec3(shadow) > 0.0 && dot(waveNormal, lightDir) > 0.0){
-                    skyReflection += max0(brdf(material, waveNormal, waveNormal, translucentViewPos, shadow, scatter) * weatherSunlightColor);
+                    skyReflection += max0(brdf(material, waveNormal, waveNormal, translucentViewPos, scatter) * weatherSunlightColor * shadow);
                 }
                 
                 skyReflection = mix(skyReflection, getClouds(translucentFeetPlayerPos, skyReflection, worldReflectedDir), skyLightmap);
