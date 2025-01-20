@@ -84,7 +84,7 @@ vec3 schlick(Material material, float NoV){
 	}
 }
 
-vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos, float scatter){
+vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos, vec3 shadow, float scatter){
 	vec3 L = lightDir;
 	float faceNoL = clamp01(dot(faceNormal, L));
 	float mappedNoL = clamp01(dot(mappedNormal, L));
@@ -133,7 +133,9 @@ vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos, f
 		Rs = vec3(0.0);
 	}
 
-	vec3 Rd = material.albedo * (1.0 - F) * clamp01(NoL + scatter);
+	Rs *= shadow;
+
+	vec3 Rd = material.albedo * (1.0 - F) * clamp01(NoL * shadow + scatter);
 
 	return Rs + Rd;
 }
