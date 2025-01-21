@@ -75,8 +75,8 @@
         bool infiniteOceanMask = false;
 
         #if defined INFINITE_OCEAN && defined WORLD_OVERWORLD
-        if(translucentDepth == 1.0 && !inWater && cameraPosition.y > 63.0){
-            if(rayPlaneIntersection(vec3(0.0, 0.0, 0.0), normalize(translucentFeetPlayerPos), 63.0 - cameraPosition.y, translucentFeetPlayerPos)){
+        if(translucentDepth == 1.0 && !inWater && cameraPosition.y > SEA_LEVEL){
+            if(rayPlaneIntersection(vec3(0.0, 0.0, 0.0), normalize(translucentFeetPlayerPos), SEA_LEVEL - cameraPosition.y, translucentFeetPlayerPos)){
                 infiniteOceanMask = true;
                 translucentViewPos = (gbufferModelView * vec4(translucentFeetPlayerPos, 1.0)).xyz;
                 normal = mat3(gbufferModelView) * vec3(0.0, 1.0, 0.0);

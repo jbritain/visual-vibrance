@@ -240,6 +240,9 @@ option.WAVING_BLOCKS.comment=Makes plants sway in the breeze. §aMinimal perform
 option.INFINITE_OCEAN=Infinite Ocean
 option.INFINITE_OCEAN.comment=Adds an ocean that stretches out to infinity. §6Moderate performance impact.
 
+option.SEA_LEVEL=Sea Level
+option.SEA_LEVEL.comment=What altitude the infinite ocean should render at. §9No performance impact! §7If you need a sea level that isn't an option here, let me know! 
+
 option.DH_AO=Ambient Occlusion
 option.DH_AO.comment=Makes edges of blocks more defined on Distant Horizons terrain. §6Moderate performance impact.
 
