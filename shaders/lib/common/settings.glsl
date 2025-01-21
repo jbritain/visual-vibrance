@@ -39,6 +39,13 @@ const float sunPathRotation = -40.0; // [-90.0 -85.0 -80.0 -75.0 -70.0 -65.0 -60
 #define ATMOSPHERIC_FOG
 #define CLOUDY_FOG
 
+// #define GODRAYS
+#define GODRAYS_DENSITY 1.0
+#define GODRAYS_DECAY 1.0
+#define GODRAYS_EXPOSURE 1.0
+#define GODRAYS_WEIGHT 1.0
+#define GODRAYS_SAMPLES 10
+
 #define SSR_STEPS 4 // [1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16]
 #define REFLECTION_MODE 2 // [0 1 2]
 #define FADE_REFLECTIONS

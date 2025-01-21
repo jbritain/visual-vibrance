@@ -71,6 +71,12 @@ const bool colortex3Clear = false;
 */
 #endif
 
+const vec4 colortex4ClearColor = vec4(1.0, 1.0, 1.0, 1.0);
+
+/*
+    const int colortex4Format = RGB8;
+*/
+
 #ifdef INFINITE_OCEAN
 #endif
 

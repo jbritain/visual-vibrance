@@ -4,6 +4,7 @@
     1: Encoded Normal, Sky Lightmap, Block ID
     2: Bloom Colour
     3: History buffer
+    4: Godrays
 
 ---Passes---
     setup           : Compute transmittance LUT for atmosphere
@@ -16,7 +17,10 @@
     deferred1       : Distant Horizons SSAO
 
     composite       : Water & water fog
+
+    composite4      : Godrays
     composite5      : Fog
+    
     composite90-98  : Bloom
     composite99     : Temporal filter
 ```

@@ -47,7 +47,7 @@ float getFogDensity(float height){
   
 }
 
-vec3 cloudyFog(vec3 color, vec3 playerPos, float depth){
+vec3 cloudyFog(vec3 color, vec3 playerPos, float depth, vec3 scatterFactor){
   // we want fog to occur between time = 15000 and time = 1000
   float fogFactor = 0.0;
   if(worldTime > 1000){
@@ -58,6 +58,8 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth){
 
   fogFactor += wetness * 0.1;
   fogFactor += thunderStrength;
+
+  fogFactor += 0.1;
 
   if(fogFactor < 1e-6){
     return color;
@@ -130,9 +132,7 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth){
 
   float transmittance = exp(-opticalDepth);
 
-  float sunVisibility = (depth == 1.0 ? 1.0 : sunVisibilitySmooth);
-
-  vec3 radiance = sunlightColor * sunVisibilitySmooth * getMiePhase(dot(normalize(playerPos), worldLightDir)) + skylightColor * EBS.y;
+  vec3 radiance = weatherSunlightColor * scatterFactor * getMiePhase(dot(normalize(playerPos), worldLightDir)) + weatherSkylightColor * EBS.y;
 
   vec3 scatter = (radiance - radiance * clamp01(transmittance));
 

@@ -187,7 +187,7 @@
                 reflectedColor = atmosphericFog(reflectedColor, viewReflectedPos);
                 #endif
                 #ifdef CLOUDY_FOG
-                reflectedColor = cloudyFog(reflectedColor, playerReflectedPos, reflectedPos.z);
+                reflectedColor = cloudyFog(reflectedColor, playerReflectedPos, reflectedPos.z, vec3(sunVisibilitySmooth));
                 #endif
                 #ifdef FADE_REFLECTIONS
                 fadeFactor = 1.0 - smoothstep(0.9, 1.0, maxVec2(abs(reflectedPos.xy - 0.5)) * 2);
@@ -207,7 +207,7 @@
                 skyReflection = mix(skyReflection, getClouds(translucentFeetPlayerPos, skyReflection, worldReflectedDir), skyLightmap);
                 #ifdef CLOUDY_FOG
                 vec3 playerReflectedPos = translucentFeetPlayerPos + worldReflectedDir * far;
-                skyReflection = cloudyFog(skyReflection, playerReflectedPos, reflectedPos.z);
+                skyReflection = cloudyFog(skyReflection, playerReflectedPos, reflectedPos.z, vec3(sunVisibilitySmooth));
                 #endif
 
                 reflectedColor = mix(skyReflection, reflectedColor, fadeFactor);

@@ -83,6 +83,7 @@ void main(){
     void main() {
         color = texture(colortex0, texcoord);
         float depth = texture(depthtex0, texcoord).r;
+        float opaqueDepth = texture(depthtex1, texcoord).r;
         vec4 data1 = texture(colortex1, texcoord);
         vec3 worldNormal = decodeNormal(data1.xy);
         int materialID = int(data1.a * 255 + 0.5) + 1000;
@@ -92,7 +93,9 @@ void main(){
         }
 
         vec3 viewPos = screenSpaceToViewSpace(vec3(texcoord, depth));
+        vec3 opaqueViewPos = screenSpaceToViewSpace(vec3(texcoord, opaqueDepth));
         dhOverride(depth, viewPos, false);
+        dhOverride(opaqueDepth, opaqueViewPos, true);
 
         bool infiniteOceanMask = false;
 
@@ -115,7 +118,12 @@ void main(){
         if(depth != 1.0) color.rgb = atmosphericFog(color.rgb, viewPos);
         #endif
         #ifdef CLOUDY_FOG
-        color.rgb = cloudyFog(color.rgb, mat3(gbufferModelViewInverse) * viewPos, depth);
+        vec3 scatterFactor = vec3(sunVisibilitySmooth);
+        #ifdef GODRAYS
+        scatterFactor = texture(colortex4, texcoord).rgb;
+        #endif
+
+        color.rgb = cloudyFog(color.rgb, mat3(gbufferModelViewInverse) * opaqueViewPos, depth, scatterFactor);
         #endif
         #endif
         

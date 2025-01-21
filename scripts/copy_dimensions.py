@@ -12,7 +12,9 @@ dimensions = [
 excluded_programs = [
   "setup.csh",
   "setup1.csh",
-  "prepare1.csh"
+  "prepare1.csh",
+  "composite4.fsh",
+  "composite4.vsh"
 ]
 
 

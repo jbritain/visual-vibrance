@@ -104,9 +104,18 @@
         return tbnMatrix * mappedNormal;
     }
 
-    /* RENDERTARGETS: 0,1 */
+    #ifdef GODRAYS
+    /* RENDERTARGETS: 0,1,4 */
+    #else
+    /* RENDERTARGETS: 0,1,4 */
+    #endif
+
     layout(location = 0) out vec4 color;
     layout(location = 1) out vec4 outData1;
+
+    #ifdef GODRAYS
+    layout(location = 2) out vec4 sunOcclusion;
+    #endif
 
     void main() {
 
@@ -206,6 +215,15 @@
         outData1.xy = encodeNormal(mat3(gbufferModelViewInverse) * mappedNormal);
         outData1.z = lightmap.y;
         outData1.a = clamp01(float(materialID - 1000) * rcp(255.0));
+
+        #ifdef GODRAYS
+        if(color.a == 1.0){
+            sunOcclusion = vec4(0.0);
+        } else {
+            sunOcclusion = albedo;
+        }
+        #endif
+        
     }
 
 #endif
