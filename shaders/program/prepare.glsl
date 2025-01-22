@@ -70,8 +70,8 @@ void main()
     #endif
 
     ivec2 texelCoord = ivec2(gl_GlobalInvocationID.xy);
-    float u = clamp(texelCoord.x, 0.0, skyViewLUTRes.x-1.0)/skyViewLUTRes.x;
-    float v = clamp(texelCoord.y, 0.0, skyViewLUTRes.y-1.0)/skyViewLUTRes.y;
+    float u = clamp(float(texelCoord.x), 0.0, skyViewLUTRes.x-1.0)/skyViewLUTRes.x;
+    float v = clamp(float(texelCoord.y), 0.0, skyViewLUTRes.y-1.0)/skyViewLUTRes.y;
     
     float azimuthAngle = (u - 0.5)*2.0*PI;
     // Non-linear mapping of altitude. See Section 5.3 of the paper.
