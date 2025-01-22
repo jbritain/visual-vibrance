@@ -198,13 +198,17 @@
 
             if(fadeFactor < 1.0){
                 vec3 worldReflectedDir = mat3(gbufferModelViewInverse) * reflectedDir;
-                vec3 skyReflection = getSky(worldReflectedDir, false) * skyLightmap;
+                vec3 skyReflection = getSky(worldReflectedDir, false);
+
+                vec3 transmittance;
+                vec3 cloudScatter = getClouds(translucentFeetPlayerPos, worldReflectedDir, transmittance);
+                skyReflection = skyReflection * transmittance + cloudScatter;
+                skyReflection *= skyLightmap;
+
                 vec3 shadow = getShadowing(translucentFeetPlayerPos, waveNormal, vec2(skyLightmap), material, scatter);
                 if(minVec3(shadow) > 0.0 && dot(waveNormal, lightDir) > 0.0){
                     skyReflection += max0(brdf(material, waveNormal, waveNormal, translucentViewPos, shadow, scatter) * weatherSunlightColor);
                 }
-                
-                skyReflection = mix(skyReflection, getClouds(translucentFeetPlayerPos, skyReflection, worldReflectedDir), skyLightmap);
                 #ifdef CLOUDY_FOG
                 vec3 playerReflectedPos = translucentFeetPlayerPos + worldReflectedDir * far;
                 skyReflection = cloudyFog(skyReflection, playerReflectedPos, reflectedPos.z, vec3(sunVisibilitySmooth));

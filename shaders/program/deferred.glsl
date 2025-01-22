@@ -35,8 +35,18 @@
 
     #include "/lib/dh.glsl"
 
+    #ifdef GODRAYS
+    /* RENDERTARGETS: 0,4 */
+    #else
     /* RENDERTARGETS: 0 */
+    #endif
+    
     layout(location = 0) out vec4 color;
+
+
+    #ifdef GODRAYS
+    layout(location = 1) out vec3 occlusion;
+    #endif
 
     void main() {
         color = texture(colortex0, texcoord);
@@ -53,7 +63,15 @@
 
             color.rgb = getSky(color.rgb, worldDir, true);
             #ifdef WORLD_OVERWORLD
-            color.rgb = getClouds(vec3(0.0), color.rgb, worldDir);
+                vec3 transmittance;
+
+                vec3 scattering = getClouds(vec3(0.0), worldDir, transmittance);
+
+                color.rgb = color.rgb * transmittance + scattering;
+
+                #ifdef GODRAYS
+                    occlusion = pow5(transmittance);
+                #endif
             #endif
         }
     }

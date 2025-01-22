@@ -56,6 +56,7 @@
     in vec3 viewPos;
 
     /* RENDERTARGETS: 0,1 */
+
     layout(location = 0) out vec4 color;
     layout(location = 1) out vec4 outData1;
 
@@ -130,7 +131,7 @@
         if(materialID == MATERIAL_WATER){
             color = vec4(0.0);
         }  else {
-            color.rgb = getShadedColor(material, normal, normal, lightmap, viewPos);
+            color.rgb = getShadedColor(material, normal, normal, lightmap, viewPos, 1.0);
             color.a = albedo.a;
             float fresnel = maxVec3(schlick(material, dot(normal, normalize(-viewPos))));
             color.a *= (1.0 - fresnel);

@@ -42,6 +42,8 @@
 
         vec3 sunScreenPos = viewSpaceToScreenSpace(shadowLightPosition);
 
+        sunScreenPos.xy = clamp(sunScreenPos.xy, vec2(-0.5), vec2(1.5));
+
         vec2 deltaTexcoord = (texcoord - sunScreenPos.xy);
 
         deltaTexcoord *= rcp(GODRAYS_SAMPLES) * GODRAYS_DENSITY;
@@ -61,7 +63,6 @@
         scattering /= GODRAYS_SAMPLES;
         scattering *= GODRAYS_EXPOSURE;
 
-        show(scattering);
     }
 
 #endif

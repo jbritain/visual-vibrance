@@ -46,17 +46,18 @@ vec3 multipleScattering(float density, float costh, float g1, float g2, vec3 ext
   return radiance;
 }
 
-vec3 getClouds(vec3 origin, vec3 color, vec3 worldDir){
+vec3 getClouds(vec3 origin, vec3 worldDir, out vec3 transmittance){
+  transmittance = vec3(1.0);
   #ifndef CLOUDS
-  return color;
+  return vec3(0.0);
   #endif
 
   origin += cameraPosition;
 
   vec3 point;
-  if(!rayPlaneIntersection(origin, worldDir, CLOUD_PLANE_ALTITUDE, point)) return color;
+  if(!rayPlaneIntersection(origin, worldDir, CLOUD_PLANE_ALTITUDE, point)) return vec3(0.0);
 
-  point.z += worldTime;
+  point.z += worldTime * 0.2;
 
   #ifdef BLOCKY_CLOUDS
   float density = smoothstep(mix(0.25, 0.0, wetness), mix(0.75, 0.25, wetness), texelFetch(perlinNoiseTex, ivec2(mod(point.xz / 30000, 1.0) * 256), 0).r);
@@ -92,14 +93,14 @@ vec3 getClouds(vec3 origin, vec3 color, vec3 worldDir){
   vec3 radiance = skylightColor + sunlightColor * (1.0 + 9.0 * float(lightDir == sunDir)) * multipleScattering(totalDensityTowardsSun, costh, 0.9, -0.4, CLOUD_EXTINCTION_COLOR, 4, 0.85, 0.9, 0.8, 0.1) * mix(2.0 * powder, vec3(1.0), costh * 0.5 + 0.5);
 
 
-  vec3 transmittance = exp(-totalDensityAlongRay * CLOUD_EXTINCTION_COLOR);
+  transmittance = exp(-totalDensityAlongRay * CLOUD_EXTINCTION_COLOR);
   transmittance = mix(transmittance, vec3(1.0), 1.0 - smoothstep(0.0, 0.2, worldDir.y)); // fade clouds towards horizon
 
   vec3 integScatter = (radiance - radiance * clamp01(transmittance)) / CLOUD_EXTINCTION_COLOR;
   vec3 scatter = integScatter * transmittance;
   scatter = mix(scatter, vec3(0.0), exp(-distance(point, cameraPosition) * 0.004));
 
-  return color * transmittance + scatter;
+  return scatter;
 }
 
 #endif

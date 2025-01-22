@@ -16,6 +16,7 @@
 #define SHADOWS_GLSL
 
 #include "/lib/shadowSpace.glsl"
+#include "/lib/atmosphere/clouds.glsl"
 
 vec3 sampleShadow(vec3 shadowScreenPos){
 	float transparentShadow = shadow2D(shadowtex0HW, shadowScreenPos).r;
@@ -37,6 +38,13 @@ vec3 sampleShadow(vec3 shadowScreenPos){
 
 vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material material, out float scatter){
     scatter = 0.0;
+
+    vec3 cloudShadow = vec3(1.0);
+
+    #ifdef CLOUD_SHADOWS
+    getClouds(feetPlayerPos, worldLightDir, cloudShadow);
+    cloudShadow = pow3(cloudShadow);
+    #endif
 
     #ifdef WORLD_THE_NETHER
     return vec3(0.0);
@@ -61,7 +69,7 @@ vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material m
     }
 
     #ifndef SHADOWS
-    return vec3(fakeShadow);
+    return vec3(fakeShadow) * cloudShadow;
     #else
 
     vec4 shadowClipPos = getShadowClipPos(feetPlayerPos);
@@ -107,9 +115,10 @@ vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material m
 
 	}
 
-
-    scatter -= scatter * 0.75 * clamp01(distFade);
-    return mix(shadow, vec3(fakeShadow), clamp01(distFade));
+  scatter -= scatter * 0.75 * clamp01(distFade);
+  scatter *= maxVec3(cloudShadow); // since the cloud shadows are so blurry anyway, if something is shadowed by a cloud, it's probably not getting any sunlight
+  shadow = mix(shadow, vec3(fakeShadow), clamp01(distFade));
+  return shadow * cloudShadow;
   
   #endif
 }

@@ -198,6 +198,9 @@ option.CLOUDY_FOG.comment=Adds a mist-like fog sitting over the ground in the mo
 option.GODRAYS=Godrays
 option.GODRAYS.comment=Makes objects appear to cast shadows through §efancy fog. §aMinimal performance impact.
 
+option.CLOUD_SHADOWS=Cloud Shadows
+option.CLOUD_SHADOWS.comment=Makes clouds cast a shadow. §aMinimal performance impact.
+
 option.BORDER_FOG=Border Fog
 option.BORDER_FOG.comment=Fades terrain into the sky towards the edge of the render distance. §2Imperceptible performance impact.
 

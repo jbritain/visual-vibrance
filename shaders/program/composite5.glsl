@@ -49,6 +49,8 @@ void main(){
         #endif
     }
 
+    sunVisibility *= (1.0 - wetness);
+
 
     sunVisibilitySmooth = mix(sunVisibility, sunVisibilitySmooth, clamp01(exp2(frameTime * -10.0)));
 }
@@ -123,7 +125,7 @@ void main(){
         scatterFactor = texture(colortex4, texcoord).rgb;
         #endif
 
-        color.rgb = cloudyFog(color.rgb, mat3(gbufferModelViewInverse) * opaqueViewPos, depth, scatterFactor);
+        color.rgb = cloudyFog(color.rgb, mat3(gbufferModelViewInverse) * viewPos, depth, scatterFactor);
         #endif
         #endif
         
