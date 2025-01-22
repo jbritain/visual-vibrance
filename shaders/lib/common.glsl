@@ -30,6 +30,10 @@
 const float wetnessHalflife = 50.0;
 const float drynessHalflife = 25.0;
 
+#ifdef IS_MONOCLE
+monocle_not_supported
+#endif
+
 vec3 sunDir = normalize(sunPosition);
 vec3 worldSunDir = mat3(gbufferModelViewInverse) * sunDir;
 

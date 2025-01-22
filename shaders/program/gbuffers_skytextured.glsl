@@ -46,7 +46,7 @@
           discard;
         }
 
-        if (color.a < 0.1) {
+        if (color.a < 0.01) {
           discard;
         }
 
