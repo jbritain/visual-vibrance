@@ -31,7 +31,7 @@ vec3 waterFog(vec3 color, vec3 a, vec3 b, float dhFactor){
   vec3 transmittance = exp(-opticalDepth);
 
 
-  vec3 scatter = clamp01((transmittance - 1.0) / -opticalDepth) * WATER_SCATTERING * (sunVisibilitySmooth * sunlightColor * getMiePhase(dot(normalize(b - a), lightDir)) + EBS.y * skylightColor);
+  vec3 scatter = clamp01((transmittance - 1.0) / -opticalDepth) * WATER_SCATTERING * (sunVisibilitySmooth * weatherSunlightColor * getMiePhase(dot(normalize(b - a), lightDir)) + EBS.y * weatherSkylightColor);
   
 
   return color * transmittance + scatter;

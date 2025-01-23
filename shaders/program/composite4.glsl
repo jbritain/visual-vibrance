@@ -32,6 +32,7 @@
 
     #include "/lib/dh.glsl"
     #include "/lib/shadowSpace.glsl"
+    #include "/lib/atmosphere/clouds.glsl"
 
     /* RENDERTARGETS: 4 */
     layout(location = 0) out vec3 scattering;
@@ -75,28 +76,43 @@
 
             vec3 feetPlayerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
 
-            vec3 a = getShadowClipPos(vec3(0.0)).xyz;
-            vec3 b = getShadowClipPos(feetPlayerPos).xyz;
+            vec3 a = vec3(0.0);
+            vec3 b = feetPlayerPos;
+
+            vec3 aShadow = getShadowClipPos(a).xyz;
+            vec3 bShadow = getShadowClipPos(b).xyz;
 
             #define VL_SAMPLES 10
 
             vec3 sampleDelta = (b - a) * rcp(VL_SAMPLES);
             vec3 samplePos = a;
 
-            samplePos += sampleDelta * interleavedGradientNoise(floor(gl_FragCoord.xy), frameCounter);
+            vec3 sampleDeltaShadow = (bShadow - aShadow) * rcp(VL_SAMPLES);
+            vec3 samplePosShadow = aShadow;
+
+            float noise = interleavedGradientNoise(floor(gl_FragCoord.xy), frameCounter);
+            samplePos += sampleDelta * noise;
+            samplePosShadow += sampleDeltaShadow * noise;
 
             for(int i = 0; i < VL_SAMPLES; i++){
-                vec3 screenSamplePos = getShadowScreenPos(vec4(samplePos, 1.0));
+                vec3 screenSamplePos = getShadowScreenPos(vec4(samplePosShadow, 1.0));
 
                 if(clamp01(screenSamplePos) != screenSamplePos){
                     break;
                 }
-                scattering += vec3(shadow2D(shadowtex0HW, screenSamplePos).r);
+                vec3 cloudShadow;
+                getClouds(samplePos, worldLightDir, cloudShadow);
+                cloudShadow = pow3(cloudShadow);
+                scattering += vec3(shadow2D(shadowtex0HW, screenSamplePos).r) * cloudShadow;
+
                 samplePos += sampleDelta;
+                samplePosShadow += sampleDeltaShadow;
             }
 
             scattering /= VL_SAMPLES;
             scattering = pow2(scattering);
+
+            show(scattering);
         #endif
 
     }

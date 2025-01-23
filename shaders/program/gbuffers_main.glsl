@@ -197,11 +197,6 @@
         }  else {
             color.rgb = getShadedColor(material, mappedNormal, tbnMatrix[2], lightmap, viewPos, parallaxShadow);
             color.a = albedo.a;
-            if(albedo.a != 1.0){
-                float fresnel = maxVec3(schlick(material, dot(mappedNormal, normalize(-viewPos))));
-                color.a *= (1.0 - fresnel);
-            }
-            
         }
 
         outData1.xy = encodeNormal(mat3(gbufferModelViewInverse) * mappedNormal);
