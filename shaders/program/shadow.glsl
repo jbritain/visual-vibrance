@@ -97,7 +97,7 @@
 
                 float oldArea = length(dFdx(oldPos)) * length(dFdy(oldPos));
                 float newArea = length(dFdx(newPos)) * length(dFdy(newPos));
-                color.a *= (1.0 - oldArea / newArea);
+                color.a *= (1.0 - pow2(oldArea / newArea));
             #endif
             
         }
