@@ -35,7 +35,7 @@
 
     #include "/lib/dh.glsl"
 
-    #ifdef GODRAYS
+    #if GODRAYS > 0
     /* RENDERTARGETS: 0,4 */
     #else
     /* RENDERTARGETS: 0 */
@@ -44,7 +44,7 @@
     layout(location = 0) out vec4 color;
 
 
-    #ifdef GODRAYS
+    #if GODRAYS > 0
     layout(location = 1) out vec3 occlusion;
     #endif
 
@@ -69,7 +69,7 @@
 
                 color.rgb = color.rgb * transmittance + scattering;
 
-                #ifdef GODRAYS
+                #if GODRAYS > 0
                     occlusion = pow5(transmittance);
                 #endif
             #endif

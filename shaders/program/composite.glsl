@@ -211,7 +211,7 @@
                 }
                 #ifdef CLOUDY_FOG
                 vec3 playerReflectedPos = translucentFeetPlayerPos + worldReflectedDir * far;
-                skyReflection = cloudyFog(skyReflection, playerReflectedPos, reflectedPos.z, vec3(sunVisibilitySmooth));
+                skyReflection = cloudyFog(skyReflection, playerReflectedPos, reflectedPos.z, vec3(1.0));
                 #endif
 
                 reflectedColor = mix(skyReflection, reflectedColor, fadeFactor);

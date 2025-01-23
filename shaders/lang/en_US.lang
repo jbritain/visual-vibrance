@@ -195,8 +195,12 @@ option.ATMOSPHERIC_FOG.comment=Makes terrain fade into the distance. §2Impercep
 option.CLOUDY_FOG=Fancy Fog
 option.CLOUDY_FOG.comment=Adds a mist-like fog sitting over the ground in the morning and when it rains. §6Moderate performance impact.
 
-option.GODRAYS=Godrays
-option.GODRAYS.comment=Makes objects appear to cast shadows through §efancy fog. §aMinimal performance impact.
+option.GODRAYS=Godrays (VL)
+option.GODRAYS.comment=Makes objects appear to cast shadows through §efancy fog. §fThe §escreen-space §fmode has a §aminimal performance impact §fbut is less accurate and breaks when the sun is not onscreen. The §evolumetric §fmode has a §6moderate performance impact, §frequires §eshadows §fto be enabled, and will look bad at lower §eshadow quality §fsettings.
+value.GODRAYS.0=Off
+value.GODRAYS.1=Screen-Space
+value.GODRAYS.2=Volumetric
+
 
 option.CLOUD_SHADOWS=Cloud Shadows
 option.CLOUD_SHADOWS.comment=Makes clouds cast a shadow. §aMinimal performance impact.
@@ -220,7 +224,7 @@ option.REFRACTION=Refraction
 option.REFRACTION.comment=Bends light as it enters or leaves water. §aMinimal performance impact.
 
 option.CAUSTICS=Caustics
-option.CAUSTICS.comment=Emulates how light refracting through water appears to cast a shadow. §eRequires shadows to be enabled, and will look bad at lower shadow quality settings. §aMinimal performance impact.
+option.CAUSTICS.comment=Emulates how light refracting through water appears to cast a shadow. Requires §eshadows §fto be enabled, and will look bad at lower §eshadow quality §fsettings. §aMinimal performance impact.
 
 option.BLOOM=Bloom
 option.BLOOM.comment=Makes bright objects appear to glow. §6Moderate performance impact.

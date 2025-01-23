@@ -40,7 +40,7 @@ const float sunPathRotation = -40.0; // [-90.0 -85.0 -80.0 -75.0 -70.0 -65.0 -60
 #define ATMOSPHERIC_FOG
 #define CLOUDY_FOG
 
-// #define GODRAYS
+#define GODRAYS 0 // [0 1 2]
 #define GODRAYS_DENSITY 1.0
 #define GODRAYS_DECAY 1.0
 #define GODRAYS_EXPOSURE 1.0
@@ -74,6 +74,11 @@ const float sunPathRotation = -40.0; // [-90.0 -85.0 -80.0 -75.0 -70.0 -65.0 -60
 
 #define GLIMMER_SHADERS 1 // [1 2]
 #define WEBSITE 1 // [1 2]
+
+// #define PROGRAM_DISABLED
+
+#ifdef PROGRAM_DISABLED
+#endif
 
 
 #endif // SETTINGS_GLSL

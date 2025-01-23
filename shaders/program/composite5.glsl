@@ -120,8 +120,8 @@ void main(){
         if(depth != 1.0) color.rgb = atmosphericFog(color.rgb, viewPos);
         #endif
         #ifdef CLOUDY_FOG
-        vec3 scatterFactor = vec3(sunVisibilitySmooth);
-        #ifdef GODRAYS
+        vec3 scatterFactor = depth == 1.0 ? vec3(1.0) : vec3(sunVisibilitySmooth);
+        #if GODRAYS > 0
         scatterFactor = texture(colortex4, texcoord).rgb;
         #endif
 
