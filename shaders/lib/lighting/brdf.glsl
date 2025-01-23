@@ -59,8 +59,8 @@ float schlickGGX(float NoV, float K) {
 }
 	
 float geometrySmith(vec3 N, vec3 V, vec3 L, float K) {
-	float NoV = max(dot(N, V), 0.0);
-	float NoL = max(dot(N, L), 0.0);
+	float NoV = max(dot(N, V), 1e-6);
+	float NoL = max(dot(N, L), 1e-6);
 	float ggx1 = schlickGGX(NoV, K);
 	float ggx2 = schlickGGX(NoL, K);
 
@@ -123,9 +123,6 @@ vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos, v
 	}
 
 	vec3 Rs = (F * D * G) / (4.0 * NoV + 1e-6);
-
-
-	Rs = clamp(Rs, vec3(0.0), vec3(500.0));
 
 
 	// this was causing some weird issues
