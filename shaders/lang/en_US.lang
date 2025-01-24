@@ -116,6 +116,9 @@ value.EXPOSURE.78=7.8
 value.EXPOSURE.79=7.9
 value.EXPOSURE.80=8.0
 
+option.AMBIENT_STRENGTH=Ambient Light Strength
+option.AMBIENT_STRENGTH.comment=The minimum amount of light there can be in any situation. §9No performance impact!
+
 option.SHADOWS=Shadows
 
 option.shadowDistance=Shadow Distance
@@ -201,6 +204,8 @@ value.GODRAYS.0=Off
 value.GODRAYS.1=Screen-Space
 value.GODRAYS.2=Volumetric
 
+option.GODRAYS_SAMPLES=Godray Samples
+option.GODRAYS_SAMPLES.comment=How many samples are taken when rendering godrays. Higher values reduce noise at the cost of performance. §6Moderate performance impact.
 
 option.CLOUD_SHADOWS=Cloud Shadows
 option.CLOUD_SHADOWS.comment=Makes clouds cast a shadow. §aMinimal performance impact.

@@ -61,6 +61,7 @@ const bool colortex3Clear = false;
 // BUFFER FORMATS
 /*
     const int colortex0Format = RGB16F;
+    const int colortex5Format = R8;
 */
 
 #ifdef BLOOM

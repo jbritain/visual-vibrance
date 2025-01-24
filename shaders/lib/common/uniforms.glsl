@@ -61,6 +61,7 @@ vec2 resolution = vec2(viewWidth, viewHeight);
 uniform float wetness;
 uniform float sunAngle;
 uniform float playerMood;
+uniform float constantMood;
 
 uniform ivec2 atlasSize;
 uniform ivec2 eyeBrightness;

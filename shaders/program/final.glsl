@@ -42,7 +42,9 @@
 
         #ifdef BLOOM
         vec3 bloom = texture(colortex2, texcoord).rgb;
-        color.rgb = mix(color.rgb, bloom, 0.01 * BLOOM_STRENGTH);
+
+        float rain = texture(colortex5, texcoord).r;
+        color.rgb = mix(color.rgb, bloom, clamp01(0.01 * BLOOM_STRENGTH + rain * 0.1));
         #endif
 
         color.rgb *= 2.0;

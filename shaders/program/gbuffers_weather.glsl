@@ -31,7 +31,7 @@
 
         viewPos = (gl_ModelViewMatrix * gl_Vertex).xyz;
         vec3 feetPlayerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
-        feetPlayerPos.zy = rotate(feetPlayerPos.zy, 0.3);
+        feetPlayerPos.xz += feetPlayerPos.y * 0.25;
         viewPos = (gbufferModelView * vec4(feetPlayerPos, 1.0)).xyz;
 
         gl_Position = gbufferProjection * vec4(viewPos, 1.0);
@@ -47,11 +47,26 @@
     in vec4 glcolor;
     in vec3 viewPos;
 
-    /* RENDERTARGETS: 0 */
+    /* RENDERTARGETS: 0,5 */
     layout(location = 0) out vec4 color;
+    layout(location = 1) out vec4 rainMask;
 
     void main() {
-        discard;
+        color = texture(gtexture, texcoord) * glcolor;
+
+        if(color.a < alphaTestRef){
+            discard;
+        }
+
+        if(color.r == color.g) { // snow
+            rainMask = vec4(0.0);
+            return;
+        } else {
+            color = vec4(0.0);
+            rainMask = vec4(1.0);
+        }
+
+        rainMask = vec4(1.0);
     }
 
 #endif

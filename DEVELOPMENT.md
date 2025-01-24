@@ -5,6 +5,7 @@
     2: Bloom Colour
     3: History buffer
     4: Godrays
+    5: Rain mask
 
 ---Passes---
     setup           : Compute transmittance LUT for atmosphere
