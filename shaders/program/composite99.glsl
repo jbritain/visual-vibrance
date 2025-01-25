@@ -64,8 +64,6 @@
 
         vec4 historyColor = texture(colortex3, previousScreenPos.xy);
 
-        vec2 iResolution = rcp(resolution);
-
         // neighbourhood clamping
         vec3 maxCol = vec3(0.0);
         vec3 minCol = vec3(999999999.0);
