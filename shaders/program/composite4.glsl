@@ -102,7 +102,7 @@
                 vec3 cloudShadow = vec3(1.0);
                 #ifdef CLOUD_SHADOWS
                 getClouds(samplePos, worldLightDir, cloudShadow);
-                cloudShadow = pow3(cloudShadow);
+                // cloudShadow = pow3(cloudShadow);
                 #endif
                 scattering += vec3(shadow2D(shadowtex0HW, screenSamplePos).r) * cloudShadow;
 
@@ -111,6 +111,8 @@
             }
 
             scattering /= GODRAYS_SAMPLES;
+            scattering *= distance(a, b);
+            scattering /= (shadowDistance / 2.0);
             scattering = pow2(scattering);
 
             show(scattering);

@@ -70,7 +70,7 @@
                 color.rgb = color.rgb * transmittance + scattering;
 
                 #if GODRAYS > 0
-                    occlusion = pow5(transmittance);
+                    occlusion = transmittance;
                 #endif
             #endif
         }
