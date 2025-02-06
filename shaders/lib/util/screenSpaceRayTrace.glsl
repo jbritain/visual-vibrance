@@ -62,7 +62,7 @@ bool rayIntersects(vec3 viewOrigin, vec3 viewDir, int maxSteps, float jitter, bo
 	rayDir -= rayPos;
 	rayDir = normalize(rayDir);
 
-    vec3 r = abs(sign(rayDir) - rayPos) / max(abs(rayDir), 0.00001);
+  vec3 r = abs(sign(rayDir) - rayPos) / max(abs(rayDir), 0.00001);
 	float rayLength = minVec3(r);
 	float stepLength = rayLength * rcp(float(maxSteps));
 

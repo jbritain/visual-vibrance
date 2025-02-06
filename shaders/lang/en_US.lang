@@ -196,10 +196,16 @@ option.ATMOSPHERIC_FOG=Atmospheric Fog
 option.ATMOSPHERIC_FOG.comment=Makes terrain fade into the distance. §2Imperceptible performance impact.
 
 option.CLOUDY_FOG=Fancy Fog
-option.CLOUDY_FOG.comment=Adds a mist-like fog sitting over the ground in the morning and when it rains. §6Moderate performance impact.
+option.CLOUDY_FOG.comment=Adds a mist-like fog sitting over the ground. More obvious in the morning and when it rains. §6Moderate performance impact.
+
+option.BASE_FOG_DENSITY=Base Fog Density
+option.BASE_FOG_DENSITY.comment=The density of §efancy fog§f. §9No performance impact!
+
+option.MORNING_FOG_DENSITY=Morning Fog Density
+option.MORNING_FOG_DENSITY.comment=How much the density of §efancy fog§f increases in the morning. §9No performance impact!
 
 option.GODRAYS=Godrays (VL)
-option.GODRAYS.comment=Makes objects appear to cast shadows through §efancy fog. §fThe §escreen-space §fmode has a §aminimal performance impact §fbut is less accurate and breaks when the sun is not onscreen. The §evolumetric §fmode has a §6moderate performance impact, §frequires §eshadows §fto be enabled, and will look bad at lower §eshadow quality §fsettings.
+option.GODRAYS.comment=Makes objects appear to cast shadows through §efancy fog. §fThe §escreen-space §fmode has a §aminimal performance impact §fbut is less accurate and will disappear if the sun is not on the screen. The §evolumetric §fmode has a §6moderate performance impact, §frequires §eshadows §fto be enabled, and will look bad at lower §eshadow quality §fsettings.
 value.GODRAYS.0=Off
 value.GODRAYS.1=Screen-Space
 value.GODRAYS.2=Volumetric
@@ -220,10 +226,13 @@ value.REFLECTION_MODE.1=Fast
 value.REFLECTION_MODE.2=SSR
 
 option.SSR_STEPS=SSR Steps
-option.SSR_STEPS.comment=Higher values will reduce noise in water reflections §ewhen SSR is enabled §fat the cost of performance. §6Moderate performance impact. §7Note that each step takes 4 samples.
+option.SSR_STEPS.comment=Higher values will reduce noise/stepping in water reflections §ewhen SSR is enabled §fat the cost of performance. §6Moderate performance impact. §7Note that each step takes 4 samples.
 
-option.FADE_REFLECTIONS=Fade Reflections @ Edges
+option.FADE_REFLECTIONS=Reflection Edge Fade
 option.FADE_REFLECTIONS.comment=Fades reflections into the sky as they approach the edge of the screen to prevent the otherwise hard cutoff. §2Imperceptible performance impact.
+
+option.SSR_JITTER=SSR Jitter
+option.SSR_JITTER.comment=When enabled, §eSSR §freflections will appear noisy, however there will be no 'stair-stepping' effect. §2Imperceptible performance impact.
 
 option.REFRACTION=Refraction
 option.REFRACTION.comment=Bends light as it enters or leaves water. §aMinimal performance impact.

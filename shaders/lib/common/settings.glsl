@@ -41,6 +41,8 @@ const float sunPathRotation = -40.0; // [-90.0 -85.0 -80.0 -75.0 -70.0 -65.0 -60
 
 #define ATMOSPHERIC_FOG
 #define CLOUDY_FOG
+#define MORNING_FOG_DENSITY 1.0 // [0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0]
+#define BASE_FOG_DENSITY 0.1 // [0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0]
 
 #define GODRAYS 1 // [0 1 2]
 #define GODRAYS_DENSITY 1.0
@@ -50,6 +52,7 @@ const float sunPathRotation = -40.0; // [-90.0 -85.0 -80.0 -75.0 -70.0 -65.0 -60
 #define GODRAYS_SAMPLES 16 // [4 8 16 32 64]
 
 #define SSR_STEPS 4 // [1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16]
+// #define SSR_JITTER
 #define REFLECTION_MODE 2 // [0 1 2]
 #define FADE_REFLECTIONS
 

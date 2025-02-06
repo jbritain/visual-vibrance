@@ -51,15 +51,15 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth, vec3 scatterFactor){
   // we want fog to occur between time = 15000 and time = 1000
   float fogFactor = 0.0;
   if(worldTime > 1000){
-    fogFactor = smoothstep(15000, 24000, worldTime);  
+    fogFactor = smoothstep(15000, 24000, worldTime) * MORNING_FOG_DENSITY;  
   } else {
-    fogFactor = 1.0 - smoothstep(0, 1000, worldTime);
+    fogFactor = (1.0 - smoothstep(0, 1000, worldTime)) * MORNING_FOG_DENSITY;
   }
 
   fogFactor += wetness * 0.1;
   fogFactor += thunderStrength;
 
-  fogFactor += 0.1;
+  fogFactor += BASE_FOG_DENSITY;
 
   if(fogFactor < 1e-6){
     return color;
@@ -106,7 +106,7 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth, vec3 scatterFactor){
     float densityA = getFogDensity(a.y + cameraPosition.y);
     float densityB = getFogDensity(b.y + cameraPosition.y);
 
-  opticalDepth = max0(distance(a, b) * (densityA + densityB) / 2) * fogFactor;
+    opticalDepth = max0(distance(a, b) * (densityA + densityB) / 2) * fogFactor;
 
     if(!rayPlaneIntersection(vec3(0.0), dir, localBottomHeight, a)){
       a = vec3(0.0);
@@ -132,7 +132,11 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth, vec3 scatterFactor){
 
   float transmittance = exp(-opticalDepth);
 
-  vec3 radiance = weatherSunlightColor * scatterFactor * getMiePhase(dot(normalize(playerPos), worldLightDir)) + weatherSkylightColor * EBS.y;
+  float costh = dot(normalize(playerPos), worldLightDir);
+
+  vec3 phase = multipleScattering(opticalDepth, costh, -0.2, 0.85, vec3(1.0), 1, 0.7, 0.9, 0.8, 0.1);
+
+  vec3 radiance = weatherSunlightColor * scatterFactor * phase + weatherSkylightColor * EBS.y;
 
   vec3 scatter = (radiance - radiance * clamp01(transmittance));
 

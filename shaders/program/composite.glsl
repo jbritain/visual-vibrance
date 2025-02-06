@@ -153,7 +153,11 @@
             }
 
             // SSR
+            #ifdef SSR_JITTER
             float jitter = interleavedGradientNoise(floor(gl_FragCoord.xy), frameCounter);
+            #else
+            float jitter = 0.0;
+            #endif
             vec3 reflectedDir = reflect(viewDir, waveNormal);
             vec3 reflectedPos;
             vec3 reflectedColor;
