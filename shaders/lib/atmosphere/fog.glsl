@@ -98,7 +98,7 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth, vec3 scatterFactor){
     if(length(playerPos) < length(a)){
       a = vec3(0.0);
       b = vec3(0.0);
-    } else if(length(playerPos) < length(b) && depth != 1.0){ // terrain in the way
+    } else if(length(playerPos) < length(b)){ // terrain in the way
       b = playerPos;
     }
     
@@ -124,7 +124,7 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth, vec3 scatterFactor){
     if(length(playerPos) < length(a)){
       a = vec3(0.0);
       b = vec3(0.0);
-    } else if(length(playerPos) < length(b) && depth != 1.0){ // terrain in the way
+    } else if(length(playerPos) < length(b)){ // terrain in the way
       b = playerPos;
     }
 
@@ -134,11 +134,12 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth, vec3 scatterFactor){
 
   float costh = dot(normalize(playerPos), worldLightDir);
 
-  vec3 phase = multipleScattering(opticalDepth, costh, -0.2, 0.85, vec3(1.0), 1, 0.7, 0.9, 0.8, 0.1);
+  vec3 phase = vec3(getMiePhase(costh));//multipleScattering(opticalDepth, costh, -0.2, 0.85, vec3(1.0), 1, 0.7, 0.9, 0.8, 0.1);
 
   vec3 radiance = weatherSunlightColor * scatterFactor * phase + weatherSkylightColor * EBS.y;
 
-  vec3 scatter = (radiance - radiance * clamp01(transmittance));
+  vec3 scatter = vec3(1.0 - transmittance) / 2;// / max(opticalDepth, 1e-6);
+  scatter *= radiance;
 
   return color * transmittance + scatter;
 }
