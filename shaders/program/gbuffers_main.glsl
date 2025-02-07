@@ -110,6 +110,7 @@
     layout(location = 1) out vec4 outData1;
 
     void main() {
+        vec3 playerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
 
         float parallaxShadow = 1.0;
         #ifdef PARALLAX
@@ -141,7 +142,6 @@
         #endif
 
         #ifdef DYNAMIC_HANDLIGHT
-            vec3 playerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
             float dist = length(playerPos);
             lightmap.x = max(lightmap.x, (1.0 - clamp01(smoothstep(0.0, 15.0, dist))) * max(heldBlockLightValue, heldBlockLightValue2) / 15.0);
         #endif
@@ -156,6 +156,16 @@
         albedo.rgb = mix(albedo.rgb, entityColor.rgb, entityColor.a);
 
         albedo.rgb = pow(albedo.rgb, vec3(2.2));
+
+        #ifdef PATCHY_LAVA
+            if(materialID == MATERIAL_LAVA){
+                vec3 worldPos = playerPos + cameraPosition;
+                float noise = texture(perlinNoiseTex, mod(worldPos.xz / 100 + vec2(0.0, frameTimeCounter * 0.005), 1.0)).r;
+                noise *= texture(perlinNoiseTex, mod(worldPos.xz / 200 + vec2(frameTimeCounter * 0.005, 0.0), 1.0)).r;
+                show(noise);
+                albedo.rgb *= noise;
+            }
+        #endif
 
         vec3 mappedNormal = getMappedNormal(texcoord);
 

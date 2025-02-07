@@ -258,6 +258,9 @@ option.TEMPORAL_FILTER.comment=Uses data from previous frames to reduce noise. C
 option.WAVING_BLOCKS=Waving Blocks
 option.WAVING_BLOCKS.comment=Makes plants sway in the breeze. §aMinimal performance impact.
 
+option.PATCHY_LAVA=Patchy Lava
+option.PATCHY_LAVA.comment=Adds some variation to the brightness of lava. §2Imperceptible performance impact.
+
 option.INFINITE_OCEAN=Infinite Ocean
 option.INFINITE_OCEAN.comment=Adds an ocean that stretches out to infinity. §6Moderate performance impact.
 
