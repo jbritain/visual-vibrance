@@ -66,6 +66,9 @@
         color.rgb = pow(color.rgb, vec3(2.2));
 
         color.rgb *= 50.0;
+        #ifdef REALLY_FUCKING_GLOWING
+        color.rgb *= 20.0;
+        #endif
 
         outData1.xy = encodeNormal(mat3(gbufferModelViewInverse) * normal);
         outData1.z = 0.0;
