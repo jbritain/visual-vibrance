@@ -15,6 +15,8 @@
 #ifndef SWAY_GLSL
 #define SWAY_GLSL
 
+#include "/lib/water/waveNormals.glsl"
+
 vec3 getWave(vec3 pos){
   float t = (frameTimeCounter + weatherFrameTimeCounter) * 0.3;
 
@@ -44,29 +46,35 @@ vec3 lowerSway(vec3 pos, vec3 midblock){ // bottom halves of double high plants
   return pos + getWave(pos) * waveMult;
 }
 
+vec3 hangingSway(vec3 pos, vec3 midblock){ // stuff hanging from a block
+  float waveMult = smoothstep(-32.0, 32.0, midblock.y);
+  return pos + getWave(pos + midblock / 64) * waveMult;
+}
+
+vec3 floatingSway(vec3 pos){ // stuff on the water
+  return pos;
+  return pos + vec3(0.0, waveHeight(pos.xz) - 0.5, 0.0);
+}
+
 vec3 fullSway(vec3 pos){ // leaves, mainly
   return pos + getWave(pos);
 }
 
-vec3 plantSway(vec3 pos, vec3 midblock){
-    float waveMult = (1.0 - step(0, midblock.y));
-
-    return pos + getWave(pos) * waveMult;
-}
-
 vec3 getSway(int materialID, vec3 pos, vec3 midblock){
-    switch(materialID){
-        case MATERIAL_PLANTS:
-            return plantSway(pos, midblock);
-        case MATERIAL_LEAVES:
-            return fullSway(pos);
-        case MATERIAL_TALL_PLANT_LOWER:
-            return lowerSway(pos, midblock);
-        case MATERIAL_TALL_PLANT_UPPER:
-            return upperSway(pos, midblock);
-        default:
-            return pos;
-    }
+  switch(materialSwayType(materialID).value){
+    case 1:
+      return upperSway(pos, midblock);
+    case 2:
+      return lowerSway(pos, midblock);
+    case 3:
+      return hangingSway(pos, midblock);
+    case 4:
+      return floatingSway(pos);
+    case 5:
+      return fullSway(pos);
+    default:
+      return pos;
+  }
 }
 
 #endif // SWAY_GLSL

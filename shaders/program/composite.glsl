@@ -41,8 +41,6 @@
     #include "/lib/atmosphere/fog.glsl"
     #include "/lib/atmosphere/clouds.glsl"
 
-    
-
     /* RENDERTARGETS: 0 */
     layout(location = 0) out vec4 color;
 
@@ -55,7 +53,7 @@
         float skyLightmap = data1.z;
         int materialID = int(data1.a * 255 + 0.5) + 1000;
 
-        bool isWater = materialID == MATERIAL_WATER;
+        bool isWater = materialIsWater(materialID);
         bool inWater = isEyeInWater == 1;
 
         float translucentDepth = texture(depthtex0, texcoord).r;
@@ -160,7 +158,7 @@
             #endif
             vec3 reflectedDir = reflect(viewDir, waveNormal);
             vec3 reflectedPos;
-            vec3 reflectedColor;
+            vec3 reflectedColor = vec3(0.0);
 
             float scatter = 0.0;
 

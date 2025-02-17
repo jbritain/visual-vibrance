@@ -39,7 +39,6 @@ vec3 sampleShadow(vec3 shadowScreenPos){
 vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material material, out float scatter){
     scatter = 0.0;
     if(EBS.y == 0.0 && lightmap.y < 0.1 && constantMood > 0.2){
-      // show(1.0);
       return vec3(0.0);
     }
 

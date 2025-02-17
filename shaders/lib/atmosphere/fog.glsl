@@ -56,7 +56,7 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth, vec3 scatterFactor){
     fogFactor = (1.0 - smoothstep(0, 1000, worldTime)) * MORNING_FOG_DENSITY;
   }
 
-  fogFactor += wetness * 0.1;
+  fogFactor += wetness * 0.2;
   fogFactor += thunderStrength;
 
   fogFactor += BASE_FOG_DENSITY;

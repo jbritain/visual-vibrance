@@ -16,11 +16,19 @@
 #include "/lib/shadowSpace.glsl"
 
 #ifdef vsh
+    layout (r32ui) uniform uimage3D voxelMap;
+    layout (rgba16f) uniform image3D floodfillVoxelMap1;
+    layout (R11F_G11F_B10F) uniform image3D floodFillVoxelMap2;
+
     #include "/lib/sway.glsl"
+    #include "/lib/voxel/voxelMap.glsl"
+    #include "/lib/voxel/voxelData.glsl"
+    #include "/lib/ipbr/blocklightColors.glsl"
 
     in vec2 mc_Entity;
     in vec4 at_tangent;
-    in vec3 at_midBlock;
+    in vec4 at_midBlock;
+    in vec2 mc_midTexCoord;
 
     out vec2 lmcoord;
     out vec2 texcoord;
@@ -39,9 +47,34 @@
         materialID = int(mc_Entity.x + 0.5);
 
         shadowViewPos = (gl_ModelViewMatrix * gl_Vertex).xyz;
-        #ifdef WAVING_BLOCKS
         feetPlayerPos = (shadowModelViewInverse * vec4(shadowViewPos, 1.0)).xyz;
-        feetPlayerPos = getSway(materialID, feetPlayerPos + cameraPosition, at_midBlock) - cameraPosition;
+
+        #ifdef FLOODFILL
+        ivec3 voxelPos = mapVoxelPos(feetPlayerPos + vec3(at_midBlock.xyz * rcp(64.0)));
+        if(isWithinVoxelBounds(voxelPos) && gl_VertexID % 4 == 0 &&
+            (
+                renderStage == MC_RENDER_STAGE_TERRAIN_SOLID ||
+                // renderStage == MC_RENDER_STAGE_BLOCK_ENTITIES ||
+                renderStage == MC_RENDER_STAGE_TERRAIN_TRANSLUCENT
+            ) 
+        ){
+            VoxelData data;
+            vec4 averageTextureData = textureLod(gtexture, mc_midTexCoord, 4) * gl_Color;
+
+            data.color = getBlocklightColor(materialID);
+            if(data.color == vec3(0.0)){
+                data.color = averageTextureData.rgb;
+            }
+            data.opacity = pow(averageTextureData.a, rcp(3));
+            data.emission = at_midBlock.w / 15.0;
+
+            uint encodedVoxelData = encodeVoxelData(mat3(shadowModelViewInverse) * normal, data);
+            imageAtomicMax(voxelMap, voxelPos, encodedVoxelData);
+        }
+        #endif
+
+        #ifdef WAVING_BLOCKS
+        feetPlayerPos = getSway(materialID, feetPlayerPos + cameraPosition, at_midBlock.xyz) - cameraPosition;
         shadowViewPos = (shadowModelView * vec4(feetPlayerPos, 1.0)).xyz;
         #endif
         gl_Position = gl_ProjectionMatrix * vec4(shadowViewPos, 1.0);
@@ -80,7 +113,7 @@
 
         const float avgWaterExtinction = sum3(waterExtinction) / 3.0;
 
-        if(materialID == MATERIAL_WATER){
+        if(materialIsWater(materialID)){
             float opaqueDepth = texture(shadowtex1, gl_FragCoord.xy / shadowMapResolution).r;
             float opaqueDistance = getShadowDistanceZ(opaqueDepth); // how far away from the sun is the opaque fragment shadowed by the water?
             float waterDepth = abs(shadowViewPos.z - opaqueDistance);

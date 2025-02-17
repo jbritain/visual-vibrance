@@ -84,7 +84,7 @@
         }
 
         int materialID = materialID;
-        if(materialID == MATERIAL_WATER && albedo.a == 1.0){
+        if(materialIsWater(materialID) && albedo.a == 1.0){
             materialID = 0;
         }
 
@@ -117,18 +117,15 @@
         material.emission = 0.0;
         material.ao = 0.0;
 
-        if(materialID == MATERIAL_PLANTS || materialID == MATERIAL_LEAVES || materialID == MATERIAL_TALL_PLANT_UPPER || materialID == MATERIAL_TALL_PLANT_LOWER){
+        if(materialIsPlant(materialID)){
             material.sss = 1.0;
             material.f0 = vec3(0.04);
             material.roughness = 0.5;
         }
 
-        if(materialID == MATERIAL_WATER){
+        if(materialIsWater(materialID)){
             material.f0 = vec3(0.02);
             material.roughness = 0.0;
-        }
-
-        if(materialID == MATERIAL_WATER){
             color = vec4(0.0);
         }  else {
             color.rgb = getShadedColor(material, normal, normal, lightmap, viewPos, 1.0);

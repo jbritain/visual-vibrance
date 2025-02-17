@@ -14,6 +14,8 @@
     prepare         : Compute sky view LUT
     prepare1        : Compute skylight colour by taking several hemisphere samples
 
+    shadowcomp      : Floodfill propagation
+
     deferred        : Render sky
     deferred1       : Distant Horizons SSAO
 
@@ -27,3 +29,5 @@
 ```
 
 Glimmer makes use of a primarily forward rendered pipeline, with the exception of water, which is done deferred. Likewise, fog is also handled in a deferred manner.
+
+A modified version of block_wrangler is used to manage block IDs - if you need to modify them, see `scripts/block_properties.py`.

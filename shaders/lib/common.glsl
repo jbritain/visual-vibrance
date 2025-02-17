@@ -27,6 +27,8 @@
 #include "/lib/common/spaceConversions.glsl"
 #include "/lib/common/materialIDs.glsl"
 
+#define worldTimeCounter ((worldTime / 20.0) + (worldDay * 1200.0))
+
 const float wetnessHalflife = 50.0;
 const float drynessHalflife = 25.0;
 

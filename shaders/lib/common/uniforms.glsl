@@ -138,6 +138,7 @@ uniform sampler2D skyViewLUTTex;
 
 uniform sampler2D perlinNoiseTex;
 uniform sampler2D blueNoiseTex;
+uniform sampler2D turbulentNoiseTex;
 
 #ifdef DISTANT_HORIZONS
     uniform int dhRenderDistance;
@@ -148,6 +149,12 @@ uniform sampler2D blueNoiseTex;
     
     uniform sampler2D dhDepthTex0;
     uniform sampler2D dhDepthTex1;
+#endif
+
+#ifdef FLOODFILL
+uniform usampler3D voxelMapTex;
+uniform sampler3D floodfillVoxelMapTex1;
+uniform sampler3D floodfillVoxelMapTex2;
 #endif
 
 #endif // UNIFORMS_GLSL

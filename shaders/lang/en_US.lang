@@ -7,6 +7,7 @@ value.WEBSITE.1=§djbritain.net
 value.WEBSITE.2=§djbritain.net
 
 screen.LIGHTING=Lighting & Shadows
+screen.SHADOWS=Shadows
 screen.ATMOSPHERICS=Sky & Fog
 screen.WATER=Water
 screen.POST=Post-Processing
@@ -118,6 +119,9 @@ value.EXPOSURE.80=8.0
 
 option.AMBIENT_STRENGTH=Ambient Light Strength
 option.AMBIENT_STRENGTH.comment=The minimum amount of light there can be in any situation. §9No performance impact!
+
+option.FLOODFILL=Colored Blocklight
+option.FLOODFILL.comment=Makes the light emitted by blocks match their color. Requires §eshadows §fto be enabled. §6Moderate performance impact.
 
 option.SHADOWS=Shadows
 

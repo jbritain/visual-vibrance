@@ -29,6 +29,7 @@
     flat out int materialID;
     out vec3 viewPos;
     out float emission;
+    out vec3 midblock;
 
     #ifdef PARALLAX
         flat out vec2 singleTexSize;
@@ -70,6 +71,8 @@
         #endif
 
         gl_Position = gbufferProjection * vec4(viewPos, 1.0);
+
+        midblock = at_midBlock.xyz;
     }
 
 #endif
@@ -80,6 +83,8 @@
     #include "/lib/lighting/shading.glsl"
     #include "/lib/util/packing.glsl"
     #include "/lib/lighting/directionalLightmap.glsl"
+    #include "/lib/voxel/voxelMap.glsl"
+    #include "/lib/voxel/voxelData.glsl"
 
     in vec2 lmcoord;
     in vec2 texcoord;
@@ -88,6 +93,7 @@
     flat in int materialID;
     in vec3 viewPos;
     in float emission;
+    in vec3 midblock;
 
     #ifdef PARALLAX
         flat in vec2 singleTexSize;
@@ -97,6 +103,10 @@
     #endif
 
     vec3 getMappedNormal(vec2 texcoord){
+        #if PBR_MODE == 0
+        return tbnMatrix[2];
+        #endif
+
         vec3 mappedNormal = texture(normals, texcoord).rgb;
         mappedNormal = mappedNormal * 2.0 - 1.0;
         mappedNormal.z = sqrt(1.0 - dot(mappedNormal.xy, mappedNormal.xy)); // reconstruct z due to labPBR encoding
@@ -119,7 +129,7 @@
         vec2 dy = dFdy(texcoord);
         vec2 texcoord = texcoord;
         if(
-            materialID != MATERIAL_LAVA &&
+            !materialIsLava(materialID) &&
             (
                 renderStage == MC_RENDER_STAGE_TERRAIN_SOLID ||
                 renderStage ==  MC_RENDER_STAGE_ENTITIES ||
@@ -158,18 +168,27 @@
         albedo.rgb = pow(albedo.rgb, vec3(2.2));
 
         #ifdef PATCHY_LAVA
-            if(materialID == MATERIAL_LAVA){
+            if(materialIsLava(materialID)){
                 vec3 worldPos = playerPos + cameraPosition;
                 float noise = texture(perlinNoiseTex, mod(worldPos.xz / 100 + vec2(0.0, frameTimeCounter * 0.005), 1.0)).r;
                 noise *= texture(perlinNoiseTex, mod(worldPos.xz / 200 + vec2(frameTimeCounter * 0.005, 0.0), 1.0)).r;
-                show(noise);
                 albedo.rgb *= noise;
+                albedo.rgb *= 4.0;
             }
         #endif
 
         vec3 mappedNormal = getMappedNormal(texcoord);
+        if(renderStage == MC_RENDER_STAGE_ENTITIES){
+            vec3 mappedNormal = texture(normals, texcoord).rgb;
 
+            show(tbnMatrix[0]);
+        }
+
+        #if PBR_MODE == 0
+        vec4 specularData = vec4(0.0);
+        #else
         vec4 specularData = texture(specular, texcoord);
+        #endif
         Material material = materialFromSpecularMap(albedo.rgb, specularData);
         material.ao = texture(normals, texcoord).z;
         #ifndef MC_TEXTURE_FORMAT_LAB_PBR
@@ -179,20 +198,20 @@
             
         #endif
 
-        if(materialID == MATERIAL_PLANTS || materialID == MATERIAL_LEAVES || materialID == MATERIAL_TALL_PLANT_UPPER || materialID == MATERIAL_TALL_PLANT_LOWER){
+        if(materialIsPlant(materialID)){
             material.sss = 1.0;
             material.f0 = vec3(0.04);
             material.roughness = 0.5;
         }
 
-        if(materialID == MATERIAL_WATER){
+        if(materialIsWater(materialID)){
             mappedNormal = tbnMatrix[2];
             material.f0 = vec3(0.02);
             material.roughness = 0.0;
             material.albedo = vec3(0.0);
         }
 
-        if(materialID == MATERIAL_LAVA){
+        if(materialIsLava(materialID)){
             material.emission = 1.0;
         }
 
@@ -200,12 +219,41 @@
         applyDirectionalLightmap(lightmap, viewPos, mappedNormal, tbnMatrix, material.sss);
         #endif
 
+        // float rainFactor = clamp01(smoothstep(13.5 / 15.0, 14.5 / 15.0, lightmap.y)) * wetness;
+        // material.f0 = mix(material.f0, vec3(0.02), rainFactor * (1.0 - material.porosity));
+        // material.roughness = mix(material.roughness, 0.0, rainFactor * (1.0 - material.porosity));
+        // material.albedo *= (1.0 - 0.5 * rainFactor * material.porosity);
+
         parallaxShadow = mix(parallaxShadow, 1.0, material.sss * 0.5);
 
-        if(materialID == MATERIAL_WATER){
+        if(materialIsWater(materialID)){
             color = vec4(0.0);
         }  else {
-            color.rgb = getShadedColor(material, mappedNormal, tbnMatrix[2], lightmap, viewPos, parallaxShadow);
+            bool sampleColoredLight = false;
+            #ifdef FLOODFILL
+                #ifdef DIRECTIONAL_LIGHTMAPS
+                    vec3 voxelPosInterp = mapVoxelPosInterp(playerPos - mat3(gbufferModelViewInverse) * tbnMatrix[2] * 0.5 + mat3(gbufferModelViewInverse) * mappedNormal);
+                #else
+                    vec3 voxelPosInterp = mapVoxelPosInterp(playerPos + mat3(gbufferModelViewInverse) * tbnMatrix[2] * 0.5);
+                #endif
+            sampleColoredLight = clamp01(voxelPosInterp) == voxelPosInterp;
+            #endif
+
+            if(sampleColoredLight){
+                #ifdef FLOODFILL
+                vec3 blocklightColor;
+                if(frameCounter % 2 == 0){
+                    blocklightColor = texture(floodfillVoxelMapTex2, voxelPosInterp).rgb;
+                } else {
+                    blocklightColor = texture(floodfillVoxelMapTex1, voxelPosInterp).rgb;
+                }
+                color.rgb = getShadedColor(material, mappedNormal, tbnMatrix[2], blocklightColor, lightmap, viewPos, parallaxShadow);  
+                #endif
+            } else {
+                color.rgb = getShadedColor(material, mappedNormal, tbnMatrix[2], lightmap, viewPos, parallaxShadow);
+            }
+
+
             color.a = albedo.a;
         }
 
