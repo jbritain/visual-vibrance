@@ -101,8 +101,8 @@
 
                 vec3 cloudShadow = vec3(1.0);
                 #ifdef CLOUD_SHADOWS
-                getClouds(samplePos, worldLightDir, cloudShadow);
-                // cloudShadow = pow3(cloudShadow);
+                cloudShadow = getCloudShadow(feetPlayerPos);
+                cloudShadow = pow3(cloudShadow);
                 #endif
                 scattering += vec3(shadow2D(shadowtex0HW, screenSamplePos).r) * cloudShadow;
 

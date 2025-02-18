@@ -6,6 +6,7 @@
     3: History buffer
     4: Godrays
     5: Rain mask
+    6: Combined depth buffer for SSR
 
 ---Passes---
     setup           : Compute transmittance LUT for atmosphere
@@ -19,8 +20,10 @@
     deferred        : Render sky
     deferred1       : Distant Horizons SSAO
 
-    composite       : Water & water fog
+    composite       : Generate combined depth buffer    
+    composite1      : Water & water fog
 
+    composite3      : Godrays mask
     composite4      : Godrays
     composite5      : Fog
     

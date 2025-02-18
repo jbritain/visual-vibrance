@@ -45,8 +45,7 @@ vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material m
     vec3 cloudShadow = vec3(1.0);
 
     #ifdef CLOUD_SHADOWS
-    getClouds(feetPlayerPos, worldLightDir, cloudShadow);
-    // cloudShadow = pow3(cloudShadow);
+    cloudShadow = getCloudShadow(feetPlayerPos);
     #endif
 
     #ifdef WORLD_THE_NETHER

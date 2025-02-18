@@ -149,6 +149,20 @@ uniform sampler2D turbulentNoiseTex;
     
     uniform sampler2D dhDepthTex0;
     uniform sampler2D dhDepthTex1;
+
+    
+    uniform vec4 combinedProjection0;
+    uniform vec4 combinedProjection1;
+    uniform vec4 combinedProjection2;
+    uniform vec4 combinedProjection3;
+    #define combinedProjection mat4(combinedProjection0, combinedProjection1, combinedProjection2, combinedProjection3)
+
+    uniform vec4 combinedProjectionInverse0;
+    uniform vec4 combinedProjectionInverse1;
+    uniform vec4 combinedProjectionInverse2;
+    uniform vec4 combinedProjectionInverse3;
+    #define combinedProjectionInverse mat4(combinedProjectionInverse0, combinedProjectionInverse1, combinedProjectionInverse2, combinedProjectionInverse3)
+
 #endif
 
 #ifdef FLOODFILL

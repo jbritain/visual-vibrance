@@ -41,7 +41,7 @@
 
         #if defined DISTANT_HORIZONS && defined DH_AO
         float depth = texture(depthtex0, texcoord).r;
-        vec3 viewPos;
+        vec3 viewPos = vec3(0.0);
         if(depth != 1.0){
             return;
         }
@@ -59,7 +59,7 @@
         tbn[0] = normal.yzx;
         tbn[1] = cross(tbn[0], tbn[2]);
 
-        float occlusion;
+        float occlusion = 0.0;
 
         for(int i = 0; i < DH_AO_SAMPLES; i++){
             vec4 noise = blueNoise(texcoord, i + frameCounter * DH_AO_SAMPLES);

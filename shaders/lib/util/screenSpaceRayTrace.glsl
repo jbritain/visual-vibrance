@@ -21,7 +21,7 @@
 const float handDepth = MC_HAND_DEPTH * 0.5 + 0.5;
 
 float getDepth(vec2 pos){
-	return texelFetch(depthtex0, ivec2(pos * vec2(viewWidth, viewHeight)), 0).r;
+	return texelFetch(colortex6, ivec2(pos * vec2(viewWidth, viewHeight)), 0).r;
 }
 
 void binarySearch(inout vec3 rayPos, vec3 rayDir){
@@ -49,15 +49,21 @@ bool rayIntersects(vec3 viewOrigin, vec3 viewDir, int maxSteps, float jitter, bo
 	}
 
 	#if REFLECTION_MODE == 1
-	rayPos = viewSpaceToScreenSpace(viewOrigin + 76.0 * viewDir);
+	rayPos = viewSpaceToScreenSpace(viewOrigin + 76.0 * viewDir, combinedProjection);
 	float rayDepth = getDepth(rayPos.xy);
-	return clamp01(rayPos.xy) == rayPos.xy && rayDepth < 1.0 && length(screenSpaceToViewSpace(vec3(rayPos.xy, rayDepth))) > length(viewOrigin);
+	return clamp01(rayPos.xy) == rayPos.xy && rayDepth < 1.0 && length(screenSpaceToViewSpace(vec3(rayPos.xy, rayDepth), combinedProjectionInverse)) > length(viewOrigin);
 
 	#endif
 
-	rayPos = viewSpaceToScreenSpace(viewOrigin);
+	#ifdef DISTANT_HORIZONS
+	rayPos = viewSpaceToScreenSpace(viewOrigin, combinedProjection);
 
+	vec3 rayDir = viewSpaceToScreenSpace(viewOrigin + viewDir, combinedProjection);
+	#else
+
+	rayPos = viewSpaceToScreenSpace(viewOrigin);
 	vec3 rayDir = viewSpaceToScreenSpace(viewOrigin + viewDir);
+	#endif
 	
 	rayDir -= rayPos;
 	rayDir = normalize(rayDir);

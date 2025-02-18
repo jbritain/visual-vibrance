@@ -28,7 +28,7 @@ Glimmer is a Minecraft shaderpack designed to be simple and performant without l
 - [Belmu](https://github.com/BelmuTM) - Reference code for SSR
 - [Emin](https://github.com/EminGT) - Shadow bias calculation from [Complementary](https://github.com/ComplementaryDevelopment/ComplementaryReimagined)
 - [NinjaMike](https://github.com/NinjaMike) - Directional lightmapping method
-- [sixthsurge](https://github.com/sixthsurge) - A decent amount of code reference from [Photon](https://github.com/sixthsurge/photon)
+- [sixthsurge](https://github.com/sixthsurge) - A decent amount of code reference from [Photon](https://github.com/sixthsurge/photon), especially the combined projection matrix used for SSR on distant horizons terrain
 - [Null](https://github.com/Null-MC/) - Help porting in the atmospheric scattering code
 - [BuilderB0y](https://github.com/builderb0y) from whom I shamelessly stole the idea of an infinite ocean plane
 - As always, the members of the ShaderLABS Discord server who have helped me get this far learning how to do all this

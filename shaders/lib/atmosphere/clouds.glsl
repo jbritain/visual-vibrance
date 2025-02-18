@@ -52,12 +52,15 @@ float getCloudDensity(vec2 pos){
 
   pos = pos / 100000;
 
-  pos.y += worldTimeCounter * 0.0002;
-
   for(int i = 0; i < 16; i++){
     float sampleWeight = exp2(-float(i));
+    pos.y += worldTimeCounter * 0.00002 * i;
     vec2 samplePos = pos * exp2(float(i));
+    #ifdef BLOCKY_CLOUDS
+    density += texelFetch(perlinNoiseTex, ivec2(fract(samplePos) * textureSize(perlinNoiseTex, 0)), 0).r * sampleWeight;
+    #else
     density += texture(perlinNoiseTex, fract(samplePos)).r * sampleWeight;
+    #endif
     weight += sampleWeight;
   }
 
@@ -67,6 +70,18 @@ float getCloudDensity(vec2 pos){
   density *= 0.2;
 
   return density;
+}
+
+vec3 getCloudShadow(vec3 origin){
+  origin += cameraPosition;
+
+  vec3 point;
+  if(!rayPlaneIntersection(origin, worldLightDir, CLOUD_PLANE_ALTITUDE, point)) return vec3(1.0);
+  vec3 exitPoint;
+  rayPlaneIntersection(origin, worldLightDir, CLOUD_PLANE_ALTITUDE + CLOUD_PLANE_HEIGHT, exitPoint);
+  float totalDensityAlongRay = getCloudDensity(point.xz) * distance(point, exitPoint);
+  return clamp01(mix(exp(-totalDensityAlongRay * CLOUD_EXTINCTION_COLOR), vec3(1.0), (1.0 - smoothstep(0.1, 0.2, worldLightDir.y))));
+
 }
 
 vec3 getClouds(vec3 origin, vec3 worldDir, out vec3 transmittance){

@@ -84,6 +84,13 @@ const vec4 colortex4ClearColor = vec4(1.0, 1.0, 1.0, 1.0);
     const int colortex4Format = RGB8;
 */
 
+#ifdef DISTANT_HORIZONS
+/*
+    const int colortex6Format = R32F;
+
+*/
+#endif
+
 #ifdef INFINITE_OCEAN
 #endif
 

@@ -68,6 +68,14 @@
             data.opacity = pow(averageTextureData.a, rcp(3));
             data.emission = at_midBlock.w / 15.0;
 
+            if(materialIsTintedGlass(materialID)){
+                data.opacity = 1.0;
+            }
+
+            if(materialIsLetsLightThrough(materialID)){
+                data.opacity = 0.0;
+            }
+
             uint encodedVoxelData = encodeVoxelData(mat3(shadowModelViewInverse) * normal, data);
             imageAtomicMax(voxelMap, voxelPos, encodedVoxelData);
         }

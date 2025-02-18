@@ -103,7 +103,7 @@ void main(){
 
         #if defined INFINITE_OCEAN && defined WORLD_OVERWORLD
         if(depth == 1.0 && cameraPosition.y > SEA_LEVEL){
-            vec3 feetPlayerPos;
+            vec3 feetPlayerPos = vec3(0.0);
             if(rayPlaneIntersection(vec3(0.0, 0.0, 0.0), normalize(mat3(gbufferModelViewInverse) * viewPos), SEA_LEVEL - cameraPosition.y, feetPlayerPos)){
                 viewPos = (gbufferModelView * vec4(feetPlayerPos, 1.0)).xyz;
                 depth = 0.5;

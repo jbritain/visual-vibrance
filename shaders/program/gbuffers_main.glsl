@@ -219,10 +219,10 @@
         applyDirectionalLightmap(lightmap, viewPos, mappedNormal, tbnMatrix, material.sss);
         #endif
 
-        // float rainFactor = clamp01(smoothstep(13.5 / 15.0, 14.5 / 15.0, lightmap.y)) * wetness;
-        // material.f0 = mix(material.f0, vec3(0.02), rainFactor * (1.0 - material.porosity));
-        // material.roughness = mix(material.roughness, 0.0, rainFactor * (1.0 - material.porosity));
-        // material.albedo *= (1.0 - 0.5 * rainFactor * material.porosity);
+        float rainFactor = clamp01(smoothstep(13.5 / 15.0, 14.5 / 15.0, lightmap.y)) * wetness;
+        material.f0 = mix(material.f0, vec3(0.02), rainFactor * (1.0 - material.porosity));
+        material.roughness = mix(material.roughness, 0.0, rainFactor * (1.0 - material.porosity));
+        material.albedo *= (1.0 - 0.5 * rainFactor * material.porosity);
 
         parallaxShadow = mix(parallaxShadow, 1.0, material.sss * 0.5);
 

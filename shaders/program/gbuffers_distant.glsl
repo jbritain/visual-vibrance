@@ -61,6 +61,7 @@
     layout(location = 1) out vec4 outData1;
 
     void main() {
+        vec3 playerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
         if(length(viewPos) < far - 16){
             discard;
             return;
@@ -101,7 +102,8 @@
             noiseCoord = ivec2(noisePos.xy);
         }
 
-        albedo.rgb *= texelFetch(noisetex, noiseCoord, 0).r * 0.1 + 0.9;
+        albedo.rgb *= 1.1;
+        albedo.rgb *= mix(0.95, 1.05, texelFetch(noisetex, noiseCoord, 0).r);
 
 
         albedo.rgb = pow(albedo.rgb, vec3(2.2));
@@ -123,6 +125,20 @@
             material.roughness = 0.5;
         }
 
+        if(materialIsLava(materialID)){
+            material.emission = 1.0;
+        }
+
+        #ifdef PATCHY_LAVA
+        if(materialIsLava(materialID)){
+            vec3 worldPos = playerPos + cameraPosition;
+            float noise = texture(perlinNoiseTex, mod(worldPos.xz / 100 + vec2(0.0, frameTimeCounter * 0.005), 1.0)).r;
+            noise *= texture(perlinNoiseTex, mod(worldPos.xz / 200 + vec2(frameTimeCounter * 0.005, 0.0), 1.0)).r;
+            material.albedo.rgb *= noise;
+            material.albedo.rgb *= 4.0;
+        }
+        #endif
+
         if(materialIsWater(materialID)){
             material.f0 = vec3(0.02);
             material.roughness = 0.0;
@@ -133,6 +149,8 @@
             float fresnel = maxVec3(schlick(material, dot(normal, normalize(-viewPos))));
             color.a *= (1.0 - fresnel);
         }
+
+
 
         outData1.xy = encodeNormal(mat3(gbufferModelViewInverse) * normal);
         outData1.z = lightmap.y;

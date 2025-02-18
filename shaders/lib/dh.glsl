@@ -26,6 +26,9 @@ int convertDHMaterialIDs(int id){
 
         case DH_BLOCK_LEAVES:
             return MATERIAL_LEAVES;
+
+        case DH_BLOCK_LAVA:
+            return MATERIAL_LAVA;
     }
 
     return 0;
