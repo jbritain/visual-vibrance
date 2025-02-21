@@ -1,6 +1,6 @@
 #include "/lib/version.glsl"
 
-#define fsh
+#define vsh
 #define WORLD_OVERWORLD
 
-#include "/program/composite99.glsl"
+#include "/program/composite89.glsl"

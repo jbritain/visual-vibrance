@@ -59,8 +59,8 @@ vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material m
     float sampleRadius = SHADOW_SOFTNESS * 0.003;
 
     if(faceNoL <= 1e-6 && material.sss > 1e-6){
-      scatter = max0(1.0 - faceNoL) * material.sss;
-      sampleRadius *= (1.0 + 7.0 * material.sss);
+      scatter = material.sss;
+      sampleRadius *= (1.0 + 16.0 * material.sss);
 
       float VoL = dot(normalize(feetPlayerPos), worldSunDir);
       float phase1 = henyeyGreenstein(0.4, VoL) * 0.75;

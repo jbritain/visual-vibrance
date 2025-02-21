@@ -60,7 +60,16 @@
         color = texture(colortex0, texcoord);
 
         bool rejectSample = clamp01(previousScreenPos.xy) != previousScreenPos.xy;
+        #ifndef SSR_JITTER
         rejectSample = rejectSample || opaqueDepth != depth;
+
+        #ifdef DISTANT_HORIZONS
+        rejectSample = rejectSample || (depth == 1.0 && texture(dhDepthTex0, texcoord).r  != 1.0);
+        #endif
+
+        #endif
+
+
 
         vec4 historyColor = texture(colortex3, previousScreenPos.xy);
 

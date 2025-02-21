@@ -26,9 +26,13 @@
     composite3      : Godrays mask
     composite4      : Godrays
     composite5      : Fog
+
+    composite50     : Exposure
     
-    composite90-98  : Bloom
-    composite99     : Temporal filter
+    composite80-88  : Bloom
+    composite89     : Temporal filter
+
+    composite90     : FXAA
 ```
 
 Glimmer makes use of a primarily forward rendered pipeline, with the exception of water, which is done deferred. Likewise, fog is also handled in a deferred manner.

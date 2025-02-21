@@ -85,7 +85,7 @@
         }
 
         int materialID = materialID;
-        if(materialIsWater(materialID) && albedo.a == 1.0){
+        if(materialIsWater(materialID) && albedo.a >= 0.99){
             materialID = 0;
         }
 

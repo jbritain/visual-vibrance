@@ -7,7 +7,7 @@ struct VoxelData {
   vec3 color; // 12 bits
 };
 
-uint encodeVoxelData(vec3 normal, VoxelData data){
+uint encodeVoxelData(VoxelData data){
   uint encodedData = 0;
 
   encodedData = bitfieldInsert(encodedData, uint(clamp01(data.emission) * 15.0), 0, 4);

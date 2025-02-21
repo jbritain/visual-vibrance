@@ -53,6 +53,10 @@ void main(){
   vec3 indirect = data.opacity < 1.0 ? gatherLight(pos) : vec3(0.0);
   vec3 emitted = data.color * data.emission * 32.0;
 
+  if(pos == mapVoxelPos(vec3(0.0))){
+    emitted = max(emitted, vec3(heldBlockLightValue * 16.0));
+  }
+
   // tint
   if(data.opacity < 1.0){
     indirect *= (data.color * (data.opacity) + (1.0 - data.opacity));

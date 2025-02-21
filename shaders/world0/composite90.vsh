@@ -3,4 +3,4 @@
 #define vsh
 #define WORLD_OVERWORLD
 
-#include "/program/bloomDownsample.glsl"
+#include "/program/composite90.glsl"

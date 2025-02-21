@@ -19,6 +19,8 @@
 layout (local_size_x = 1, local_size_y = 1) in;
 const ivec3 workGroups = ivec3(1, 1, 1);
 
+layout (r32ui) uniform uimage3D voxelMap;
+
 #include "/lib/atmosphere/sky/sky.glsl"
 
 void main()

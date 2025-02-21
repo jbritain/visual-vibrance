@@ -54,7 +54,7 @@ float getCloudDensity(vec2 pos){
 
   for(int i = 0; i < 16; i++){
     float sampleWeight = exp2(-float(i));
-    pos.y += worldTimeCounter * 0.00002 * i;
+    pos.y += worldTimeCounter * 0.000025 * sqrt(i + 1);
     vec2 samplePos = pos * exp2(float(i));
     #ifdef BLOCKY_CLOUDS
     density += texelFetch(perlinNoiseTex, ivec2(fract(samplePos) * textureSize(perlinNoiseTex, 0)), 0).r * sampleWeight;
@@ -67,7 +67,7 @@ float getCloudDensity(vec2 pos){
   density /= weight;
   density = smoothstep(0.5 - 0.15 * wetness - 0.2 * thunderStrength, 1.0, density);
   // density = sqrt(density);
-  density *= 0.2;
+  density *= 0.1;
 
   return density;
 }

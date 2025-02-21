@@ -30,6 +30,7 @@
     out vec3 viewPos;
     out float emission;
     out vec3 midblock;
+    out vec2 midtexcoord;
 
     #ifdef PARALLAX
         flat out vec2 singleTexSize;
@@ -73,6 +74,7 @@
         gl_Position = gbufferProjection * vec4(viewPos, 1.0);
 
         midblock = at_midBlock.xyz;
+        midtexcoord = mc_midTexCoord.xy;
     }
 
 #endif
@@ -94,6 +96,7 @@
     in vec3 viewPos;
     in float emission;
     in vec3 midblock;
+    in vec2 midtexcoord;
 
     #ifdef PARALLAX
         flat in vec2 singleTexSize;
@@ -206,9 +209,7 @@
 
         if(materialIsWater(materialID)){
             mappedNormal = tbnMatrix[2];
-            material.f0 = vec3(0.02);
             material.roughness = 0.0;
-            material.albedo = vec3(0.0);
         }
 
         if(materialIsLava(materialID)){
@@ -219,15 +220,16 @@
         applyDirectionalLightmap(lightmap, viewPos, mappedNormal, tbnMatrix, material.sss);
         #endif
 
-        float rainFactor = clamp01(smoothstep(13.5 / 15.0, 14.5 / 15.0, lightmap.y)) * wetness;
-        material.f0 = mix(material.f0, vec3(0.02), rainFactor * (1.0 - material.porosity));
-        material.roughness = mix(material.roughness, 0.0, rainFactor * (1.0 - material.porosity));
-        material.albedo *= (1.0 - 0.5 * rainFactor * material.porosity);
+        // float rainFactor = clamp01(smoothstep(13.5 / 15.0, 14.5 / 15.0, lightmap.y)) * wetness;
+        // material.f0 = mix(material.f0, vec3(0.02), rainFactor * (1.0 - material.porosity));
+        // material.roughness = mix(material.roughness, 0.0, rainFactor * (1.0 - material.porosity));
+        // material.albedo *= (1.0 - 0.5 * rainFactor * material.porosity);
 
         parallaxShadow = mix(parallaxShadow, 1.0, material.sss * 0.5);
 
         if(materialIsWater(materialID)){
-            color = vec4(0.0);
+            color.rgb = material.albedo;
+            color.a = 0.0;
         }  else {
             bool sampleColoredLight = false;
             #ifdef FLOODFILL

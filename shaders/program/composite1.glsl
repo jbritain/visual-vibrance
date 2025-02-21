@@ -100,8 +100,14 @@
                 0.0
             );
 
+            #ifndef VANILLA_WATER
             vec3 worldWaveNormal = waveNormal(translucentFeetPlayerPos.xz + cameraPosition.xz, worldNormal, sin(PI * 0.5 * clamp01(abs(dot(normal, viewDir)))));
             vec3 waveNormal = mat3(gbufferModelView) * worldWaveNormal;
+            #else
+            vec3 worldWaveNormal = worldNormal;
+            vec3 waveNormal = normal;
+            // material.f0 += 
+            #endif
 
 
 
@@ -179,10 +185,24 @@
             // we do fog from the camera when we should really do fog from the reflection position
             // but it looks passable and is much easier
 
-            if(doReflections && rayIntersects(translucentViewPos, reflectedDir, SSR_STEPS, jitter, true, reflectedPos)){
+            if(doReflections && rayIntersects(
+                    translucentViewPos, 
+                    reflectedDir, 
+                    SSR_STEPS, 
+                    jitter, 
+                    true, 
+                    reflectedPos, 
+                        #ifdef DISTANT_HORIZONS
+                        dhMask ? dhDepthTex0 : colortex6,
+                        dhMask ? dhProjection : combinedProjection
+                        #else
+                        depthtex0,
+                        gbufferProjection
+                        #endif
+                )){
                 reflectedColor = texture(colortex0, reflectedPos.xy).rgb;
                 #ifdef DISTANT_HORIZONS
-                vec3 viewReflectedPos = screenSpaceToViewSpace(reflectedPos, combinedProjectionInverse);
+                vec3 viewReflectedPos = screenSpaceToViewSpace(reflectedPos, dhMask ? dhProjectionInverse : combinedProjectionInverse);
                 #else
                 vec3 viewReflectedPos = screenSpaceToViewSpace(reflectedPos);
                 #endif

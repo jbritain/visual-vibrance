@@ -20,14 +20,14 @@
 
 const float handDepth = MC_HAND_DEPTH * 0.5 + 0.5;
 
-float getDepth(vec2 pos){
-	return texelFetch(colortex6, ivec2(pos * vec2(viewWidth, viewHeight)), 0).r;
+float getDepth(vec2 pos, sampler2D depthBuffer){
+	return texelFetch(depthBuffer, ivec2(pos * vec2(viewWidth, viewHeight)), 0).r;
 }
 
-void binarySearch(inout vec3 rayPos, vec3 rayDir){
+void binarySearch(inout vec3 rayPos, vec3 rayDir, sampler2D depthBuffer){
 	vec3 lastGoodPos = rayPos; // stores the last position we know was inside, in case we accidentally step back out
 	for (int i = 0; i < BINARY_REFINEMENTS; i++){
-		float depth = getDepth(rayPos.xy);
+		float depth = getDepth(rayPos.xy, depthBuffer);
 		float intersect = sign(depth - rayPos.z);
 		lastGoodPos = intersect == 1.0 && depth != 1.0 ? rayPos : lastGoodPos; // update last good pos if still inside
 		
@@ -40,30 +40,21 @@ void binarySearch(inout vec3 rayPos, vec3 rayDir){
 // traces through screen space to find intersection point
 // thanks, belmu!!
 // https://gist.github.com/BelmuTM/af0fe99ee5aab386b149a53775fe94a3
-bool rayIntersects(vec3 viewOrigin, vec3 viewDir, int maxSteps, float jitter, bool refine, out vec3 rayPos){
-
-	// TODO: DISTANT HORIZONS
+bool rayIntersects(vec3 viewOrigin, vec3 viewDir, int maxSteps, float jitter, bool refine, out vec3 rayPos, sampler2D depthBuffer, mat4 projection){
 
 	if(viewDir.z > 0.0 && viewDir.z >= -viewOrigin.z){
 		return false;
 	}
 
 	#if REFLECTION_MODE == 1
-	rayPos = viewSpaceToScreenSpace(viewOrigin + 76.0 * viewDir, combinedProjection);
+	rayPos = viewSpaceToScreenSpace(viewOrigin + 76.0 * viewDir, projection);
 	float rayDepth = getDepth(rayPos.xy);
-	return clamp01(rayPos.xy) == rayPos.xy && rayDepth < 1.0 && length(screenSpaceToViewSpace(vec3(rayPos.xy, rayDepth), combinedProjectionInverse)) > length(viewOrigin);
+	return clamp01(rayPos.xy) == rayPos.xy && rayDepth < 1.0 && length(screenSpaceToViewSpace(vec3(rayPos.xy, rayDepth), projection)) > length(viewOrigin);
 
 	#endif
 
-	#ifdef DISTANT_HORIZONS
-	rayPos = viewSpaceToScreenSpace(viewOrigin, combinedProjection);
-
-	vec3 rayDir = viewSpaceToScreenSpace(viewOrigin + viewDir, combinedProjection);
-	#else
-
-	rayPos = viewSpaceToScreenSpace(viewOrigin);
-	vec3 rayDir = viewSpaceToScreenSpace(viewOrigin + viewDir);
-	#endif
+	rayPos = viewSpaceToScreenSpace(viewOrigin, projection);
+	vec3 rayDir = viewSpaceToScreenSpace(viewOrigin + viewDir, projection);
 	
 	rayDir -= rayPos;
 	rayDir = normalize(rayDir);
@@ -86,10 +77,10 @@ bool rayIntersects(vec3 viewOrigin, vec3 viewDir, int maxSteps, float jitter, bo
 		vec3 rayPos3 = rayPos + rayStep * 0.5;
 		vec3 rayPos4 = rayPos + rayStep * 0.75;
 
-		float depth = getDepth(rayPos.xy); // sample depth at ray position
-		float depth2 = getDepth(rayPos2.xy);
-		float depth3 = getDepth(rayPos3.xy);
-		float depth4 = getDepth(rayPos4.xy);
+		float depth = getDepth(rayPos.xy, depthBuffer); // sample depth at ray position
+		float depth2 = getDepth(rayPos2.xy, depthBuffer);
+		float depth3 = getDepth(rayPos3.xy, depthBuffer);
+		float depth4 = getDepth(rayPos4.xy, depthBuffer);
 
 		int hitIndex = 0;
 
@@ -116,7 +107,7 @@ bool rayIntersects(vec3 viewOrigin, vec3 viewDir, int maxSteps, float jitter, bo
 	if(clamp01(rayPos) != rayPos) return false; // we went offscreen
 
 	if(refine && intersect){
-		binarySearch(rayPos, rayStep);
+		binarySearch(rayPos, rayStep, depthBuffer);
 	}
 
 	return intersect;

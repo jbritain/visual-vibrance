@@ -17,8 +17,6 @@
 
 #ifdef vsh
     layout (r32ui) uniform uimage3D voxelMap;
-    layout (rgba16f) uniform image3D floodfillVoxelMap1;
-    layout (R11F_G11F_B10F) uniform image3D floodFillVoxelMap2;
 
     #include "/lib/sway.glsl"
     #include "/lib/voxel/voxelMap.glsl"
@@ -60,10 +58,10 @@
         ){
             VoxelData data;
             vec4 averageTextureData = textureLod(gtexture, mc_midTexCoord, 4) * gl_Color;
-
+            
             data.color = getBlocklightColor(materialID);
             if(data.color == vec3(0.0)){
-                data.color = averageTextureData.rgb;
+                data.color = pow(averageTextureData.rgb, vec3(2.2));
             }
             data.opacity = pow(averageTextureData.a, rcp(3));
             data.emission = at_midBlock.w / 15.0;
@@ -76,7 +74,7 @@
                 data.opacity = 0.0;
             }
 
-            uint encodedVoxelData = encodeVoxelData(mat3(shadowModelViewInverse) * normal, data);
+            uint encodedVoxelData = encodeVoxelData(data);
             imageAtomicMax(voxelMap, voxelPos, encodedVoxelData);
         }
         #endif

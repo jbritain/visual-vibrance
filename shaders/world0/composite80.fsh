@@ -3,4 +3,5 @@
 #define fsh
 #define WORLD_OVERWORLD
 
-#include "/program/composite90.glsl"
+#define TILE_INDEX 0
+#include "/program/bloomDownsample.glsl"

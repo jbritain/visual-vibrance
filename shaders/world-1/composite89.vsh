@@ -3,4 +3,4 @@
 #define vsh
 #define WORLD_THE_NETHER
 
-#include "/program/composite99.glsl"
+#include "/program/composite89.glsl"
