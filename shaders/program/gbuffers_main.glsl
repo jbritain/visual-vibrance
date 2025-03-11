@@ -87,6 +87,7 @@
     #include "/lib/lighting/directionalLightmap.glsl"
     #include "/lib/voxel/voxelMap.glsl"
     #include "/lib/voxel/voxelData.glsl"
+    #include "/lib/ipbr/blocklightColors.glsl"
 
     in vec2 lmcoord;
     in vec2 texcoord;
@@ -154,10 +155,7 @@
         lightmap.y = 1.0;
         #endif
 
-        #ifdef DYNAMIC_HANDLIGHT
-            float dist = length(playerPos);
-            lightmap.x = max(lightmap.x, (1.0 - clamp01(smoothstep(0.0, 15.0, dist))) * max(heldBlockLightValue, heldBlockLightValue2) / 15.0);
-        #endif
+
 
 
         vec4 albedo = texture(gtexture, texcoord) * glcolor;
@@ -183,8 +181,6 @@
         vec3 mappedNormal = getMappedNormal(texcoord);
         if(renderStage == MC_RENDER_STAGE_ENTITIES){
             vec3 mappedNormal = texture(normals, texcoord).rgb;
-
-            show(tbnMatrix[0]);
         }
 
         #if PBR_MODE == 0
@@ -220,6 +216,21 @@
         applyDirectionalLightmap(lightmap, viewPos, mappedNormal, tbnMatrix, material.sss);
         #endif
 
+        #if defined DYNAMIC_HANDLIGHT && !defined FLOODFILL
+            float dist = length(playerPos);
+            float falloff = (1.0 - clamp01(smoothstep(0.0, 15.0, dist))) * max(heldBlockLightValue, heldBlockLightValue2) / 15.0;
+
+            #ifdef DIRECTIONAL_LIGHTMAPS
+                falloff *= mix(dot(normalize(-viewPos), mappedNormal), 1.0, material.sss * 0.25 + 0.75);
+            #endif
+
+            lightmap.x = max(lightmap.x, falloff);
+
+            // #ifdef GBUFFERS_HAND
+            // atomicMax(encodedHeldLightColor, floatBitsToUint(pack4x8F(vec4(hsv(albedo.rgb).gbr, 0.0))));
+            // #endif
+        #endif
+
         // float rainFactor = clamp01(smoothstep(13.5 / 15.0, 14.5 / 15.0, lightmap.y)) * wetness;
         // material.f0 = mix(material.f0, vec3(0.02), rainFactor * (1.0 - material.porosity));
         // material.roughness = mix(material.roughness, 0.0, rainFactor * (1.0 - material.porosity));
@@ -234,7 +245,9 @@
             bool sampleColoredLight = false;
             #ifdef FLOODFILL
                 #ifdef DIRECTIONAL_LIGHTMAPS
-                    vec3 voxelPosInterp = mapVoxelPosInterp(playerPos - mat3(gbufferModelViewInverse) * tbnMatrix[2] * 0.5 + mat3(gbufferModelViewInverse) * mappedNormal);
+                    vec3 offset = -mat3(gbufferModelViewInverse) * tbnMatrix[2] * 0.5 + mat3(gbufferModelViewInverse) * mappedNormal;
+                    offset = mix(offset, vec3(0.0), material.sss * 0.25);
+                    vec3 voxelPosInterp = mapVoxelPosInterp(playerPos + offset);
                 #else
                     vec3 voxelPosInterp = mapVoxelPosInterp(playerPos + mat3(gbufferModelViewInverse) * tbnMatrix[2] * 0.5);
                 #endif
@@ -249,6 +262,19 @@
                 } else {
                     blocklightColor = texture(floodfillVoxelMapTex1, voxelPosInterp).rgb;
                 }
+
+                #ifdef DYNAMIC_HANDLIGHT
+                float dist = length(playerPos);
+                float falloff = (1.0 - clamp01(smoothstep(0.0, 15.0, dist))) * max(heldBlockLightValue, heldBlockLightValue2) / 15.0;
+
+                #ifdef DIRECTIONAL_LIGHTMAPS
+                falloff *= mix(dot(normalize(-viewPos), mappedNormal), 1.0, material.sss * 0.25 + 0.75);
+                #endif
+
+                blocklightColor += pow(vec3(255, 152, 54), vec3(2.2)) * 1e-8 * max0(exp(-(1.0 - falloff * 10.0)));
+
+                #endif
+
                 color.rgb = getShadedColor(material, mappedNormal, tbnMatrix[2], blocklightColor, lightmap, viewPos, parallaxShadow);  
                 #endif
             } else {

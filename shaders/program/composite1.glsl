@@ -45,6 +45,8 @@
     layout(location = 0) out vec4 color;
 
     void main() {
+        show(rgb(unpack4x8F(uintBitsToFloat(encodedHeldLightColor)).rbg));
+
         color = texture(colortex0, texcoord);
         vec4 data1 = texture(colortex1, texcoord);
 

@@ -49,6 +49,7 @@ layout(std430, binding = 0) buffer environmentData {
     vec3 sunlightColor;
     vec3 skylightColor;
     float weatherFrameTimeCounter; // only increments when it is raining
+    uint encodedHeldLightColor;
 };
 
 layout(std430, binding = 1) buffer smoothedData {

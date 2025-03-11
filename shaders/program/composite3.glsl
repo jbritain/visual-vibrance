@@ -44,8 +44,6 @@
         #endif
 
         occlusion *= vec3(visible ? 1.0 : 0.0);
-
-        show(occlusion);
     }
 
 #endif

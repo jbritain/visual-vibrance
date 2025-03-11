@@ -4,6 +4,7 @@ layout (local_size_x = 4, local_size_y = 4, local_size_z = 4) in;
 #include "/lib/common.glsl"
 #include "/lib/voxel/voxelMap.glsl"
 #include "/lib/voxel/voxelData.glsl"
+#include "/lib/util/packing.glsl"
 
 const ivec3 workGroups = ivec3(64, 32, 64); // 4 * 64 = 256
 
@@ -52,10 +53,6 @@ void main(){
 
   vec3 indirect = data.opacity < 1.0 ? gatherLight(pos) : vec3(0.0);
   vec3 emitted = data.color * data.emission * 32.0;
-
-  if(pos == mapVoxelPos(vec3(0.0))){
-    emitted = max(emitted, vec3(heldBlockLightValue * 16.0));
-  }
 
   // tint
   if(data.opacity < 1.0){
