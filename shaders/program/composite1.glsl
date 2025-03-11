@@ -64,8 +64,9 @@
         vec3 translucentViewPos = screenSpaceToViewSpace(vec3(texcoord, translucentDepth));
         vec3 opaqueViewPos = screenSpaceToViewSpace(vec3(texcoord, opaqueDepth));
 
-        dhOverride(translucentDepth, translucentViewPos, false);
         dhOverride(opaqueDepth, opaqueViewPos, true);
+        dhOverride(translucentDepth, translucentViewPos, false);
+
 
         vec3 viewDir = normalize(translucentViewPos);
 
@@ -128,7 +129,12 @@
                 float refractedDepth = texture(depthtex2, refractedPos.xy).r;
                 refractedViewPos = screenSpaceToViewSpace(vec3(refractedPos.xy, refractedDepth));
 
-                dhOverride(refractedDepth, refractedViewPos, true);
+                if(texture(depthtex0, refractedPos.xy).r == 1.0){
+                    dhOverride(refractedDepth, refractedViewPos, true);
+                } else {
+                    dhMask = false;
+                }
+                
 
                 if(clamp01(refractedPos.xy) == refractedPos.xy && refractedDepth > translucentDepth){
                     color = texture(colortex0, refractedPos.xy);
@@ -174,7 +180,7 @@
 
             #if REFLECTION_MODE > 0
                 bool doReflections = true;
-                #ifdef INFINITE_OCEAN
+                #if defined INFINITE_OCEAN && !defined DISTANT_HORIZONS
                 doReflections = doReflections && !infiniteOceanMask;
                 #endif
             #else
