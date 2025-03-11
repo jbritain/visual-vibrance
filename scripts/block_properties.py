@@ -30,7 +30,7 @@ def main():
 		}),
 		'tinted_glass': Bool(blocks('minecraft:tinted_glass')),
 
-		'fire_light_color': Bool(blocks('minecraft:fire', 'minecraft:campfire', 'minecraft:jack_o_lantern')),
+		'fire_light_color': Bool(blocks('minecraft:fire', 'minecraft:campfire', 'minecraft:jack_o_lantern', 'minecraft:lava')),
 		'torch_light_color': Bool(blocks('minecraft:torch', 'minecraft:wall_torch', 'minecraft:lantern')),
 		'soul_fire_light_color': Bool(blocks('minecraft:soul_torch', 'minecraft:soul_wall_torch', 'minecraft:soul_fire', 'minecraft:soul_campfire', 'minecraft:soul_lantern')),
 		'redstone_light_color': Bool(blocks('minecraft:redstone_wire', 'minecraft:redstone_torch', 'minecraft:redstone_wall_torch')),

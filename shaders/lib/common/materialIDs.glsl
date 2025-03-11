@@ -15,20 +15,20 @@ bool materialIsIce(int id) {
 }
 
 
-#define MATERIAL_LAVA 1022
+#define MATERIAL_LAVA 1015
 bool materialIsLava(int id) {
-	return id == 1022;
+	return id == 1015;
 }
 
 
 bool materialIsPlant(int id) {
-	return id == 1004 || id == 1005 || id == 1014 || id == 1016 || id == 1018 || id == 1019 || id == 1020 || id == 1021;
+	return id == 1004 || id == 1005 || id == 1014 || id == 1017 || id == 1019 || id == 1020 || id == 1021 || id == 1022;
 }
 
 
-#define MATERIAL_LEAVES 1016
+#define MATERIAL_LEAVES 1017
 bool materialIsLeaves(int id) {
-	return id == 1016;
+	return id == 1017;
 }
 
 
@@ -40,28 +40,28 @@ const Sway Sway_HANGING = Sway(3);
 const Sway Sway_FLOATING = Sway(4);
 const Sway Sway_FULL = Sway(5);
 Sway materialSwayType(int id) {
-	if (id == 1020)
+	if (id == 1021)
 		return Sway_UPPER;
-	if (id == 1019)
+	if (id == 1020)
 		return Sway_LOWER;
-	if (id == 1012 || id == 1017 || id == 1018)
+	if (id == 1012 || id == 1018 || id == 1019)
 		return Sway_HANGING;
 	if (id == 1004)
 		return Sway_FLOATING;
-	if (id == 1016)
+	if (id == 1017)
 		return Sway_FULL;
 	return Sway_NONE;
 }
 
 
-#define MATERIAL_TINTED_GLASS 1015
+#define MATERIAL_TINTED_GLASS 1016
 bool materialIsTintedGlass(int id) {
-	return id == 1015;
+	return id == 1016;
 }
 
 
 bool materialIsFireLightColor(int id) {
-	return id == 1003 || id == 1013 || id == 1014;
+	return id == 1003 || id == 1013 || id == 1014 || id == 1015;
 }
 
 
