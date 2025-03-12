@@ -88,6 +88,11 @@ vec3 getSky(vec3 color, vec3 rayDir, bool includeSun){
     lum = mix(lum, weatherSkylightColor, wetness);
 
     lum += sunLum;
+
+    #ifdef fsh
+    lum *= mix(0.9, 1.1, interleavedGradientNoise(floor(gl_FragCoord.xy))); // anti banding
+    #endif
+
     return lum;
 }
 
