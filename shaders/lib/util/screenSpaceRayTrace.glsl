@@ -49,7 +49,7 @@ bool rayIntersects(vec3 viewOrigin, vec3 viewDir, int maxSteps, float jitter, bo
 	#if REFLECTION_MODE == 1
 	rayPos = viewSpaceToScreenSpace(viewOrigin + 76.0 * viewDir, projection);
 	float rayDepth = getDepth(rayPos.xy, depthBuffer);
-	return clamp01(rayPos.xy) == rayPos.xy && rayDepth < 1.0 && length(screenSpaceToViewSpace(vec3(rayPos.xy, rayDepth), projection)) > length(viewOrigin);
+	return clamp01(rayPos.xy) == rayPos.xy && rayDepth < 1.0 && rayDepth >= viewSpaceToScreenSpace(viewOrigin, projection).z;
 
 	#endif
 
