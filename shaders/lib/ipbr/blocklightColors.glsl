@@ -6,7 +6,7 @@
 
 vec3 getBlocklightColor(int ID){
   if(materialIsFireLightColor(ID)){
-    return vec3(1.0, 0.5, 0.1);
+    return pow(vec3(1.0, 0.6, 0.0), vec3(2.2));
   }
 
   if(materialIsTorchLightColor(ID)){
