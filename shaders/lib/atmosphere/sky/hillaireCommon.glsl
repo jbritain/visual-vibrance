@@ -36,21 +36,6 @@ const float mieAbsorptionBase = 4.4;
 
 const vec3 ozoneAbsorptionBase = vec3(0.650, 1.881, .085);
 
-float getMiePhase(float cosTheta) {
-    const float g = 0.8;
-    const float scale = 3.0/(8.0*PI);
-    
-    float num = (1.0-g*g)*(1.0+cosTheta*cosTheta);
-    float denom = (2.0+g*g)*pow((1.0 + g*g - 2.0*g*cosTheta), 1.5);
-    
-    return scale*num/denom;
-}
-
-float getRayleighPhase(float cosTheta) {
-    const float k = 3.0/(16.0*PI);
-    return k*(1.0+cosTheta*cosTheta);
-}
-
 void getScatteringValues(vec3 pos, 
                          out vec3 rayleighScattering, 
                          out float mieScattering,

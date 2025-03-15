@@ -14,6 +14,7 @@
 
 #include "/lib/common.glsl"
 #include "/lib/shadowSpace.glsl"
+#include "/lib/water/waterFog.glsl"
 
 #ifdef vsh
     layout (r32ui) uniform uimage3D voxelMap;
@@ -65,6 +66,10 @@
             }
             data.opacity = pow(averageTextureData.a, rcp(3));
             data.emission = at_midBlock.w / 15.0;
+            // data.emission = textureLod(specular, mc_midTexCoord, 4).a;
+            // if(data.emission == 1.0){
+            //     data.emission = 0.0;
+            // }
 
             if(materialIsTintedGlass(materialID)){
                 data.opacity = 1.0;
@@ -72,6 +77,10 @@
 
             if(materialIsLetsLightThrough(materialID)){
                 data.opacity = 0.0;
+            }
+
+            if(materialIsWater(materialID)){
+                data.color = (1.0 - WATER_SCATTERING);
             }
 
             uint encodedVoxelData = encodeVoxelData(data);
