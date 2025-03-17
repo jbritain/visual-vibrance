@@ -185,7 +185,7 @@
                 bool doReflections = false;
             #endif
 
-            float fadeFactor = 0.0;
+            float fadeFactor = 0.0; // full sky reflection
 
             // note that we are incorrectly applying fog to reflections here
             // we do fog from the camera when we should really do fog from the reflection position
@@ -208,21 +208,25 @@
                 )){
                 reflectedColor = texture(colortex0, reflectedPos.xy).rgb;
                 #ifdef DISTANT_HORIZONS
-                vec3 viewReflectedPos = screenSpaceToViewSpace(reflectedPos, dhMask ? dhProjectionInverse : combinedProjectionInverse);
+                    vec3 viewReflectedPos = screenSpaceToViewSpace(reflectedPos, dhMask ? dhProjectionInverse : combinedProjectionInverse);
                 #else
-                vec3 viewReflectedPos = screenSpaceToViewSpace(reflectedPos);
+                    vec3 viewReflectedPos = screenSpaceToViewSpace(reflectedPos);
                 #endif
+
                 vec3 playerReflectedPos = mat3(gbufferModelViewInverse) * viewReflectedPos;
+
                 #ifdef ATMOSPHERIC_FOG
-                reflectedColor = atmosphericFog(reflectedColor, viewReflectedPos);
+                    reflectedColor = atmosphericFog(reflectedColor, viewReflectedPos);
                 #endif
+
                 #ifdef CLOUDY_FOG
-                reflectedColor = cloudyFog(reflectedColor, playerReflectedPos, reflectedPos.z, vec3(sunVisibilitySmooth));
+                    reflectedColor = cloudyFog(reflectedColor, playerReflectedPos, reflectedPos.z, vec3(sunVisibilitySmooth));
                 #endif
+
                 #ifdef FADE_REFLECTIONS
-                fadeFactor = 1.0 - smoothstep(0.9, 1.0, maxVec2(abs(reflectedPos.xy - 0.5)) * 2);
+                    fadeFactor = 1.0 - smoothstep(0.9, 1.0, maxVec2(abs(reflectedPos.xy - 0.5)) * 2);
                 #else
-                fadeFactor = 1.0;
+                    fadeFactor = 1.0;
                 #endif
             }
 
@@ -236,6 +240,7 @@
                 skyReflection *= skyLightmap;
 
                 vec3 shadow = getShadowing(translucentFeetPlayerPos, waveNormal, vec2(skyLightmap), material, scatter);
+
                 if(minVec3(shadow) > 0.0 && dot(waveNormal, lightDir) > 0.0){
                     skyReflection += max0(brdf(material, waveNormal, waveNormal, translucentViewPos, shadow, scatter) * weatherSunlightColor);
                 }

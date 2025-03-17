@@ -117,6 +117,8 @@ vec3 getClouds(vec3 origin, vec3 worldDir, out vec3 transmittance){
   vec3 scatter = integScatter * transmittance;
   scatter = mix(scatter, vec3(0.0), exp(-distance(point, cameraPosition) * 0.004));
 
+  scatter *= skyMultiplier;
+
   return scatter;
 }
 

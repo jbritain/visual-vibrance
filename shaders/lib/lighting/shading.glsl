@@ -32,15 +32,16 @@ vec3 getShadedColor(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 
     ambient *= 4.0;
     #endif
 
-    vec3 diffuse = 
+    vec3 diffuse = material.albedo * (
         weatherSkylightColor * pow2(lightmap.y) * (material.ao * 0.5 + 0.5) +
         blocklight +
         vec3(ambient) * material.ao
+    );
 
-        
-    ;
-
-    color += diffuse * material.albedo;
+    // vec3 fresnel = schlick(material, dot(mappedNormal, normalize(-viewPos)));
+    // vec3 specular = weatherSkylightColor * clamp01(smoothstep(13.5 / 15.0, 1.0, lightmap.y));
+    // color += mix(diffuse, specular, fresnel);
+    color += diffuse;
 
     color += material.emission * material.albedo * 32.0;
 

@@ -256,26 +256,25 @@
 
             if(sampleColoredLight){
                 #ifdef FLOODFILL
-                vec3 blocklightColor;
-                if(frameCounter % 2 == 0){
-                    blocklightColor = texture(floodfillVoxelMapTex2, voxelPosInterp).rgb;
-                } else {
-                    blocklightColor = texture(floodfillVoxelMapTex1, voxelPosInterp).rgb;
-                }
+                    vec3 blocklightColor;
+                    if(frameCounter % 2 == 0){
+                        blocklightColor = texture(floodfillVoxelMapTex2, voxelPosInterp).rgb;
+                    } else {
+                        blocklightColor = texture(floodfillVoxelMapTex1, voxelPosInterp).rgb;
+                    }
 
-                #ifdef DYNAMIC_HANDLIGHT
-                float dist = length(playerPos);
-                float falloff = (1.0 - clamp01(smoothstep(0.0, 15.0, dist))) * max(heldBlockLightValue, heldBlockLightValue2) / 15.0;
+                    #ifdef DYNAMIC_HANDLIGHT
+                        float dist = length(playerPos);
+                        float falloff = (1.0 - clamp01(smoothstep(0.0, 15.0, dist))) * max(heldBlockLightValue, heldBlockLightValue2) / 15.0;
 
-                #ifdef DIRECTIONAL_LIGHTMAPS
-                falloff *= mix(dot(normalize(-viewPos), mappedNormal), 1.0, material.sss * 0.25 + 0.75);
-                #endif
+                        #ifdef DIRECTIONAL_LIGHTMAPS
+                            falloff *= mix(dot(normalize(-viewPos), mappedNormal), 1.0, material.sss * 0.25 + 0.75);
+                        #endif
 
-                blocklightColor += pow(vec3(255, 152, 54), vec3(2.2)) * 1e-8 * max0(exp(-(1.0 - falloff * 10.0)));
+                        blocklightColor += pow(vec3(255, 152, 54), vec3(2.2)) * 1e-8 * max0(exp(-(1.0 - falloff * 10.0)));
+                    #endif
 
-                #endif
-
-                color.rgb = getShadedColor(material, mappedNormal, tbnMatrix[2], blocklightColor, lightmap, viewPos, parallaxShadow);  
+                    color.rgb = getShadedColor(material, mappedNormal, tbnMatrix[2], blocklightColor, lightmap, viewPos, parallaxShadow);  
                 #endif
             } else {
                 color.rgb = getShadedColor(material, mappedNormal, tbnMatrix[2], lightmap, viewPos, parallaxShadow);

@@ -130,6 +130,8 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth, vec3 scatterFactor){
 
   opticalDepth += distance(a, b) * FOG_DENSITY * fogFactor;
 
+  // opticalDepth *= (1.0 - smoothstep(far * 4.0, far * 8.0, length(playerPos)));
+
   float transmittance = exp(-opticalDepth);
 
   float costh = dot(normalize(playerPos), worldLightDir);
@@ -140,6 +142,7 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth, vec3 scatterFactor){
 
   vec3 scatter = vec3(1.0 - transmittance) / 2;// / max(opticalDepth, 1e-6);
   scatter *= radiance;
+  scatter *= skyMultiplier;
 
   return color * transmittance + scatter;
 }

@@ -146,8 +146,6 @@
         }  else {
             color.rgb = getShadedColor(material, normal, normal, lightmap, viewPos, 1.0);
             color.a = albedo.a;
-            float fresnel = maxVec3(schlick(material, dot(normal, normalize(-viewPos))));
-            color.a *= (1.0 - fresnel);
         }
 
 
