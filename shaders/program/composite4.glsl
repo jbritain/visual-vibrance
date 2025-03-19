@@ -61,6 +61,10 @@
                 scattering += scatterSample;
                 decay *= GODRAYS_DECAY;
                 sampleCoord -= deltaTexcoord;
+
+                if(clamp01(sampleCoord) != sampleCoord){
+                    break;
+                }
             }
 
             scattering /= GODRAYS_SAMPLES;
