@@ -73,6 +73,11 @@
 
             float depth = texture(depthtex0, texcoord).r;
             vec3 viewPos = screenSpaceToViewSpace(vec3(texcoord, depth));
+            #ifdef PIXEL_LOCKED_LIGHTING
+            viewPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz + cameraPosition;
+            viewPos = floor(viewPos * PIXEL_SIZE) / PIXEL_SIZE;
+            viewPos = (gbufferModelView * vec4(viewPos - cameraPosition, 1.0)).xyz;
+            #endif
 
             if(depth == 1.0){
                 viewPos = normalize(viewPos) * shadowDistance;

@@ -41,6 +41,7 @@
         color = texture(colortex0, texcoord);
 
         #ifdef BLOOM
+
         vec3 bloom = texture(colortex2, texcoord).rgb;
 
         float rain = texture(colortex5, texcoord).r;

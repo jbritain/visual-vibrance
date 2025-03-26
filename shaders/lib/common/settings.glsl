@@ -33,6 +33,9 @@ const float sunPathRotation = -40.0; // [-90.0 -85.0 -80.0 -75.0 -70.0 -65.0 -60
 
 #define PBR_MODE 1 // [0 1]
 
+// #define PIXEL_LOCKED_LIGHTING
+#define PIXEL_SIZE 8
+
 #define TEMPORAL_FILTER
 
 #define BLOOM

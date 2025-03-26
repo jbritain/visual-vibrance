@@ -244,6 +244,13 @@
         }  else {
             bool sampleColoredLight = false;
             #ifdef FLOODFILL
+                #ifdef PIXEL_LOCKED_LIGHTING
+                    playerPos += cameraPosition;
+                    playerPos = floor(playerPos * PIXEL_SIZE) / PIXEL_SIZE;
+                    playerPos -= cameraPosition;
+                #endif
+                    
+
                 #ifdef DIRECTIONAL_LIGHTMAPS
                     vec3 offset = -mat3(gbufferModelViewInverse) * tbnMatrix[2] * 0.5 + mat3(gbufferModelViewInverse) * mappedNormal;
                     offset = mix(offset, vec3(0.0), material.sss * 0.25);

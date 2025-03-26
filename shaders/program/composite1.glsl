@@ -65,9 +65,6 @@
         dhOverride(opaqueDepth, opaqueViewPos, true);
         dhOverride(translucentDepth, translucentViewPos, false);
 
-
-        vec3 viewDir = normalize(translucentViewPos);
-
         vec3 translucentFeetPlayerPos = (gbufferModelViewInverse * vec4(translucentViewPos, 1.0)).xyz;
         vec3 opaqueFeetPlayerPos = (gbufferModelViewInverse * vec4(opaqueViewPos, 1.0)).xyz;
 
@@ -87,6 +84,15 @@
             }
         }
         #endif
+
+        #ifdef PIXEL_LOCKED_LIGHTING
+        if(isWater){
+            translucentFeetPlayerPos = floor((translucentFeetPlayerPos + cameraPosition) * PIXEL_SIZE) / PIXEL_SIZE - cameraPosition;
+            translucentViewPos = (gbufferModelView * vec4(translucentFeetPlayerPos, 1.0)).xyz;
+        }   
+        #endif
+
+        vec3 viewDir = normalize(translucentViewPos);
 
         if(isWater){
             Material material = Material(
@@ -138,7 +144,11 @@
                     color = texture(colortex0, refractedPos.xy);
                     opaqueDepth = texture(depthtex2, refractedPos.xy).r;
                     opaqueViewPos = refractedViewPos;
-                } 
+                }  else {
+                    #ifdef PIXEL_LOCKED_LIGHTING
+                    color = texture(colortex0, viewSpaceToScreenSpace(translucentViewPos).xy);
+                    #endif
+                }
             #endif
 
 
