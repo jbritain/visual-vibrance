@@ -60,6 +60,10 @@ float waveHeight(vec2 position) {
 // Calculate normal at point by calculating the height at the pos and 2 additional points very close to pos
 // returned value is in world space
 vec3 waveNormal(vec2 pos, vec3 worldFaceNormal, float heightmapFactor) {
+	if(dot(worldFaceNormal, vec3(0.0, 1.0, 0.0)) <= 0.1){
+		return worldFaceNormal;
+	}
+
 	#ifdef PIXEL_LOCKED_LIGHTING
 	pos = floor(pos * PIXEL_SIZE) / PIXEL_SIZE;
 	#endif
