@@ -23,7 +23,7 @@ def main():
 		'leaves': Bool(tags['minecraft:leaves']),
 		'sway': Enum({
 			'upper': tags['sway/upper'],
-			'lower': tags['sway/lower'],
+			'lower': tags['sway/lower'] + tags['sway/short'],
 			'hanging': tags['sway/hanging'],
 			'floating': tags['sway/floating'],
 			'full': tags['sway/full']

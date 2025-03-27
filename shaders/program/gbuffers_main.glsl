@@ -191,8 +191,8 @@
         Material material = materialFromSpecularMap(albedo.rgb, specularData);
         material.ao = texture(normals, texcoord).z;
         #ifndef MC_TEXTURE_FORMAT_LAB_PBR
-            if(material.emission == 0.0 && (renderStage == MC_RENDER_STAGE_TERRAIN_SOLID || renderStage == MC_RENDER_STAGE_TERRAIN_TRANSLUCENT)){
-                material.emission = emission * luminance(albedo.rgb);
+            if(material.emission == 0.0 && emission > 0.0 && (renderStage == MC_RENDER_STAGE_TERRAIN_SOLID || renderStage == MC_RENDER_STAGE_TERRAIN_TRANSLUCENT)){
+                material.emission = luminance(albedo.rgb);
             }
             
         #endif
@@ -268,6 +268,10 @@
                         blocklightColor = texture(floodfillVoxelMapTex2, voxelPosInterp).rgb;
                     } else {
                         blocklightColor = texture(floodfillVoxelMapTex1, voxelPosInterp).rgb;
+                    }
+
+                    if(luminance(blocklightColor) < 0.2 && lightmap.x > 0.5 && renderStage == MC_RENDER_STAGE_PARTICLES){
+                        material.emission = lightmap.x;
                     }
 
                     #ifdef DYNAMIC_HANDLIGHT
