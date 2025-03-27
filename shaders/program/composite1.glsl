@@ -191,21 +191,26 @@
             // we do fog from the camera when we should really do fog from the reflection position
             // but it looks passable and is much easier
 
-            if(doReflections && rayIntersects(
-                    translucentViewPos, 
-                    reflectedDir, 
-                    SSR_STEPS, 
-                    jitter, 
-                    true, 
-                    reflectedPos, 
-                        #ifdef DISTANT_HORIZONS
-                        dhMask ? dhDepthTex0 : colortex6,
-                        dhMask ? dhProjection : combinedProjection
-                        #else
-                        depthtex0,
-                        gbufferProjection
-                        #endif
-                )){
+            // the following code is truly horrible
+            // I am required to do it because newer AMD cards don't let you do ternary operations on samplers
+            // making there NO WAY to conditionally select a sampler before passing it to a function
+            // fuck you, AMD
+
+            bool reflectionHit = doReflections;
+
+            
+            #ifdef DISTANT_HORIZONS
+                if(dhMask){
+                    reflectionHit = reflectionHit && rayIntersects(translucentViewPos, reflectedDir, SSR_STEPS, jitter, true, reflectedPos, dhDepthTex0, dhProjection);
+                } else{
+                    reflectionHit = reflectionHit && rayIntersects(translucentViewPos, reflectedDir, SSR_STEPS, jitter, true, reflectedPos, colortex6, combinedProjection);
+                }
+
+            #else
+                reflectionHit && rayIntersects(translucentViewPos, reflectedDir, SSR_STEPS, jitter, true, reflectedPos, depthtex0, gbufferProjection);
+            #endif
+
+            if(reflectionHit){
                 reflectedColor = texture(colortex0, reflectedPos.xy).rgb;
                 #ifdef DISTANT_HORIZONS
                     vec3 viewReflectedPos = screenSpaceToViewSpace(reflectedPos, dhMask ? dhProjectionInverse : combinedProjectionInverse);

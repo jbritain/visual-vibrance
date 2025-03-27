@@ -112,7 +112,6 @@
         material.albedo = albedo.rgb;
         material.roughness = 1.0;
         material.f0 = vec3(0.0);
-        material.f82 = vec3(0.0);
         material.metalID = NO_METAL;
         material.porosity = 0.0;
         material.sss = 0.0;
