@@ -68,19 +68,16 @@ float geometrySmith(vec3 N, vec3 V, vec3 L, float K) {
 }
 
 
-vec3 schlick(Material material, float NoV){
-	const vec3 f0 = material.f0;
-	const vec3 f82 = material.f82;
-	if(material.metalID == NO_METAL){ // normal schlick approx.
-		return clamp01(vec3(f0 + (1.0 - f0) * pow5(1.0 - NoV)));
-	} else { // lazanyi schlick - https://www.shadertoy.com/view/DdlGWM
-		vec3 a = (823543./46656.) * (f0 - f82) + (49./6.) * (1.0 - f0);
+vec3 fresnel(Material material, float NoV){
+	if(material.metalID == NO_METAL || material.metalID == OTHER_METAL){ // normal schlick approx.
+		return clamp01(vec3(material.f0 + (1.0 - material.f0) * pow5(1.0 - NoV)));
+	} else {
+		// https://naos-be.zcu.cz/server/api/core/bitstreams/c2d8b0a7-9947-4458-98e3-d3f8df920153/content
+		mat3x2 N_K = getMetalN_K(material.metalID);
+		const vec3 n = vec3(N_K[0][0], N_K[1][0], N_K[2][0]);
+		const vec3 k = vec3(N_K[0][1], N_K[1][1], N_K[2][1]);
 
-		float p1 = 1.0 - NoV;
-		float p2 = p1*p1;
-		float p4 = p2*p2;
-
-		return clamp01(f0 + ((1.0 - f0) * p1 - a * NoV * p2) * p4);
+		return (pow2(n - 1) + 4 * n * pow5(1.0 - NoV) + pow2(k)) / (pow2(n + 1) + pow2(k));
 	}
 }
 
@@ -109,7 +106,7 @@ vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos, v
 
 
 
-	vec3 F = clamp01(schlick(material, HoV));
+	vec3 F = clamp01(fresnel(material, HoV));
 
 	// trowbridge-reitz ggx
 	float denominator = NoHSquared * (pow2(alpha) - 1.0) + 1.0;

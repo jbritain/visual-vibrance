@@ -95,17 +95,7 @@
         vec3 viewDir = normalize(translucentViewPos);
 
         if(isWater){
-            Material material = Material(
-                vec3(0.0),
-                0.0,
-                vec3(0.02),
-                vec3(0.0),
-                0.0,
-                0.0,
-                0.0,
-                NO_METAL,
-                0.0
-            );
+            Material material = waterMaterial;
 
             #ifndef VANILLA_WATER
             vec3 worldWaveNormal = waveNormal(translucentFeetPlayerPos.xz + cameraPosition.xz, worldNormal, sin(PI * 0.5 * clamp01(abs(dot(normal, viewDir)))));
@@ -264,7 +254,7 @@
 
             
 
-            vec3 fresnel = schlick(material, dot(waveNormal, normalize(-translucentViewPos)));
+            vec3 fresnel = fresnel(material, dot(waveNormal, normalize(-translucentViewPos)));
 
             color.rgb = mix(color.rgb, reflectedColor, fresnel);
         }
