@@ -140,7 +140,7 @@
                 vec3 waveNormal = waveNormal(feetPlayerPos.xz + cameraPosition.xz, vec3(0.0, 1.0, 0.0), 1.0);
                 vec3 refracted = refract(-worldLightDir, waveNormal, 1.0/1.33);
 
-                vec3 oldPos = feetPlayerPos - worldLightDir * waterDepth;
+                vec3 oldPos = feetPlayerPos;
                 vec3 newPos = feetPlayerPos + refracted * waterDepth;
 
                 float oldArea = length(dFdx(oldPos)) * length(dFdy(oldPos));
