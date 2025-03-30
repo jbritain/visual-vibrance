@@ -7,13 +7,18 @@
     4: Godrays
     5: Rain mask
     6: Combined depth buffer for SSR
+    7: Sky LUT for rough reflections
 
 ---Passes---
     setup           : Compute transmittance LUT for atmosphere
     setup1          : Compute multiple scattering LUT for atmosphere
 
     prepare         : Compute sky view LUT
-    prepare1        : Compute skylight colour by taking several hemisphere samples
+    prepare1        : Generate sky reflection LUT
+    prepare2        : Compute skylight colour by taking several hemisphere samples & Generate mipmaps for sky reflection LUT
+
+
+
 
     shadowcomp      : Floodfill propagation
 

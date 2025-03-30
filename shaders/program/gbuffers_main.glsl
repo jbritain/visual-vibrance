@@ -16,6 +16,7 @@
 
 #ifdef vsh
     #include "/lib/sway.glsl"
+    #include "/lib/water/waveNormals.glsl"
 
     in vec2 mc_Entity;
     in vec4 at_tangent;
@@ -57,11 +58,17 @@
         return;
         #endif
 
-        #ifdef WAVING_BLOCKS
         vec3 feetPlayerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
+
+        #ifdef WAVING_BLOCKS
         feetPlayerPos = getSway(materialID, feetPlayerPos + cameraPosition, at_midBlock.xyz) - cameraPosition;
-        viewPos = (gbufferModelView * vec4(feetPlayerPos, 1.0)).xyz;
         #endif
+
+        if(materialIsWater(materialID)){
+            feetPlayerPos.y += (waveHeight(feetPlayerPos.xz + cameraPosition.xz) - 0.5) * fract(feetPlayerPos.y + cameraPosition.y);
+        }
+
+        viewPos = (gbufferModelView * vec4(feetPlayerPos, 1.0)).xyz;
 
         #ifdef PARALLAX
             vec2 halfSize      = abs(texcoord - mc_midTexCoord);
@@ -231,10 +238,10 @@
             // #endif
         #endif
 
-        // float rainFactor = clamp01(smoothstep(13.5 / 15.0, 14.5 / 15.0, lightmap.y)) * wetness;
-        // material.f0 = mix(material.f0, vec3(0.02), rainFactor * (1.0 - material.porosity));
-        // material.roughness = mix(material.roughness, 0.0, rainFactor * (1.0 - material.porosity));
-        // material.albedo *= (1.0 - 0.5 * rainFactor * material.porosity);
+        float rainFactor = clamp01(smoothstep(13.5 / 15.0, 14.5 / 15.0, lightmap.y)) * wetness;
+        material.f0 = mix(material.f0, vec3(0.02), rainFactor * (1.0 - material.porosity));
+        material.roughness = mix(material.roughness, 0.0, rainFactor * (1.0 - material.porosity) * 0.8);
+        material.albedo *= (1.0 - 0.5 * rainFactor * material.porosity);
 
         parallaxShadow = mix(parallaxShadow, 1.0, material.sss * 0.5);
 

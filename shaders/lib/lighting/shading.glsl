@@ -17,6 +17,7 @@
 
 #include "/lib/lighting/brdf.glsl"
 #include "/lib/lighting/shadows.glsl"
+#include "/lib/util/spheremap.glsl"
 
 vec3 getShadedColor(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 blocklight, vec2 lightmap, vec3 viewPos, float shadowFactor){
     vec3 feetPlayerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
@@ -38,10 +39,21 @@ vec3 getShadedColor(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 
         vec3(ambient) * material.ao
     );
 
-    // vec3 fresnel = fresnel(material, dot(mappedNormal, normalize(-viewPos)));
-    // vec3 specular = weatherSkylightColor * clamp01(smoothstep(13.5 / 15.0, 1.0, lightmap.y));
-    // color += mix(diffuse, specular, fresnel);
+    vec3 fresnel = fresnelRoughness(material, dot(mappedNormal, normalize(-viewPos)));
+
+    // max mip samples the whole sphere
+    // therefore max mip minus 1 samples a hemisphere
+    // so we blend with that based on roughness
+    float mipLevel = log2(1.0 + material.roughness * (maxVec2(textureSize(colortex7, 0)) - 1.0));
+
+    vec3 reflected = reflect(normalize(viewPos), mappedNormal);
+
+    #ifdef ROUGH_SKY_REFLECTIONS
+    vec3 specular = textureLod(colortex7, mapSphere(reflected), mipLevel).rgb * clamp01(smoothstep(13.5 / 15.0, 1.0, lightmap.y));
+    color += mix(diffuse, specular, fresnel);
+    #else
     color += diffuse;
+    #endif
 
     color += material.emission * material.albedo * 32.0;
 

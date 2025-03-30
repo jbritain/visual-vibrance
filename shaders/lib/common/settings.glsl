@@ -67,6 +67,7 @@ const float sunPathRotation = -40.0; // [-90.0 -85.0 -80.0 -75.0 -70.0 -65.0 -60
 // #define SSR_JITTER
 #define REFLECTION_MODE 2 // [0 1 2]
 #define FADE_REFLECTIONS
+// #define ROUGH_SKY_REFLECTIONS
 
 #define REFRACTION
 // #define CAUSTICS

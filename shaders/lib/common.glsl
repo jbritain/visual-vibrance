@@ -93,6 +93,13 @@ const vec4 colortex4ClearColor = vec4(1.0, 1.0, 1.0, 1.0);
 */
 #endif
 
+#ifdef ROUGH_SKY_REFLECTIONS
+/*
+    const int colortex7Format = R11F_G11F_B10F;
+*/
+const bool colortex7Clear = false;
+#endif
+
 #ifdef INFINITE_OCEAN
 #endif
 

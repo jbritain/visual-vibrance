@@ -45,6 +45,7 @@
     layout(location = 0) out vec4 color;
 
     void main() {
+        show(textureLod(colortex7, texcoord, 0));
         color = texture(colortex0, texcoord);
         vec4 data1 = texture(colortex1, texcoord);
 
