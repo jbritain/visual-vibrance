@@ -22,6 +22,8 @@ const float voxelDistance = 128.0;
 #define WAVING_BLOCKS
 #define PATCHY_LAVA
 
+#define EMISSION_STRENGTH 32.0 // [16.0 32.0 48.0 64.0 80.0 96.0 112.0 128.0 144.0 160.0 176.0 192.0 208.0 224.0 240.0 256.0 272.0 288.0 304.0 320.0 336.0 352.0 368.0 384.0 400.0 416.0 432.0 448.0 464.0 480.0 496.0 512.0]
+
 #define SHADOWS
 const float shadowDistance = 64.0; // [16.0 32.0 48.0 64.0 80.0 96.0 112.0 128.0 144.0 160.0 176.0 192.0 208.0 224.0 240.0 256.0 272.0 288.0 304.0 320.0 336.0 352.0 368.0 384.0 400.0 416.0 432.0 448.0 464.0 480.0 496.0 512.0]
 const float shadowDistanceRenderMul = 1.0;
@@ -34,7 +36,7 @@ const float sunPathRotation = -40.0; // [-90.0 -85.0 -80.0 -75.0 -70.0 -65.0 -60
 #define PBR_MODE 1 // [0 1]
 
 // #define PIXEL_LOCKED_LIGHTING
-#define PIXEL_SIZE 16
+#define PIXEL_SIZE 16 // [1 2 4 8 16 32 64]
 
 #define TEMPORAL_FILTER
 
@@ -68,6 +70,7 @@ const float sunPathRotation = -40.0; // [-90.0 -85.0 -80.0 -75.0 -70.0 -65.0 -60
 #define REFLECTION_MODE 2 // [0 1 2]
 #define FADE_REFLECTIONS
 // #define ROUGH_SKY_REFLECTIONS
+// #define RAIN_PUDDLES
 
 #define REFRACTION
 // #define CAUSTICS

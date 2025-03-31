@@ -19,13 +19,10 @@
 
 vec3 atmosphericFog(vec3 color, vec3 viewPos){
   float transmittance = clamp01(exp(-length(viewPos) * 0.0004 * (EBS.y)));
-  vec3 fogColor = weatherSkylightColor;
-
-  #ifdef DISTANT_HORIZONS
-  fogColor = mix(fogColor, getSky(normalize(mat3(gbufferModelViewInverse) * viewPos), false), smoothstep(dhFarPlane, dhFarPlane * 2.0, length(viewPos)));
-  #else
-  fogColor = mix(fogColor, getSky(normalize(mat3(gbufferModelViewInverse) * viewPos), false), smoothstep(far, far * 2.0, length(viewPos)));
-  #endif
+  vec3 dir = normalize(mat3(gbufferModelViewInverse) * viewPos);
+  // https://raw.githubusercontent.com/denitdao/o-rly-collection/refs/heads/main/public/book_covers/using-hacks.jpeg
+  dir.y = abs(dir.y);
+  vec3 fogColor = getSky(dir, false);
 
   color = mix(fogColor, color.rgb, transmittance);
   return color;
@@ -136,7 +133,7 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth, vec3 scatterFactor){
 
   float costh = dot(normalize(playerPos), worldLightDir);
 
-  vec3 phase = vec3(getMiePhase(costh));//multipleScattering(opticalDepth, costh, -0.2, 0.85, vec3(1.0), 1, 0.7, 0.9, 0.8, 0.1);
+  vec3 phase = vec3(dualHenyeyGreenstein(-0.5, 0.8, costh, 0.5));
 
   vec3 radiance = weatherSunlightColor * scatterFactor * phase + weatherSkylightColor * EBS.y;
 

@@ -215,7 +215,7 @@
             material.roughness = 0.0;
         }
 
-        if(materialIsLava(materialID)){
+        if(materialIsMaxEmission(materialID)){
             material.emission = 1.0;
         }
 
@@ -238,10 +238,15 @@
             // #endif
         #endif
 
+        #ifdef RAIN_PUDDLES
         float rainFactor = clamp01(smoothstep(13.5 / 15.0, 14.5 / 15.0, lightmap.y)) * wetness;
+
+        rainFactor *= smoothstep(0.6, 0.7, texture(noisetex, mod((playerPos.xz + cameraPosition.xz) / 2.0, 64.0) / 64.0).r);
+
         material.f0 = mix(material.f0, vec3(0.02), rainFactor * (1.0 - material.porosity));
         material.roughness = mix(material.roughness, 0.0, rainFactor * (1.0 - material.porosity) * 0.8);
         material.albedo *= (1.0 - 0.5 * rainFactor * material.porosity);
+        #endif
 
         parallaxShadow = mix(parallaxShadow, 1.0, material.sss * 0.5);
 
@@ -305,7 +310,6 @@
         outData1.xy = encodeNormal(mat3(gbufferModelViewInverse) * mappedNormal);
         outData1.z = lightmap.y;
         outData1.a = clamp01(float(materialID - 1000) * rcp(255.0));
-        
     }
 
 #endif

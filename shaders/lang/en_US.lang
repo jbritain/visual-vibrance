@@ -123,6 +123,9 @@ option.AMBIENT_STRENGTH.comment=The minimum amount of light there can be in any 
 option.FLOODFILL=Colored Blocklight
 option.FLOODFILL.comment=Makes the light emitted by blocks match their color. Requires §eshadows §fto be enabled. §6Moderate performance impact.
 
+option.EMISSION_STRENGTH=Emissive Strength
+option.EMISSION_STRENGTH.comment=How bright emissives are. §9No performance impact!
+
 option.SHADOWS=Shadows
 
 option.shadowDistance=Shadow Distance
@@ -228,6 +231,12 @@ option.REFLECTION_MODE.comment=Adds reflections to water. The 'fast' option gues
 value.REFLECTION_MODE.0=Off
 value.REFLECTION_MODE.1=Fast
 value.REFLECTION_MODE.2=SSR
+
+option.ROUGH_SKY_REFLECTIONS=Rough Sky Reflections
+option.VANILLA_WATER=Vanilla Water
+option.PIXEL_LOCKED_LIGHTING=Pixel Locked Lighting
+option.PIXEL_SIZE=Pixel Lock Size
+option.RAIN_PUDDLES=Rain Puddles
 
 option.SSR_STEPS=SSR Steps
 option.SSR_STEPS.comment=Higher values will reduce noise/stepping in water reflections §ewhen SSR is enabled §fat the cost of performance. §6Moderate performance impact. §7Note that each step takes 4 samples.

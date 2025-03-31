@@ -123,7 +123,7 @@ vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material m
 
 	}
 
-  scatter -= scatter * 0.75 * clamp01(distFade);
+
   scatter *= maxVec3(cloudShadow); // since the cloud shadows are so blurry anyway, if something is shadowed by a cloud, it's probably not getting any sunlight
   shadow = mix(shadow, vec3(fakeShadow), clamp01(distFade));
   return shadow * cloudShadow;

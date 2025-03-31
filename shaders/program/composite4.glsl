@@ -43,11 +43,15 @@
         #if GODRAYS == 1
             vec2 sampleCoord = texcoord;
 
+            bool facingSun = lightDir.z < 0.0;
+
             vec3 sunScreenPos = viewSpaceToScreenSpace(shadowLightPosition);
 
             sunScreenPos.xy = clamp(sunScreenPos.xy, vec2(-0.5), vec2(1.5));
 
             vec2 deltaTexcoord = (texcoord - sunScreenPos.xy);
+
+            if(!facingSun) deltaTexcoord *= -1.0;
 
             deltaTexcoord *= rcp(GODRAYS_SAMPLES) * GODRAYS_DENSITY;
 

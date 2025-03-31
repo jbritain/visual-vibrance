@@ -46,7 +46,7 @@ vec3 multipleScattering(float density, float costh, float g1, float g2, vec3 ext
   return radiance;
 }
 
-float getCloudDensity(vec2 pos){
+float getCloudDensity(vec2 pos, bool highSamples){
   float density = 0.0;
   float weight = 0.0;
 
@@ -62,6 +62,10 @@ float getCloudDensity(vec2 pos){
     density += texture(perlinNoiseTex, fract(samplePos)).r * sampleWeight;
     #endif
     weight += sampleWeight;
+
+    if(!highSamples){
+      break;
+    }
   }
 
   density /= weight;
@@ -79,7 +83,7 @@ vec3 getCloudShadow(vec3 origin){
   if(!rayPlaneIntersection(origin, worldLightDir, CLOUD_PLANE_ALTITUDE, point)) return vec3(1.0);
   vec3 exitPoint;
   rayPlaneIntersection(origin, worldLightDir, CLOUD_PLANE_ALTITUDE + CLOUD_PLANE_HEIGHT, exitPoint);
-  float totalDensityAlongRay = getCloudDensity(point.xz) * distance(point, exitPoint);
+  float totalDensityAlongRay = getCloudDensity(point.xz, false) * distance(point, exitPoint);
   return clamp01(mix(exp(-totalDensityAlongRay * CLOUD_EXTINCTION_COLOR), vec3(1.0), (1.0 - smoothstep(0.1, 0.2, worldLightDir.y))));
 
 }
@@ -99,10 +103,10 @@ vec3 getClouds(vec3 origin, vec3 worldDir, out vec3 transmittance){
 
   vec3 exitPoint; // where the view ray exits the cloud plane
   rayPlaneIntersection(origin, worldDir, CLOUD_PLANE_ALTITUDE + CLOUD_PLANE_HEIGHT, exitPoint);
-  float totalDensityAlongRay = getCloudDensity(point.xz) * distance(point, exitPoint);
+  float totalDensityAlongRay = getCloudDensity(point.xz, true) * distance(point, exitPoint);
   vec3 sunExitPoint;
   rayPlaneIntersection(point, worldLightDir, CLOUD_PLANE_ALTITUDE + CLOUD_PLANE_HEIGHT, sunExitPoint);
-  float totalDensityTowardsSun = getCloudDensity(mix(point.xz, sunExitPoint.xz, jitter)) * distance(point, sunExitPoint);
+  float totalDensityTowardsSun = getCloudDensity(mix(point.xz, sunExitPoint.xz, jitter), true) * distance(point, sunExitPoint);
   float costh = dot(worldDir, worldLightDir);
 
   vec3 powder = clamp01((1.0 - exp(-totalDensityTowardsSun * 2 * CLOUD_EXTINCTION_COLOR)));

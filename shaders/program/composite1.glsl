@@ -45,14 +45,18 @@
     layout(location = 0) out vec4 color;
 
     void main() {
-        show(textureLod(colortex7, texcoord, 0));
         color = texture(colortex0, texcoord);
         vec4 data1 = texture(colortex1, texcoord);
 
         vec3 worldNormal = decodeNormal(data1.xy);
         vec3 normal = mat3(gbufferModelView) * worldNormal;
+
+
+
         float skyLightmap = data1.z;
         int materialID = int(data1.a * 255 + 0.5) + 1000;
+
+        show(skyLightmap);
 
         bool isWater = materialIsWater(materialID);
         bool inWater = isEyeInWater == 1;
