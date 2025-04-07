@@ -48,7 +48,7 @@ void main()
     }
 
     skylightColor /= float(samples);
-    skylightColor *= 2.0;
+
 
     if(lightningBoltPosition.xyz != vec3(0.0)){
         skylightColor += vec3(20.0, 20.0, 40.0);

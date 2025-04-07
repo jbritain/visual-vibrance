@@ -126,6 +126,9 @@ option.FLOODFILL.comment=Makes the light emitted by blocks match their color. Re
 option.EMISSION_STRENGTH=Emissive Strength
 option.EMISSION_STRENGTH.comment=How bright emissives are. §9No performance impact!
 
+option.ambientOcclusionLevel = Ambient Occlusion Strength
+option.ambientOcclusionLevel.comment=Darkens corners where blocks meet to imitate ambient shadowing. §9No performance impact! §falso affects §eDistant Horizons Ambient Occlusion.
+
 option.SHADOWS=Shadows
 
 option.shadowDistance=Shadow Distance
@@ -162,6 +165,10 @@ value.shadowDistance.464.0=29 Chunks
 value.shadowDistance.480.0=30 Chunks  
 value.shadowDistance.496.0=31 Chunks  
 value.shadowDistance.512.0=32 Chunks
+
+option.entityShadowDistanceMul=Entity Shadow Distance
+option.entityShadowDistanceMul.comment=The fraction of the shadow distance within which entities will cast shadows. Setting to 0 will entirely disable entity shadows. §6Moderate performance impact.
+suffix.entityShadowDistanceMul=x
 
 option.shadowMapResolution=Shadow Quality
 option.shadowMapResolution.comment=The resolution of the shadow map (how pixelated it is). §cHigh performance impact!

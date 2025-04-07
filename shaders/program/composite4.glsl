@@ -43,15 +43,18 @@
         #if GODRAYS == 1
             vec2 sampleCoord = texcoord;
 
-            bool facingSun = lightDir.z < 0.0;
+            if(lightDir.z > 0.0){ // not facing sun
+                float facingFactor = dot(vec3(0.0, -1.0, 0.0), lightDir);
+                show(facingFactor);
+                scattering = vec3(facingFactor);
+                return;
+            }
 
             vec3 sunScreenPos = viewSpaceToScreenSpace(shadowLightPosition);
 
             sunScreenPos.xy = clamp(sunScreenPos.xy, vec2(-0.5), vec2(1.5));
 
             vec2 deltaTexcoord = (texcoord - sunScreenPos.xy);
-
-            if(!facingSun) deltaTexcoord *= -1.0;
 
             deltaTexcoord *= rcp(GODRAYS_SAMPLES) * GODRAYS_DENSITY;
 
@@ -61,6 +64,7 @@
 
             for(int i = 0; i < GODRAYS_SAMPLES; i++){
                 vec3 scatterSample = texture(colortex4, sampleCoord).rgb;
+
                 scatterSample *= decay * GODRAYS_WEIGHT;
                 scattering += scatterSample;
                 decay *= GODRAYS_DECAY;
