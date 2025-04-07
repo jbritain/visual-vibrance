@@ -29,7 +29,7 @@ void binarySearch(inout vec3 rayPos, vec3 rayDir, sampler2D depthBuffer){
 	for (int i = 0; i < BINARY_REFINEMENTS; i++){
 		float depth = getDepth(rayPos.xy, depthBuffer);
 		float intersect = sign(depth - rayPos.z);
-		lastGoodPos = intersect == 1.0 && depth != 1.0 ? rayPos : lastGoodPos; // update last good pos if still inside
+		lastGoodPos = intersect == 1.0 && depth < 1.0 ? rayPos : lastGoodPos; // update last good pos if still inside
 		
 		rayPos += intersect * rayDir; // goes back if we're in geometry and forward if we're not
 		rayDir *= BINARY_REDUCTION; // scale down the ray
@@ -87,15 +87,15 @@ bool rayIntersects(vec3 viewOrigin, vec3 viewDir, int maxSteps, float jitter, bo
 		intersect = depth < rayPos.z && abs(depthLenience - (rayPos.z - depth)) < depthLenience && rayPos.z > handDepth && depth < 1.0;
 		hitIndex = intersect ? 1 : 0;
 
-		intersect = intersect || depth2 < rayPos2.z && abs(depthLenience - (rayPos2.z - depth2)) < depthLenience && rayPos2.z > handDepth && depth2 < 1.0;
+		intersect = intersect || (depth2 < rayPos2.z && abs(depthLenience - (rayPos2.z - depth2)) < depthLenience && rayPos2.z > handDepth && depth2 < 1.0);
 		hitIndex = intersect && hitIndex == 0 ? 2 : 0;
 		rayPos = hitIndex == 2 ? rayPos2 : rayPos;
 
-		intersect = intersect || depth3 < rayPos3.z && abs(depthLenience - (rayPos3.z - depth3)) < depthLenience && rayPos3.z > handDepth && depth3 < 1.0;
+		intersect = intersect || (depth3 < rayPos3.z && abs(depthLenience - (rayPos3.z - depth3)) < depthLenience && rayPos3.z > handDepth && depth3 < 1.0);
 		hitIndex = intersect && hitIndex == 0 ? 3 : 0;
 		rayPos = hitIndex == 3 ? rayPos3 : rayPos;
 
-		intersect = intersect || depth4 < rayPos4.z && abs(depthLenience - (rayPos4.z - depth4)) < depthLenience && rayPos4.z > handDepth && depth4 < 1.0;
+		intersect = intersect || (depth4 < rayPos4.z && abs(depthLenience - (rayPos4.z - depth4)) < depthLenience && rayPos4.z > handDepth && depth4 < 1.0);
 		hitIndex = intersect && hitIndex == 0 ? 4 : 0;
 		rayPos = hitIndex == 4 ? rayPos4 : rayPos;
 

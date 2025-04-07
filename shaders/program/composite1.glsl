@@ -56,7 +56,6 @@
         float skyLightmap = data1.z;
         int materialID = int(data1.a * 255 + 0.5) + 1000;
 
-        show(skyLightmap);
 
         bool isWater = materialIsWater(materialID);
         bool inWater = isEyeInWater == 1;
@@ -212,10 +211,11 @@
                 }
 
             #else
-                reflectionHit && rayIntersects(translucentViewPos, reflectedDir, SSR_STEPS, jitter, true, reflectedPos, depthtex0, gbufferProjection);
+                reflectionHit = reflectionHit && rayIntersects(translucentViewPos, reflectedDir, SSR_STEPS, jitter, true, reflectedPos, depthtex0, gbufferProjection);
             #endif
 
             if(reflectionHit){
+
                 reflectedColor = texture(colortex0, reflectedPos.xy).rgb;
                 #ifdef DISTANT_HORIZONS
                     vec3 viewReflectedPos = screenSpaceToViewSpace(reflectedPos, dhMask ? dhProjectionInverse : combinedProjectionInverse);

@@ -45,7 +45,6 @@
 
             if(lightDir.z > 0.0){ // not facing sun
                 float facingFactor = dot(vec3(0.0, -1.0, 0.0), lightDir);
-                show(facingFactor);
                 scattering = vec3(facingFactor);
                 return;
             }
