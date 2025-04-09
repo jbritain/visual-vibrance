@@ -110,6 +110,8 @@ vec4 rcp(in vec4 x) {
 #define sum3(v) (((v).x + (v).y) + (v).z)
 #define sum4(v) (((v).x + (v).y) + ((v).z + (v).w))
 
+#define mean3(v) sum3(v) / (3.0)
+
 #define clamp01(x) clamp(x, 0.0, 1.0)
 
 #define saturate clamp01

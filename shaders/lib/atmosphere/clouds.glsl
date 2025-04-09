@@ -15,8 +15,8 @@
 #ifndef CLOUDS_GLSL
 #define CLOUDS_GLSL
 
-#define CLOUD_PLANE_ALTITUDE 1000
-#define CLOUD_PLANE_HEIGHT 50
+#define CLOUD_PLANE_ALTITUDE 192
+#define CLOUD_PLANE_HEIGHT 4
 #define CLOUD_EXTINCTION_COLOR vec3(1.0)
 
 float remap(float val, float oMin, float oMax, float nMin, float nMax){
@@ -46,34 +46,10 @@ vec3 multipleScattering(float density, float costh, float g1, float g2, vec3 ext
   return radiance;
 }
 
-float getCloudDensity(vec2 pos, bool highSamples){
-  float density = 0.0;
-  float weight = 0.0;
+float getCloudDensity(vec2 pos){
+  ivec2 p = ivec2(floor(mod((pos + vec2(frameTimeCounter, 0.0)) / 24, 256)));
 
-  pos = pos / 100000;
-
-  for(int i = 0; i < 16; i++){
-    float sampleWeight = exp2(-float(i));
-    pos.y += worldTimeCounter * 0.000025 * sqrt(i + 1);
-    vec2 samplePos = pos * exp2(float(i));
-    #ifdef BLOCKY_CLOUDS
-    density += texelFetch(perlinNoiseTex, ivec2(fract(samplePos) * textureSize(perlinNoiseTex, 0)), 0).r * sampleWeight;
-    #else
-    density += texture(perlinNoiseTex, fract(samplePos)).r * sampleWeight;
-    #endif
-    weight += sampleWeight;
-
-    if(!highSamples){
-      break;
-    }
-  }
-
-  density /= weight;
-  density = smoothstep(0.5 - 0.15 * wetness - 0.2 * thunderStrength, 1.0, density);
-  // density = sqrt(density);
-  density *= 0.1;
-
-  return density;
+  return texelFetch(vanillaCloudTex, p, 0).r;
 }
 
 vec3 getCloudShadow(vec3 origin){
@@ -83,7 +59,7 @@ vec3 getCloudShadow(vec3 origin){
   if(!rayPlaneIntersection(origin, worldLightDir, CLOUD_PLANE_ALTITUDE, point)) return vec3(1.0);
   vec3 exitPoint;
   rayPlaneIntersection(origin, worldLightDir, CLOUD_PLANE_ALTITUDE + CLOUD_PLANE_HEIGHT, exitPoint);
-  float totalDensityAlongRay = getCloudDensity(point.xz, false) * distance(point, exitPoint);
+  float totalDensityAlongRay = getCloudDensity(point.xz) * distance(point, exitPoint);
   return clamp01(mix(exp(-totalDensityAlongRay * CLOUD_EXTINCTION_COLOR), vec3(1.0), (1.0 - smoothstep(0.1, 0.2, worldLightDir.y))));
 
 }
@@ -94,34 +70,41 @@ vec3 getClouds(vec3 origin, vec3 worldDir, out vec3 transmittance){
   return vec3(0.0);
   #endif
 
+  vec3 scatter = vec3(0.0);
+
   origin += cameraPosition;
 
-  vec3 point;
-  if(!rayPlaneIntersection(origin, worldDir, CLOUD_PLANE_ALTITUDE, point)) return vec3(0.0);
+  vec3 a;
+  if(!rayPlaneIntersection(origin, worldDir, CLOUD_PLANE_ALTITUDE, a)) return vec3(0.0);
 
-  float jitter = interleavedGradientNoise(floor(gl_FragCoord.xy), frameCounter);
+  vec3 b;
+  if(!rayPlaneIntersection(origin, worldDir, CLOUD_PLANE_ALTITUDE + CLOUD_PLANE_HEIGHT, b)) return vec3(0.0);
 
-  vec3 exitPoint; // where the view ray exits the cloud plane
-  rayPlaneIntersection(origin, worldDir, CLOUD_PLANE_ALTITUDE + CLOUD_PLANE_HEIGHT, exitPoint);
-  float totalDensityAlongRay = getCloudDensity(point.xz, true) * distance(point, exitPoint);
-  vec3 sunExitPoint;
-  rayPlaneIntersection(point, worldLightDir, CLOUD_PLANE_ALTITUDE + CLOUD_PLANE_HEIGHT, sunExitPoint);
-  float totalDensityTowardsSun = getCloudDensity(mix(point.xz, sunExitPoint.xz, jitter), true) * distance(point, sunExitPoint);
-  float costh = dot(worldDir, worldLightDir);
+  float totalDensity = 0.0;
 
-  vec3 powder = clamp01((1.0 - exp(-totalDensityTowardsSun * 2 * CLOUD_EXTINCTION_COLOR)));
+  vec3 rayPos = a;
+  vec3 rayStep = (b - a) / 8;
+  rayPos += rayStep * interleavedGradientNoise(floor(gl_FragCoord.xy), frameCounter);
 
-  vec3 radiance = skylightColor + sunlightColor * (1.0 + 9.0 * float(lightDir == sunDir)) * multipleScattering(totalDensityTowardsSun, costh, 0.9, -0.4, CLOUD_EXTINCTION_COLOR, 4, 0.85, 0.9, 0.8, 0.1) * mix(2.0 * powder, vec3(1.0), costh * 0.5 + 0.5);
+  for(int i = 0; i < 8; i++, rayPos += rayStep){
+    totalDensity += getCloudDensity(rayPos.xz);
+  }
+
+  scatter = vec3(mix(sunlightColor, skylightColor, 0.5) * 0.5 * step(0.01, totalDensity));
+
+  float mixFactor = henyeyGreenstein(0.6, dot(worldDir, worldLightDir)) * 0.9 + 0.1;
+  mixFactor *= 2.0;
+
+  scatter *= mix(1.0, mixFactor, totalDensity / 7.0);
+  transmittance = mix(transmittance, transmittance * 0.1, rainStrength * step(0.01, totalDensity));
+
+  float fade = smoothstep(1000.0, 2000.0, length(a - cameraPosition));
+
+  scatter = mix(scatter, vec3(0.0), fade);
+  transmittance = mix(transmittance, vec3(1.0), fade);
 
 
-  transmittance = exp(-totalDensityAlongRay * CLOUD_EXTINCTION_COLOR);
-  transmittance = mix(transmittance, vec3(1.0), 1.0 - smoothstep(0.0, 0.2, worldDir.y)); // fade clouds towards horizon
 
-  vec3 integScatter = (radiance - radiance * clamp01(transmittance)) / CLOUD_EXTINCTION_COLOR;
-  vec3 scatter = integScatter * transmittance;
-  scatter = mix(scatter, vec3(0.0), exp(-distance(point, cameraPosition) * 0.004));
-
-  scatter *= skyMultiplier;
 
   return scatter;
 }

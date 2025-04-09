@@ -15,8 +15,6 @@
 #ifndef BRDF_GLSL
 #define BRDF_GLSL
 
-#include "/lib/atmosphere/sky/hillaireCommon.glsl"
-
 // https://advances.realtimerendering.com/s2017/DecimaSiggraph2017.pdf
 float getNoHSquared(float NoL, float NoV, float VoL, float radius) {
   float radiusCos = cos(radius);

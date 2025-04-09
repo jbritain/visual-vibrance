@@ -61,7 +61,7 @@
 
             vec3 worldDir = mat3(gbufferModelViewInverse) * normalize(viewPos);
 
-            color.rgb = getSky(color.rgb, worldDir, true);
+            // color.rgb = getSky(color.rgb, worldDir, true);
             #ifdef WORLD_OVERWORLD
                 vec3 transmittance;
 

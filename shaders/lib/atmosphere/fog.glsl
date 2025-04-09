@@ -18,14 +18,7 @@
 #include "/lib/atmosphere/clouds.glsl"
 
 vec3 atmosphericFog(vec3 color, vec3 viewPos){
-  float transmittance = clamp01(exp(-length(viewPos) * 0.0004 * (EBS.y)));
-  vec3 dir = normalize(mat3(gbufferModelViewInverse) * viewPos);
-  // https://raw.githubusercontent.com/denitdao/o-rly-collection/refs/heads/main/public/book_covers/using-hacks.jpeg
-  dir.y = abs(dir.y);
-  vec3 fogColor = getSky(dir, false);
-
-  color = mix(fogColor, color.rgb, transmittance);
-  return color;
+  return mix(color, getSky(mat3(gbufferModelViewInverse) * normalize(viewPos), false), clamp01(exp(-5.0 * (1.0 - length(viewPos) / far))));
 }
 
 #define FOG_DENSITY 0.01
@@ -135,7 +128,7 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth, vec3 scatterFactor){
 
   vec3 phase = vec3(dualHenyeyGreenstein(-0.5, 0.8, costh, 0.5));
 
-  vec3 radiance = weatherSunlightColor * scatterFactor * phase + weatherSkylightColor * EBS.y;
+  vec3 radiance = sunlightColor * scatterFactor * phase + skylightColor * EBS.y;
 
   vec3 scatter = vec3(1.0 - transmittance) / 2;// / max(opticalDepth, 1e-6);
   scatter *= radiance;

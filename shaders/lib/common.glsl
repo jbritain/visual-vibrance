@@ -29,6 +29,13 @@
 
 #define worldTimeCounter ((worldTime / 20.0) + (worldDay * 1200.0))
 
+const float sunAngularRadius = PI/180.0;
+const float moonAngularRadius = 2.5 * PI / 180.0;
+
+vec3 sunIrradiance = fogColor * vec3(6.0, 2.0, 0.5);
+vec3 sunRadiance = sunIrradiance / sunAngularRadius;
+const vec3 moonIrradiance = vec3(0.01, 0.01, 0.05) * 0.5;
+
 const float wetnessHalflife = 50.0;
 const float drynessHalflife = 25.0;
 
@@ -55,9 +62,6 @@ layout(std430, binding = 0) buffer environmentData {
 layout(std430, binding = 1) buffer smoothedData {
     float sunVisibilitySmooth;
 };
-
-#define weatherSunlightColor mix(sunlightColor, sunlightColor * 0.005, pow(wetness, rcp(5.0)))
-#define weatherSkylightColor mix(skylightColor, sunlightColor * 0.02, pow(wetness, rcp(5.0)))
 
 float skyMultiplier = clamp01(constantMood > 0.9 ? 0.0 : 1.0);
 

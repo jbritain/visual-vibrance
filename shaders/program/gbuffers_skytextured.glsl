@@ -38,20 +38,18 @@
     layout(location = 0) out vec4 color;
 
     void main() {
-        // remove bloom around moon by checking saturation since it's coloured while the moon is greyscale
         color = texture(gtexture, texcoord) * glcolor;
-        vec3 color2 = hsv(color.rgb);
-
-        if(color2.g > 0.5){
+        if (color.b < 0.3 && color.r > color.b) { // remove bloom
           discard;
         }
 
-        if (color.a < 0.01) {
-          discard;
+        if(color.r > color.b) { // sun
+          color.rgb *= vec3(10.0, 7.0, 5.0);
         }
 
+        
 
-        color.rgb *= vec3(2.0, 2.0, 3.0);
+
         color.rgb = pow(color.rgb, vec3(2.2));
     }
 

@@ -138,12 +138,15 @@
                     color = texture(colortex0, refractedPos.xy);
                     opaqueDepth = texture(depthtex2, refractedPos.xy).r;
                     opaqueViewPos = refractedViewPos;
-                }  else {
-                    #ifdef PIXEL_LOCKED_LIGHTING
-                    color = texture(colortex0, viewSpaceToScreenSpace(translucentViewPos).xy);
-                    #endif
                 }
             #endif
+
+            if(inWater){
+                vec3 refracted = refract(viewDir, normal, 1.33);
+                if(dot(refracted, viewDir) == 0.0){
+                    color.rgb = (sunlightColor + skylightColor) * waterExtinction * EBS.y;
+                }
+            }
 
 
 
@@ -214,6 +217,8 @@
                 reflectionHit = reflectionHit && rayIntersects(translucentViewPos, reflectedDir, SSR_STEPS, jitter, true, reflectedPos, depthtex0, gbufferProjection);
             #endif
 
+            reflectionHit = reflectionHit && !materialIsWater(int(texture(colortex1, reflectedPos.xy).a  * 255 + 0.5) + 1000);
+
             if(reflectionHit){
 
                 reflectedColor = texture(colortex0, reflectedPos.xy).rgb;
@@ -252,7 +257,7 @@
                 vec3 shadow = getShadowing(translucentFeetPlayerPos, waveNormal, vec2(skyLightmap), material, scatter);
 
                 if(minVec3(shadow) > 0.0 && dot(waveNormal, lightDir) > 0.0){
-                    skyReflection += max0(brdf(material, waveNormal, waveNormal, translucentViewPos, shadow, scatter) * weatherSunlightColor);
+                    skyReflection += max0(brdf(material, waveNormal, waveNormal, translucentViewPos, shadow, scatter) * sunlightColor);
                 }
                 #ifdef CLOUDY_FOG
                 vec3 playerReflectedPos = translucentFeetPlayerPos + worldReflectedDir * far;

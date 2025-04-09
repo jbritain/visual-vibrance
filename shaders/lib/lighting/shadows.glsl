@@ -19,21 +19,7 @@
 #include "/lib/atmosphere/clouds.glsl"
 
 vec3 sampleShadow(vec3 shadowScreenPos){
-	float transparentShadow = shadow2D(shadowtex0HW, shadowScreenPos).r;
-
-	if(transparentShadow >= 1.0 - 1e-6){
-		return vec3(transparentShadow);
-	}
-
-	float opaqueShadow = shadow2D(shadowtex1HW, shadowScreenPos).r;
-
-	if(opaqueShadow <= 1e-6){
-		return vec3(opaqueShadow);
-	}
-  
-	vec4 shadowColorData = texture(shadowcolor0, shadowScreenPos.xy);
-	vec3 shadowColor = pow(shadowColorData.rgb, vec3(2.2)) * (1.0 - shadowColorData.a);
-	return mix(shadowColor * opaqueShadow, vec3(1.0), transparentShadow);
+	return vec3(texture(shadowtex1HW, shadowScreenPos).r);
 }
 
 vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material material, out float scatter){
@@ -119,6 +105,16 @@ vec3 getShadowing(vec3 feetPlayerPos, vec3 faceNormal, vec2 lightmap, Material m
       }
 
       shadow /= float(SHADOW_SAMPLES);
+
+      shadow = step(vec3(0.5), shadow);
+
+      #ifdef CAUSTICS
+      bool isWater = texture(shadowcolor0, shadowScreenPos.xy).r > 0.5 && texture(shadowtex0HW, shadowScreenPos) < 0.5;
+
+      if(isWater){
+        // shadow = vec3(1.0, 0.0, 0.0);
+      }
+      #endif
     }
 
 	}

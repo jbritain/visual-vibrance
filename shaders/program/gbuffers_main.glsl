@@ -64,9 +64,11 @@
         feetPlayerPos = getSway(materialID, feetPlayerPos + cameraPosition, at_midBlock.xyz) - cameraPosition;
         #endif
 
+        #ifndef VANILLA_WATER
         if(materialIsWater(materialID)){
             feetPlayerPos.y += (waveHeight(feetPlayerPos.xz + cameraPosition.xz) - 0.5) * fract(feetPlayerPos.y + cameraPosition.y);
         }
+        #endif
 
         viewPos = (gbufferModelView * vec4(feetPlayerPos, 1.0)).xyz;
 
@@ -113,12 +115,12 @@
         #include "/lib/parallax.glsl"
     #endif
 
-    vec3 getMappedNormal(vec2 texcoord){
+    vec3 getMappedNormal(vec2 texcoord, int materialID){
         #if PBR_MODE == 0
         return tbnMatrix[2];
         #endif
 
-        vec3 mappedNormal = texture(normals, texcoord).rgb;
+        vec3 mappedNormal = materialIsWater(materialID) ? textureLod(normals, texcoord, 0).rgb : texture(normals, texcoord).rgb;
         mappedNormal = mappedNormal * 2.0 - 1.0;
         mappedNormal.z = sqrt(1.0 - dot(mappedNormal.xy, mappedNormal.xy)); // reconstruct z due to labPBR encoding
         
@@ -185,7 +187,7 @@
             }
         #endif
 
-        vec3 mappedNormal = getMappedNormal(texcoord);
+        vec3 mappedNormal = getMappedNormal(texcoord, materialID);
         if(renderStage == MC_RENDER_STAGE_ENTITIES){
             vec3 mappedNormal = texture(normals, texcoord).rgb;
         }
@@ -210,8 +212,11 @@
             material.roughness = 0.5;
         }
 
+        
         if(materialIsWater(materialID)){
+            #ifndef VANILLA_WATER
             mappedNormal = tbnMatrix[2];
+            #endif
             material.roughness = 0.0;
         }
 
@@ -253,6 +258,7 @@
         if(materialIsWater(materialID)){
             color.rgb = material.albedo;
             color.a = 0.0;
+
         }  else {
             bool sampleColoredLight = false;
             #ifdef FLOODFILL

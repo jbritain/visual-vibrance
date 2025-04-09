@@ -48,7 +48,7 @@
         color.rgb = mix(color.rgb, bloom, clamp01(0.01 * BLOOM_STRENGTH + rain * 0.1 + wetness * 0.05));
         #endif
 
-        color.rgb *= 2.0;
+        color.rgb *= 4.0;
         color.rgb = tonemap(color.rgb);
 
         color = postProcess(color);

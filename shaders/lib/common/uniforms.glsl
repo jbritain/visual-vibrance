@@ -119,6 +119,7 @@ uniform sampler2D normals;
 uniform sampler2D noisetex;
 uniform sampler2D specular;
 uniform sampler2D gtexture;
+uniform sampler2D lightmap;
 
 uniform ivec3 cameraPositionInt;
 uniform ivec3 previousCameraPositionInt;
@@ -131,6 +132,7 @@ uniform sampler2DShadow shadowtex1HW;
 uniform sampler2DShadow shadowtex0HW;
 
 uniform sampler2D shadowcolor0;
+uniform sampler2D shadowcolor1;
 
 uniform sampler2D sunTransmittanceLUTTex;
 uniform sampler2D multipleScatteringLUTTex;
@@ -139,6 +141,7 @@ uniform sampler2D skyViewLUTTex;
 uniform sampler2D perlinNoiseTex;
 uniform sampler2D blueNoiseTex;
 uniform sampler2D turbulentNoiseTex;
+uniform sampler2D vanillaCloudTex;
 
 #ifdef DISTANT_HORIZONS
     uniform int dhRenderDistance;

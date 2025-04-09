@@ -26,7 +26,7 @@ vec3 getShadedColor(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 
     vec3 shadow = shadowFactor > 1e-6 ? getShadowing(feetPlayerPos, faceNormal, lightmap, material, scatter) * shadowFactor : vec3(0.0);
 
     vec3 color = 
-        brdf(material, mappedNormal, faceNormal, viewPos, shadow, scatter) * weatherSunlightColor;
+        brdf(material, mappedNormal, faceNormal, viewPos, shadow, scatter) * sunlightColor;
 
     float ambient = AMBIENT_STRENGTH;
     #ifdef WORLD_THE_NETHER
@@ -34,7 +34,7 @@ vec3 getShadedColor(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 
     #endif
 
     vec3 diffuse = material.albedo * (
-        weatherSkylightColor * pow2(lightmap.y) * (material.ao * 0.5 + 0.5) +
+        skylightColor * pow2(lightmap.y) * (material.ao * 0.5 + 0.5) +
         blocklight +
         vec3(ambient) * material.ao
     );
