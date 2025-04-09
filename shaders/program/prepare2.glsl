@@ -28,6 +28,10 @@ void main()
     skylightColor = texture(lightmap, vec2(0.0, 1.0)).rgb;
     sunlightColor = sunPosition == shadowLightPosition ? sunIrradiance : moonIrradiance;
 
+    if(isEyeInWater == 1 && sunPosition == shadowLightPosition){
+        sunlightColor *= vec3(1.5, 1.5, 0.5);
+    }
+
     weatherFrameTimeCounter += frameTime * (wetness + thunderStrength) * 2.0;
 
     // skylightColor = mix(skylightColor, exp(-1.0 * 10 * skylightColor), wetness);

@@ -55,7 +55,7 @@ const float sunPathRotation = 0.0; // [-90.0 -85.0 -80.0 -75.0 -70.0 -65.0 -60.0
 
 #define CLOUDS
 // #define BLOCKY_CLOUDS
-// #define CLOUD_SHADOWS
+#define CLOUD_SHADOWS
 
 #define ATMOSPHERIC_FOG
 // #define CLOUDY_FOG

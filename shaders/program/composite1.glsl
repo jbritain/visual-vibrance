@@ -144,7 +144,7 @@
             if(inWater){
                 vec3 refracted = refract(viewDir, normal, 1.33);
                 if(dot(refracted, viewDir) == 0.0){
-                    color.rgb = (sunlightColor + skylightColor) * waterExtinction * EBS.y;
+                    color.rgb = (1.0 - waterExtinction) * (skylightColor + sunlightColor) * EBS.y;
                 }
             }
 
