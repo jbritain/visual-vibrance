@@ -1,38 +1,13 @@
-# Glimmer
+Visual Vibrance is an attempt at recreating the upcoming "Vibrant Visuals" feature which is currently only available on the Bedrock edition of Minecraft.
 
-![](/assets/glimmer-banner.png)
+**Warning:** *This shaderpack does not include normal maps for water.* To properly recreate the look, I recommmend a pack like [Fire Rekindled](https://modrinth.com/resourcepack/fire-rekindled).
 
-Glimmer is a Minecraft shaderpack designed to be simple and performant without looking like it.
+Visual Vibrance is *an alpha* and since it was forked from my other pack, [Glimmer](https://modrinth.com/shader/glimmer-shaders) in a relatively short period of time, there may be bugs. You can report these to me in [my Discord server](https://discord.gg/4U3nPxTznF) or `#jbritains-shaderpacks` in [the shaderLABS Discord Server](https://discord.gg/RpzWN9S).
 
-[![modrinth](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/modrinth_vector.svg)](https://modrinth.com/mod/glimmer-shaders)
-[![discord](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/social/discord-plural_vector.svg)](https://discord.gg/b9SHNcvs6c)
-[![curseforge](https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/curseforge_vector.svg)](https://legacy.curseforge.com/minecraft/shaders/glimmer-shaders)
+# To-do
+These are some things I still need to add
+- Integrated water normal maps
+- Caustics
+- Volumetric fog and water
 
-## Features
-- 'Potato', 'Toaster', 'Integrated Graphics' and 'Dedicated Graphics' presets, designed to run on anything from your fridge to a NASA supercomputer.
-- Complete LabPBR 1.3 compliance.
-- Distant Horizons support!
-- 'Infinite Ocean', adding water stretching out of render distance.
-- Shadows, using either the shadow map or approximated from the lightmap.
-- Screen space reflections and refractions.
-- Procedural 2D clouds.
-- Temporal filtering to reduce noise at low sample counts.
-- Bloom.
-
-## Compatibility
-- OpenGL 4.3+ - MacOS is *not supported*, nor is the Raspberry Pi. Most modern GPUs (integrated or dedicated) should work fine.
-- Iris 1.6+, Optifine is *not supported*.
-
-## Acknowledgements
-- Andrew Hilmer, for his [Shadertoy implementation](https://www.shadertoy.com/view/slSXRW) of Sébastien Hillaire's ['A Scalable and Production Ready Sky and Atmosphere Rendering Technique'](https://github.com/sebh/UnrealEngineSkyAtmosphere)
-- [Belmu](https://github.com/BelmuTM) - Reference code for SSR
-- [Emin](https://github.com/EminGT) - Shadow bias calculation from [Complementary](https://github.com/ComplementaryDevelopment/ComplementaryReimagined)
-- [NinjaMike](https://github.com/NinjaMike) - Directional lightmapping method
-- [sixthsurge](https://github.com/sixthsurge) - A decent amount of code reference from [Photon](https://github.com/sixthsurge/photon), especially the combined projection matrix used for SSR on distant horizons terrain
-- [Null](https://github.com/Null-MC/) - Help porting in the atmospheric scattering code
-- [BuilderB0y](https://github.com/builderb0y) from whom I shamelessly stole the idea of an infinite ocean plane
-- As always, the members of the ShaderLABS Discord server who have helped me get this far learning how to do all this
-- Many other people, there are links scattered throughout the code
-
-## Get in touch
-If you have an issue with Glimmer or just want to chat, you can [join my Discord server](https://discord.gg/b9SHNcvs6c) or find me in `#jbritains-shaderpacks` in the [shaderLABS Discord server](https://discord.gg/RpzWN9S).
+If you are interested in contributing or assisting in the development of this shaderpack, don't hesitate to make a pull request, as I have only some interest in maintaining this pack, and it was mainly made just to see if I could recreate the look.

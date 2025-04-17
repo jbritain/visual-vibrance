@@ -1,4 +1,4 @@
-option.GLIMMER_SHADERS=Visual Vibrance Shaders
+option.GLIMMER_SHADERS=Visual Vibrance
 value.GLIMMER_SHADERS.1=§dBy jbritain
 value.GLIMMER_SHADERS.2=§dBy jbritain
 
@@ -206,8 +206,11 @@ option.CLOUDS.comment=§aMinimal performance impact.
 option.BLOCKY_CLOUDS=Blocky Clouds
 option.BLOCKY_CLOUDS.comment=Makes clouds have clearly defined square shapes in them. This was originally a bug, but people liked it, so now it's a feature! §9No performance impact!
 
-option.ATMOSPHERIC_FOG=Atmospheric Fog
+option.ATMOSPHERIC_FOG=Fog
 option.ATMOSPHERIC_FOG.comment=Makes terrain fade into the distance. §2Imperceptible performance impact.
+
+option.VANILLA_FOG_DENSITY=Fog Density
+option.VANILLA_FOG_DENSITY.comment=How much fog there is. §9No performance impact!
 
 option.CLOUDY_FOG=Fancy Fog
 option.CLOUDY_FOG.comment=Adds a mist-like fog sitting over the ground. More obvious in the morning and when it rains. §6Moderate performance impact.

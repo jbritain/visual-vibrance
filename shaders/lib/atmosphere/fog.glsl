@@ -18,7 +18,7 @@
 #include "/lib/atmosphere/clouds.glsl"
 
 vec3 atmosphericFog(vec3 color, vec3 viewPos){
-  return mix(color, getSky(mat3(gbufferModelViewInverse) * normalize(viewPos), false), clamp01(exp(-5.0 * (1.0 - length(viewPos) / far))));
+  return mix(color, getSky(mat3(gbufferModelViewInverse) * normalize(viewPos), false), clamp01(exp(-(10.0 - VANILLA_FOG_DENSITY) * (1.0 - length(viewPos) / far))));
 }
 
 #define FOG_DENSITY 0.01
