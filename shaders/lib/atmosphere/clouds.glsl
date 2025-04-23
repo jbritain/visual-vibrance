@@ -15,8 +15,8 @@
 #ifndef CLOUDS_GLSL
 #define CLOUDS_GLSL
 
-#define CLOUD_PLANE_ALTITUDE 192
-#define CLOUD_PLANE_HEIGHT 4
+#define CLOUD_PLANE_ALTITUDE 192 // [64 96 128 160 192]
+#define CLOUD_PLANE_HEIGHT 4 // [1 2 3 4 5 6 7 8]
 #define CLOUD_EXTINCTION_COLOR vec3(1.0)
 
 float remap(float val, float oMin, float oMax, float nMin, float nMax){
@@ -64,11 +64,13 @@ vec3 getCloudShadow(vec3 origin){
 
 }
 
-vec3 getClouds(vec3 origin, vec3 worldDir, out vec3 transmittance){
+vec3 getClouds(vec3 origin, vec3 feetPlayerPos, out vec3 transmittance){
   transmittance = vec3(1.0);
   #ifndef CLOUDS
   return vec3(0.0);
   #endif
+
+  vec3 worldDir = normalize(feetPlayerPos);
 
   vec3 scatter = vec3(0.0);
 

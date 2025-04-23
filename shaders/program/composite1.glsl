@@ -141,12 +141,14 @@
                 }
             #endif
 
+            #ifdef SNELLS_WINDOW
             if(inWater){
                 vec3 refracted = refract(viewDir, normal, 1.33);
                 if(dot(refracted, viewDir) == 0.0){
                     color.rgb = (1.0 - waterExtinction) * (skylightColor + sunlightColor) * EBS.y;
                 }
             }
+            #endif
 
 
 
@@ -250,7 +252,7 @@
                 vec3 skyReflection = getSky(worldReflectedDir, false);
 
                 vec3 transmittance;
-                vec3 cloudScatter = getClouds(translucentFeetPlayerPos, worldReflectedDir, transmittance);
+                vec3 cloudScatter = getClouds(translucentFeetPlayerPos, worldReflectedDir * 1000.0, transmittance);
                 skyReflection = skyReflection * transmittance + cloudScatter;
                 skyReflection *= skyLightmap;
 

@@ -59,13 +59,13 @@
                 return;
             }
 
-            vec3 worldDir = mat3(gbufferModelViewInverse) * normalize(viewPos);
+            vec3 feetPlayerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
 
             // color.rgb = getSky(color.rgb, worldDir, true);
             #ifdef WORLD_OVERWORLD
                 vec3 transmittance;
 
-                vec3 scattering = getClouds(vec3(0.0), worldDir, transmittance);
+                vec3 scattering = getClouds(vec3(0.0), feetPlayerPos, transmittance);
 
                 color.rgb = color.rgb * transmittance + scattering;
 

@@ -70,6 +70,10 @@
             //     data.emission = 0.0;
             // }
 
+            if(materialIsWater(materialID)){
+                data.emission = 0.0;
+            }
+
             if(materialIsTintedGlass(materialID)){
                 data.opacity = 1.0;
             }

@@ -15,8 +15,8 @@
 #ifndef WATER_FOG_GLSL
 #define WATER_FOG_GLSL
 
-#define WATER_ABSORPTION (vec3(0.3, 0.03, 0.04) * 5.0)
-#define WATER_SCATTERING (vec3(0.01, 0.04, 0.05) * 0.01)
+#define WATER_ABSORPTION (vec3(0.3, 0.03, 0.04) * (isEyeInWater == 1 ? 1.0 : 5.0))
+#define WATER_SCATTERING (vec3(0.01, 0.04, 0.05) * (isEyeInWater == 1 ? 0.5 : 0.01))
 #define WATER_DENSITY 1.0
 
 const vec3 waterExtinction = clamp01(WATER_ABSORPTION + WATER_SCATTERING);
@@ -36,7 +36,6 @@ vec3 waterFog(vec3 color, vec3 a, vec3 b, float dhFactor){
   
 
   return color * transmittance + scatter;
-  return color;
 }
 
 vec3 waterFog(vec3 color, vec3 a, vec3 b){

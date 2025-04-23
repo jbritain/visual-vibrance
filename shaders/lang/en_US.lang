@@ -203,6 +203,12 @@ value.PBR_MODE.1=LabPBR 1.3
 option.CLOUDS=Clouds
 option.CLOUDS.comment=§aMinimal performance impact.
 
+option.CLOUD_PLANE_ALTITUDE=Cloud Plane Altitude
+option.CLOUD_PLANE_ALTITUDE.comment=§9No performance impact!
+
+option.CLOUD_PLANE_HEIGHT=Cloud Height
+option.CLOUD_PLANE_HEIGHT.comment=§9No performance impact!
+
 option.BLOCKY_CLOUDS=Blocky Clouds
 option.BLOCKY_CLOUDS.comment=Makes clouds have clearly defined square shapes in them. This was originally a bug, but people liked it, so now it's a feature! §9No performance impact!
 
@@ -259,6 +265,9 @@ option.SSR_JITTER.comment=When enabled, §eSSR §freflections will appear noisy,
 
 option.REFRACTION=Refraction
 option.REFRACTION.comment=Bends light as it enters or leaves water. §aMinimal performance impact.
+
+option.SNELLS_WINDOW=Snell's Window
+option.SNELLS_WINDOW.comment=An approximate recreation of a real phenomena where refraction of light stops you seeing out of water at some angles. §aMinimal performance impact.
 
 option.CAUSTICS=Caustics
 option.CAUSTICS.comment=Emulates how light refracting through water appears to cast a shadow. Requires §eshadows §fto be enabled, and will look bad at lower §eshadow quality §fsettings. §aMinimal performance impact.
