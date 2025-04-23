@@ -126,7 +126,10 @@ option.FLOODFILL.comment=Makes the light emitted by blocks match their color. Re
 option.EMISSION_STRENGTH=Emissive Strength
 option.EMISSION_STRENGTH.comment=How bright emissives are. §9No performance impact!
 
-option.ambientOcclusionLevel = Ambient Occlusion Strength
+option.BLOCKLIGHT_STRENGTH=Blocklight Strength
+option.BLOCKLIGHT_STRENGTH.comment=How bright the light emitted by blocks is. §9No performance impact!
+
+option.ambientOcclusionLevel=Ambient Occlusion Strength
 option.ambientOcclusionLevel.comment=Darkens corners where blocks meet to imitate ambient shadowing. §9No performance impact! §falso affects §eDistant Horizons Ambient Occlusion.
 
 option.SHADOWS=Shadows

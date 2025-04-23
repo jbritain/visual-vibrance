@@ -35,7 +35,7 @@ vec3 getShadedColor(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 
 
     vec3 diffuse = material.albedo * (
         skylightColor * pow2(lightmap.y) * (material.ao * 0.5 + 0.5) +
-        blocklight +
+        blocklight * BLOCKLIGHT_STRENGTH * 5e-2 +
         vec3(ambient) * material.ao
     );
 
@@ -61,7 +61,7 @@ vec3 getShadedColor(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 
 }
 
 vec3 getShadedColor(Material material, vec3 mappedNormal, vec3 faceNormal, vec2 lightmap, vec3 viewPos, float shadowFactor){
-    vec3 blocklight = pow(vec3(255, 152, 54), vec3(2.2)) * 1e-8 * max0(exp(-(1.0 - lightmap.x * 10.0)));
+    vec3 blocklight = vec3(1.0, 0.7, 0.5) * 5e-3 * max0(exp(-(1.0 - lightmap.x * 10.0)));
     return getShadedColor(material, mappedNormal, faceNormal, blocklight, lightmap, viewPos, shadowFactor);
 }
 
