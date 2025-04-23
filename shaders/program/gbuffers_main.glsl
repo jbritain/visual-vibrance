@@ -53,11 +53,6 @@
 
         viewPos = (gl_ModelViewMatrix * gl_Vertex).xyz;
 
-        #ifdef GBUFFERS_HAND
-        gl_Position = ftransform();
-        return;
-        #endif
-
         vec3 feetPlayerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
 
         #ifdef WAVING_BLOCKS
@@ -204,6 +199,10 @@
                 material.emission = luminance(albedo.rgb);
             }
             
+        #endif
+
+        #ifdef GBUFFERS_ARMOR_GLINT
+        material.emission = 1.0;
         #endif
 
         if(materialIsPlant(materialID)){
