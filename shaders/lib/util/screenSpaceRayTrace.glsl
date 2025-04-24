@@ -61,7 +61,7 @@ bool rayIntersects(vec3 viewOrigin, vec3 viewDir, int maxSteps, float jitter, bo
 
   vec3 r = abs(sign(rayDir) - rayPos) / max(abs(rayDir), 0.00001);
 	float rayLength = minVec3(r);
-	float stepLength = rayLength * rcp(float(maxSteps));
+	float stepLength = rayLength * rcp(float(maxSteps * 4));
 
 	vec3 rayStep = rayDir * stepLength;
 	rayPos += rayStep * jitter + length(vec2(rcp(viewWidth), rcp(viewHeight))) * rayDir;
@@ -70,38 +70,47 @@ bool rayIntersects(vec3 viewOrigin, vec3 viewDir, int maxSteps, float jitter, bo
 
 	bool intersect = false;
 
-	for(int i = 0; i < maxSteps; ++i, rayPos += rayStep){
+	for(int i = 0; i < maxSteps * 4; ++i, rayPos += rayStep){
 		if(clamp01(rayPos) != rayPos) return false; // we went offscreen
 
-		vec3 rayPos2 = rayPos + rayStep * 0.25;
-		vec3 rayPos3 = rayPos + rayStep * 0.5;
-		vec3 rayPos4 = rayPos + rayStep * 0.75;
+		// vec3 rayPos2 = rayPos + rayStep * 0.25;
+		// vec3 rayPos3 = rayPos + rayStep * 0.5;
+		// vec3 rayPos4 = rayPos + rayStep * 0.75;
 
 		float depth = getDepth(rayPos.xy, depthBuffer); // sample depth at ray position
-		float depth2 = getDepth(rayPos2.xy, depthBuffer);
-		float depth3 = getDepth(rayPos3.xy, depthBuffer);
-		float depth4 = getDepth(rayPos4.xy, depthBuffer);
+		// float depth2 = getDepth(rayPos2.xy, depthBuffer);
+		// float depth3 = getDepth(rayPos3.xy, depthBuffer);
+		// float depth4 = getDepth(rayPos4.xy, depthBuffer);
 
 		int hitIndex = 0;
 
 		intersect = depth < rayPos.z && abs(depthLenience - (rayPos.z - depth)) < depthLenience && rayPos.z > handDepth && depth < 1.0;
 		hitIndex = intersect ? 1 : 0;
 
-		intersect = intersect || (depth2 < rayPos2.z && abs(depthLenience - (rayPos2.z - depth2)) < depthLenience && rayPos2.z > handDepth && depth2 < 1.0);
-		hitIndex = intersect && hitIndex == 0 ? 2 : 0;
-		rayPos = hitIndex == 2 ? rayPos2 : rayPos;
-
-		intersect = intersect || (depth3 < rayPos3.z && abs(depthLenience - (rayPos3.z - depth3)) < depthLenience && rayPos3.z > handDepth && depth3 < 1.0);
-		hitIndex = intersect && hitIndex == 0 ? 3 : 0;
-		rayPos = hitIndex == 3 ? rayPos3 : rayPos;
-
-		intersect = intersect || (depth4 < rayPos4.z && abs(depthLenience - (rayPos4.z - depth4)) < depthLenience && rayPos4.z > handDepth && depth4 < 1.0);
-		hitIndex = intersect && hitIndex == 0 ? 4 : 0;
-		rayPos = hitIndex == 4 ? rayPos4 : rayPos;
-
 		if(intersect){
 			break;
 		}
+
+		// intersect = intersect || (depth2 < rayPos2.z && abs(depthLenience - (rayPos2.z - depth2)) < depthLenience && rayPos2.z > handDepth && depth2 < 1.0);
+		// hitIndex = intersect && hitIndex == 0 ? 2 : 0;
+
+		// if(intersect){
+		// 	break;
+		// }
+
+		// intersect = intersect || (depth3 < rayPos3.z && abs(depthLenience - (rayPos3.z - depth3)) < depthLenience && rayPos3.z > handDepth && depth3 < 1.0);
+		// hitIndex = intersect && hitIndex == 0 ? 3 : 0;
+
+		// if(intersect){
+		// 	break;
+		// }
+
+		// intersect = intersect || (depth4 < rayPos4.z && abs(depthLenience - (rayPos4.z - depth4)) < depthLenience && rayPos4.z > handDepth && depth4 < 1.0);
+		// hitIndex = intersect && hitIndex == 0 ? 4 : 0;
+
+		// if(intersect){
+		// 	break;
+		// }
 	}
 
 	if(clamp01(rayPos) != rayPos) return false; // we went offscreen
