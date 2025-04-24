@@ -53,6 +53,11 @@
 
         viewPos = (gl_ModelViewMatrix * gl_Vertex).xyz;
 
+        if(renderStage == MC_RENDER_STAGE_HAND_SOLID || renderStage == MC_RENDER_STAGE_HAND_TRANSLUCENT){
+            gl_Position = ftransform();
+            return;
+        }
+
         vec3 feetPlayerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
 
         #ifdef WAVING_BLOCKS
