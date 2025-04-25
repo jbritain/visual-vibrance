@@ -39,6 +39,7 @@ vec3 getShadedColor(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 
         vec3(ambient) * material.ao
     );
 
+    #ifdef ROUGH_SKY_REFLECTIONS
     vec3 fresnel = fresnelRoughness(material, dot(mappedNormal, normalize(-viewPos)));
 
     // max mip samples the whole sphere
@@ -48,8 +49,10 @@ vec3 getShadedColor(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 
 
     vec3 reflected = reflect(normalize(viewPos), mappedNormal);
 
-    #ifdef ROUGH_SKY_REFLECTIONS
     vec3 specular = textureLod(colortex7, mapSphere(reflected), mipLevel).rgb * clamp01(smoothstep(13.5 / 15.0, 1.0, lightmap.y));
+    if(material.metalID != NO_METAL){
+        diffuse = vec3(0.0);
+    }
     color += mix(diffuse, specular, fresnel);
     #else
     color += diffuse;

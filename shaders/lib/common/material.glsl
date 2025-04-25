@@ -27,57 +27,54 @@
 #define SILVER 8
 #define OTHER_METAL 9
 
-mat3x2 getMetalN_K(uint metalID){
+vec3 getMetalf0(uint metalID, vec3 albedo){
 	switch(metalID){
 		case IRON:
-			return mat3x2(
-				vec3(2.9114, 2.9497, 2.5845 ),
-				vec3(3.0893, 2.9318, 2.7670 )
-			);
+			return vec3(0.78, 0.77, 0.74);
 		case GOLD:
-			return mat3x2(
-				vec3(0.18299, 0.42108, 1.3734),
-				vec3(3.4242, 2.3459, 1.7704)
-			);
+			return vec3(1.00, 0.90, 0.61);
 		case ALUMINIUM:
-			return mat3x2(
-				vec3(1.3456, 0.96521, 0.61722),
-				vec3(7.4746, 6.3995, 5.3031)
-			);
+			return vec3(1.00, 0.98, 1.00);
 		case CHROME:
-			return mat3x2(
-				vec3(3.1071, 3.1812, 2.3230),
-				vec3(3.3314, 3.3291, 3.1350)
-			);
+			return vec3(0.77, 0.80, 0.79);
 		case COPPER:
-			return mat3x2(
-				vec3(0.27105, 0.67693, 1.3164),
-				vec3(3.6092, 2.6248, 2.2921)
-			);
+			return vec3(1.00, 0.89, 0.73);
 		case LEAD:
-			return mat3x2(
-				vec3(1.9100, 1.8300, 1.4400),
-				vec3(3.5100, 3.4000, 3.1800)
-			);
+			return vec3(0.79, 0.87, 0.85);
 		case PLATINUM:
-			return mat3x2(
-				vec3(2.3757, 2.0847, 1.8453),
-				vec3(4.2655, 3.7153, 3.1365)
-			);
+			return vec3(0.92, 0.90, 0.83);
 		case SILVER:
-			return mat3x2(
-				vec3(0.15943, 0.14512, 0.13547),
-				vec3(3.9291, 3.1900, 2.3808)
-			);
+			return vec3(1.00, 1.00, 0.91);
 	}
-	return mat3x2(0.0);
+	return clamp01(albedo);
+}
+
+vec3 getMetalf82(uint metalID, vec3 albedo){
+	switch(metalID){
+		case IRON:
+			return vec3(0.74, 0.76, 0.76);
+		case GOLD:
+			return vec3(1.00, 0.93, 0.73);
+		case ALUMINIUM:
+			return vec3(0.96, 0.97, 0.98);
+		case CHROME:
+			return vec3(0.74, 0.79, 0.78);
+		case COPPER:
+			return vec3(1.00, 0.90, 0.80);
+		case LEAD:
+			return vec3(0.83, 0.80, 0.83);
+		case PLATINUM:
+			return vec3(0.89, 0.87, 0.81);
+		case SILVER:
+			return vec3(1.00, 1.00, 0.95);
+	}
+	return clamp01(albedo);
 }
 
 struct Material {
 	vec3 albedo;
 	float emission;
 	vec3 f0;
-	mat3x2 N_K;
 	float roughness;
 	float sss;
 	float porosity;
@@ -89,7 +86,6 @@ const Material waterMaterial = Material(
 	vec3(0.0),
 	0.0,
 	vec3(0.02),
-	mat3x2(0.0),
 	0.0,
 	0.0,
 	0.0,
@@ -119,8 +115,8 @@ Material materialFromSpecularMap(vec3 albedo, vec4 specularData){
 		material.f0 = vec3(specularData.g);
 		material.metalID = NO_METAL;
 	} else {
-		material.f0 = albedo;
 		material.metalID = int(specularData.g * 255 + 0.5) - 229;
+		material.f0 = getMetalf0(material.metalID, albedo);
 	}
 
 	if(specularData.b <= 0.25){

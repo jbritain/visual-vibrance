@@ -67,16 +67,7 @@ float geometrySmith(vec3 N, vec3 V, vec3 L, float K) {
 
 
 vec3 fresnel(Material material, float NoV){
-	if(material.metalID == NO_METAL || material.metalID == OTHER_METAL){ // normal schlick approx.
-		return clamp01(vec3(material.f0 + (1.0 - material.f0) * pow5(1.0 - NoV)));
-	} else {
-		// https://naos-be.zcu.cz/server/api/core/bitstreams/c2d8b0a7-9947-4458-98e3-d3f8df920153/content
-		mat3x2 N_K = getMetalN_K(material.metalID);
-		const vec3 n = vec3(N_K[0][0], N_K[1][0], N_K[2][0]);
-		const vec3 k = vec3(N_K[0][1], N_K[1][1], N_K[2][1]);
-
-		return (pow2(n - 1) + 4 * n * pow5(1.0 - NoV) + pow2(k)) / (pow2(n + 1) + pow2(k));
-	}
+	return clamp01(vec3(material.f0 + (1.0 - material.f0) * pow5(1.0 - NoV)));
 }
 
 vec3 fresnelRoughness(Material material, float NoV){
@@ -135,6 +126,9 @@ vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos, v
 
 
 	vec3 Rd = material.albedo * (1.0 - F) * clamp01(NoL);
+	if(material.metalID != NO_METAL){
+		Rd = vec3(0.0);
+	}
 
 	return (Rs + Rd) * shadow + (scatter * material.albedo);
 }

@@ -32,7 +32,7 @@
 const float sunAngularRadius = PI/180.0;
 const float moonAngularRadius = 2.5 * PI / 180.0;
 
-vec3 sunIrradiance = fogColor * vec3(6.0, 2.0, 0.5) * 0.5;
+vec3 sunIrradiance = fogColor * vec3(4.0, 2.0, 1.0) * 0.5;
 vec3 sunRadiance = sunIrradiance / sunAngularRadius;
 const vec3 moonIrradiance = vec3(0.01, 0.01, 0.05) * 0.5;
 
