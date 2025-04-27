@@ -64,7 +64,7 @@ vec3 getShadedColor(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 
 }
 
 vec3 getShadedColor(Material material, vec3 mappedNormal, vec3 faceNormal, vec2 lightmap, vec3 viewPos, float shadowFactor){
-    vec3 blocklight = vec3(1.0, 0.7, 0.5) * 2e-3 * max0(exp(-(1.0 - lightmap.x * 10.0)));
+    vec3 blocklight = vec3(1.0, 0.7, 0.5) * 2e-2 * max0(exp(-(1.0 - lightmap.x * 8.0)));
     return getShadedColor(material, mappedNormal, faceNormal, blocklight, lightmap, viewPos, shadowFactor);
 }
 

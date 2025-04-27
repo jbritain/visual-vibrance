@@ -252,7 +252,7 @@
                 vec3 skyReflection = getSky(worldReflectedDir, false);
 
                 vec3 transmittance;
-                vec3 cloudScatter = getClouds(translucentFeetPlayerPos, worldReflectedDir * 1000.0, transmittance);
+                vec3 cloudScatter = getClouds(translucentFeetPlayerPos, worldReflectedDir * 1000.0, transmittance, translucentDepth);
                 skyReflection = skyReflection * transmittance + cloudScatter;
                 skyReflection *= skyLightmap;
 

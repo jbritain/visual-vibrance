@@ -65,7 +65,7 @@
             #ifdef WORLD_OVERWORLD
                 vec3 transmittance;
 
-                vec3 scattering = getClouds(vec3(0.0), feetPlayerPos, transmittance);
+                vec3 scattering = getClouds(vec3(0.0), feetPlayerPos, transmittance, depth);
 
                 color.rgb = color.rgb * transmittance + scattering;
 

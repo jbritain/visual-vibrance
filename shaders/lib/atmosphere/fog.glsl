@@ -18,7 +18,12 @@
 #include "/lib/atmosphere/clouds.glsl"
 
 vec3 atmosphericFog(vec3 color, vec3 viewPos){
-  return mix(color, getSky(mat3(gbufferModelViewInverse) * normalize(viewPos), false), clamp01(exp(-(10.0 - VANILLA_FOG_DENSITY) * (1.0 - length(viewPos) / far))));
+  #ifdef DISTANT_HORIZONS
+  float end = dhRenderDistance;
+  #else
+  float end = far;
+  #endif
+  return mix(color, getSky(mat3(gbufferModelViewInverse) * normalize(viewPos), false), clamp01(exp(-(10.0 - VANILLA_FOG_DENSITY) * (1.0 - length(viewPos) / end))));
 }
 
 #define FOG_DENSITY 0.01
@@ -148,11 +153,18 @@ vec3 defaultFog(vec3 color, vec3 viewPos){
     return color;
   #endif
 
-  // approximately fit beer's law to match the given fog end
-  const float zeroPoint = -log(0.1); // at a distance of fogEnd, the transmittance hits 0.1
-  float extinction = zeroPoint/fogEnd;
+  float end = far; // the render distance is the default
 
-  color.rgb = mix(color.rgb, pow(fogColor, vec3(2.2)), 1.0 - clamp01(exp(-extinction * max0(length(viewPos)))));
+  switch(isEyeInWater){
+    case 2:
+      end = 3;
+      break;
+    case 3:
+      end = 2;
+      break;
+  }
+
+  color.rgb = mix(color.rgb, pow(fogColor, vec3(2.2)), clamp01(length(viewPos) / end));
 
   return color;
 }

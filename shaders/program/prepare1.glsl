@@ -40,7 +40,7 @@
 
         color = getSky(vec3(0.0), dir, false);
         vec3 transmittance;
-        vec3 scatter = getClouds(vec3(0.0), dir * 1000.0, transmittance);
+        vec3 scatter = getClouds(vec3(0.0), dir * 1000.0, transmittance, 1.0);
         color = color * transmittance + scatter;
     }
 #endif

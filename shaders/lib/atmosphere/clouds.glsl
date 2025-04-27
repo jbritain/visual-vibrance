@@ -64,7 +64,7 @@ vec3 getCloudShadow(vec3 origin){
 
 }
 
-vec3 getClouds(vec3 origin, vec3 feetPlayerPos, out vec3 transmittance){
+vec3 getClouds(vec3 origin, vec3 feetPlayerPos, out vec3 transmittance, float depth){
   transmittance = vec3(1.0);
   #ifndef CLOUDS
   return vec3(0.0);
@@ -77,10 +77,38 @@ vec3 getClouds(vec3 origin, vec3 feetPlayerPos, out vec3 transmittance){
   origin += cameraPosition;
 
   vec3 a;
-  if(!rayPlaneIntersection(origin, worldDir, CLOUD_PLANE_ALTITUDE, a)) return vec3(0.0);
+  if(!rayPlaneIntersection(origin, worldDir, CLOUD_PLANE_ALTITUDE, a)){
+    if (worldDir.y > 0.0){
+      a = cameraPosition;
+    } else {
+      return vec3(0.0);
+    }
+  }
 
   vec3 b;
-  if(!rayPlaneIntersection(origin, worldDir, CLOUD_PLANE_ALTITUDE + CLOUD_PLANE_HEIGHT, b)) return vec3(0.0);
+  if(!rayPlaneIntersection(origin, worldDir, CLOUD_PLANE_ALTITUDE + CLOUD_PLANE_HEIGHT, b)){
+    if(worldDir.y < 0.0){
+      b = cameraPosition;
+    } else {
+      return vec3(0.0);
+    }
+  };
+
+  // a -= cameraPosition;
+  // b -= cameraPosition;
+
+  // if(length(a) > length(b)){ // for convenience, a will always be closer to the camera
+  //   vec3 swap = a;
+  //   a = b;
+  //   b = swap;
+  // }
+
+  // if(depth != 1.0 && length(b) > length(feetPlayerPos)){
+  //   b = feetPlayerPos;
+  // }
+  
+  // a += cameraPosition;
+  // b += cameraPosition;
 
   float totalDensity = 0.0;
 
@@ -89,7 +117,7 @@ vec3 getClouds(vec3 origin, vec3 feetPlayerPos, out vec3 transmittance){
   rayPos += rayStep * interleavedGradientNoise(floor(gl_FragCoord.xy), frameCounter);
 
   for(int i = 0; i < 8; i++, rayPos += rayStep){
-    totalDensity += getCloudDensity(rayPos.xz);
+    totalDensity += getCloudDensity(rayPos.xz); // I should be multiplying by the ray step length but it looks fine anyway
   }
 
   scatter = vec3(mix(sunlightColor, skylightColor, 0.5) * 0.5 * step(0.01, totalDensity));
