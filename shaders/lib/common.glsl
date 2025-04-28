@@ -29,7 +29,7 @@
 
 #define worldTimeCounter ((worldTime / 20.0) + (worldDay * 1200.0))
 
-const float sunAngularRadius = PI/180.0;
+const float sunAngularRadius = PI/90.0;
 const float moonAngularRadius = 2.5 * PI / 180.0;
 
 vec3 sunIrradiance = fogColor * vec3(4.0, 2.0, 1.0) * 0.5;

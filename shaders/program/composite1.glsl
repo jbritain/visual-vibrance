@@ -50,6 +50,7 @@
 
         vec3 worldNormal = decodeNormal(data1.xy);
         vec3 normal = mat3(gbufferModelView) * worldNormal;
+        show(normal);
 
 
 

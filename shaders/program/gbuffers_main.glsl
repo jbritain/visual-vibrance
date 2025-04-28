@@ -33,11 +33,9 @@
     out vec3 midblock;
     out vec2 midtexcoord;
 
-    #ifdef PARALLAX
-        flat out vec2 singleTexSize;
-        flat out ivec2 pixelTexSize;
-        flat out vec4 textureBounds;
-    #endif
+    flat out vec2 singleTexSize;
+    flat out ivec2 pixelTexSize;
+    flat out vec4 textureBounds;
 
     void main() {
         materialID = int(mc_Entity.x + 0.5);
@@ -72,13 +70,11 @@
 
         viewPos = (gbufferModelView * vec4(feetPlayerPos, 1.0)).xyz;
 
-        #ifdef PARALLAX
-            vec2 halfSize      = abs(texcoord - mc_midTexCoord);
-            textureBounds = vec4(mc_midTexCoord.xy - halfSize, mc_midTexCoord.xy + halfSize);
+        vec2 halfSize      = abs(texcoord - mc_midTexCoord);
+        textureBounds = vec4(mc_midTexCoord.xy - halfSize, mc_midTexCoord.xy + halfSize);
 
-            singleTexSize = halfSize * 2.0;
-            pixelTexSize  = ivec2(singleTexSize * atlasSize);
-        #endif
+        singleTexSize = halfSize * 2.0;
+        pixelTexSize  = ivec2(singleTexSize * atlasSize);
 
         gl_Position = gbufferProjection * vec4(viewPos, 1.0);
 
@@ -108,12 +104,11 @@
     in vec3 midblock;
     in vec2 midtexcoord;
 
-    #ifdef PARALLAX
-        flat in vec2 singleTexSize;
-        flat in ivec2 pixelTexSize;
-        flat in vec4 textureBounds;
-        #include "/lib/parallax.glsl"
-    #endif
+    flat in vec2 singleTexSize;
+    flat in ivec2 pixelTexSize;
+    flat in vec4 textureBounds;
+
+    #include "/lib/parallax.glsl"
 
     vec3 getMappedNormal(vec2 texcoord, int materialID){
         #if PBR_MODE == 0
@@ -136,10 +131,11 @@
         vec3 playerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
 
         float parallaxShadow = 1.0;
-        #ifdef PARALLAX
-        vec3 parallaxPos;
         vec2 dx = dFdx(texcoord);
         vec2 dy = dFdy(texcoord);
+
+        #ifdef PARALLAX
+        vec3 parallaxPos;
         vec2 texcoord = texcoord;
         if(
             !materialIsLava(materialID) &&
@@ -218,8 +214,36 @@
 
         
         if(materialIsWater(materialID)){
-            #ifndef VANILLA_WATER
-            mappedNormal = tbnMatrix[2];
+            #ifdef VANILLA_WATER
+            
+            #ifndef MC_TEXTURE_FORMAT_LAB_PBR
+            // sample texture 1 pixel in each direction to determine normal
+            // using the luminance as a heightmap
+
+            float inversePixelSize = rcp(PIXEL_SIZE);
+
+            vec3 xPosMinus = vec3(-inversePixelSize, 0.0, 0.0);
+            vec3 xPosPlus = vec3(inversePixelSize, 0.0, 0.0);
+            
+            vec3 yPosMinus = vec3(0.0, -inversePixelSize, 0.0);
+            vec3 yPosPlus = vec3(0.0, inversePixelSize, 0.0);
+
+            vec2 localCoord = atlasToLocal(texcoord);
+
+            xPosMinus.z = luminance(pow(textureGrad(gtexture, localToAtlas(localCoord + xPosMinus.xy), dx, dy).rgb, vec3(2.2))) * 0.05 + 0.475;
+            xPosPlus.z = luminance(pow(textureGrad(gtexture, localToAtlas(localCoord + xPosPlus.xy), dx, dy).rgb, vec3(2.2))) * 0.05 + 0.475;
+
+            yPosMinus.z = luminance(pow(textureGrad(gtexture, localToAtlas(localCoord + yPosMinus.xy), dx, dy).rgb, vec3(2.2))) * 0.05 + 0.475;
+            yPosPlus.z = luminance(pow(textureGrad(gtexture, localToAtlas(localCoord + yPosPlus.xy), dx, dy).rgb, vec3(2.2))) * 0.05 + 0.475;
+
+            vec3 xDir = normalize(xPosPlus - xPosMinus);
+            vec3 yDir = normalize(yPosPlus - yPosMinus);
+
+            mappedNormal = tbnMatrix * cross(xDir, yDir);
+
+
+            #endif
+
             #endif
             material.roughness = 0.0;
         }
