@@ -62,7 +62,7 @@
         feetPlayerPos = getSway(materialID, feetPlayerPos + cameraPosition, at_midBlock.xyz) - cameraPosition;
         #endif
 
-        #ifndef VANILLA_WATER
+        #if WAVE_MODE == 2
         if(materialIsWater(materialID)){
             feetPlayerPos.y += (waveHeight(feetPlayerPos.xz + cameraPosition.xz) - 0.5) * fract(feetPlayerPos.y + cameraPosition.y);
         }
@@ -214,9 +214,7 @@
 
         
         if(materialIsWater(materialID)){
-            #ifdef VANILLA_WATER
-            
-            #ifndef MC_TEXTURE_FORMAT_LAB_PBR
+            #if WAVE_MODE == 1
             // sample texture 1 pixel in each direction to determine normal
             // using the luminance as a heightmap
 
@@ -240,10 +238,6 @@
             vec3 yDir = normalize(yPosPlus - yPosMinus);
 
             mappedNormal = tbnMatrix * cross(xDir, yDir);
-
-
-            #endif
-
             #endif
             material.roughness = 0.0;
         }

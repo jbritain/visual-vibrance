@@ -252,7 +252,16 @@ value.REFLECTION_MODE.1=Fast
 value.REFLECTION_MODE.2=SSR
 
 option.ROUGH_SKY_REFLECTIONS=Rough Sky Reflections
-option.VANILLA_WATER=Vanilla Water
+
+option.WAVE_MODE=Water Normals
+option.WAVE_MODE.comment=How normals are generated for water. §eResource pack §fwill use whatever normals are provided by the resource pack. §eGenerated §fwill generate them based on the brightness of the water texture. §eRealistic §fwill create more real looking water waves that are not pixelated. §aMinimal performance impact.
+value.WAVE_MODE.0=Resource Pack
+value.WAVE_MODE.1=Generated
+value.WAVE_MODE.2=Realistic
+
+option.CUSTOM_SUN=Resource Pack Sun/Moon Fix
+option.CUSTOM_SUN.comment=If this is disabled, the shaderpack attempts to remove the "bloom" around the sun and moon. This can cause issues with custom sky resource packs, so this setting disables it. §2Imperceptible performance impact.
+
 option.PIXEL_LOCKED_LIGHTING=Pixel Locked Lighting
 option.PIXEL_SIZE=Pixel Lock Size
 option.RAIN_PUDDLES=Rain Puddles

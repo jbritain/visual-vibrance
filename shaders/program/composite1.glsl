@@ -102,7 +102,7 @@
         if(isWater){
             Material material = waterMaterial;
 
-            #ifndef VANILLA_WATER
+            #if WAVE_MODE == 2
             vec3 worldWaveNormal = waveNormal(translucentFeetPlayerPos.xz + cameraPosition.xz, worldNormal, sin(PI * 0.5 * clamp01(abs(dot(normal, viewDir)))));
             vec3 waveNormal = mat3(gbufferModelView) * worldWaveNormal;
             #else

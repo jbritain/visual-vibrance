@@ -80,8 +80,10 @@ const float sunPathRotation = 0.0; // [-90.0 -85.0 -80.0 -75.0 -70.0 -65.0 -60.0
 
 // #define REFRACTION
 #define CAUSTICS
-#define VANILLA_WATER
+#define WAVE_MODE 1 // [0 1 2]
 #define SNELLS_WINDOW
+
+// #define CUSTOM_SUN
 
 // #define INFINITE_OCEAN
 #define SEA_LEVEL 63 // [-60 4 31 63]

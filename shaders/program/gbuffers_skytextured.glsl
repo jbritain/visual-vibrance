@@ -39,9 +39,12 @@
 
     void main() {
         color = texture(gtexture, texcoord) * glcolor;
+
+        #ifndef CUSTOM_SUN
         if (color.b < 0.3 && color.r > color.b) { // remove bloom
           discard;
         }
+        #endif
 
         if(color.r > color.b) { // sun
           color.rgb *= vec3(10.0, 7.0, 5.0);

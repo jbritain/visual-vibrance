@@ -40,7 +40,7 @@ void main(){
 
     if(clamp01(lightScreenPos) != lightScreenPos){
         #ifdef SHADOWS
-        vec4 shadowClipPos = getShadowClipPos(vec3(0.0));
+        vec4 shadowClipPos = getShadowClipPos(vec3(0.0) + worldLightDir);
         vec3 shadowScreenPos = getShadowScreenPos(shadowClipPos);
 
         sunVisibility = shadow2D(shadowtex1HW, shadowScreenPos).r;

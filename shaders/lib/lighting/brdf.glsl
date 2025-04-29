@@ -118,6 +118,8 @@ vec3 brdf(Material material, vec3 mappedNormal, vec3 faceNormal, vec3 viewPos, v
 
 	vec3 Rs = (F * D * G) / (4.0 * NoV + 1e-6);
 
+	Rs = min(Rs, vec3(1000.0)); // prevent specular blowing out bloom
+
 
 	// this was causing some weird issues
 	if(NoL < 1e-6){
