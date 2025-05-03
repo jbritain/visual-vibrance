@@ -90,13 +90,6 @@
         }
         #endif
 
-        #ifdef PIXEL_LOCKED_LIGHTING
-        if(isWater){
-            translucentFeetPlayerPos = floor((translucentFeetPlayerPos + cameraPosition) * PIXEL_SIZE) / PIXEL_SIZE - cameraPosition;
-            translucentViewPos = (gbufferModelView * vec4(translucentFeetPlayerPos, 1.0)).xyz;
-        }   
-        #endif
-
         vec3 viewDir = normalize(translucentViewPos);
 
         if(isWater){
@@ -141,6 +134,13 @@
                     opaqueViewPos = refractedViewPos;
                 }
             #endif
+
+	        #ifdef PIXEL_LOCKED_LIGHTING
+	        if(isWater){
+	            translucentFeetPlayerPos = floor((translucentFeetPlayerPos + cameraPosition) * PIXEL_SIZE) / PIXEL_SIZE - cameraPosition;
+	            translucentViewPos = (gbufferModelView * vec4(translucentFeetPlayerPos, 1.0)).xyz;
+	        }   
+	        #endif
 
             #ifdef SNELLS_WINDOW
             if(inWater){
