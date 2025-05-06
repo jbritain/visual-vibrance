@@ -50,7 +50,6 @@
 
         vec3 worldNormal = decodeNormal(data1.xy);
         vec3 normal = mat3(gbufferModelView) * worldNormal;
-        show(normal);
 
 
 
@@ -112,7 +111,12 @@
 
             // refraction
             #ifdef REFRACTION
+                #if WAVE_MODE == 2
                 vec3 refractionNormal = normal - waveNormal;
+                #else
+                vec3 faceNormal = cross(normalize(dFdx(translucentFeetPlayerPos)), normalize(dFdy(translucentFeetPlayerPos)));
+                vec3 refractionNormal = normal - faceNormal;
+                #endif
 
                 vec3 refractedDir = normalize(refract(viewDir, refractionNormal, !inWater ? rcp(1.33) : 1.33)); // when in water it should be rcp(1.33) but unless I use the actual normal (which results in snell's window) this results in no refraction
                 vec3 refractedViewPos = translucentViewPos + refractedDir * distance(translucentViewPos, opaqueViewPos);
