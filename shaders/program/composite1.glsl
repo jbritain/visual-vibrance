@@ -224,7 +224,7 @@
                 reflectionHit = reflectionHit && rayIntersects(translucentViewPos, reflectedDir, SSR_STEPS, jitter, true, reflectedPos, depthtex0, gbufferProjection);
             #endif
 
-            reflectionHit = reflectionHit && !materialIsWater(int(texture(colortex1, reflectedPos.xy).a  * 255 + 0.5) + 1000);
+            reflectionHit = reflectionHit;
 
             if(reflectionHit){
 
