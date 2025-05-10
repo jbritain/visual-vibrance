@@ -12,6 +12,9 @@
                                             
 */
 
+// because the chunks fade in dev decided to make having your shader injected opt out
+#define CHUNKS_FADE_IN_NO_MOD_INJECT
+
 #include "/lib/common.glsl"
 #include "/lib/shadowSpace.glsl"
 #include "/lib/water/waterFog.glsl"
