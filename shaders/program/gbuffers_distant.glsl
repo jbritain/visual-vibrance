@@ -118,7 +118,7 @@
         material.porosity = 0.0;
         material.sss = 0.0;
         material.emission = 0.0;
-        material.ao = 1.1;
+        material.ao = 1.0;
 
         if(materialIsPlant(materialID)){
             material.sss = 1.0;

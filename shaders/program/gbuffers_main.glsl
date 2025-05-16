@@ -339,7 +339,9 @@
             color.a = albedo.a;
         }
 
-        blendAtEdge(viewPos, far, midblock);
+        #ifdef DISTANT_HORIZONS
+        dhBlend(viewPos);
+        #endif
 
         outData1.xy = encodeNormal(mat3(gbufferModelViewInverse) * mappedNormal);
         outData1.z = lightmap.y;
