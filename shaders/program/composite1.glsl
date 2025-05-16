@@ -3,16 +3,16 @@
     Licensed under a custom non-commercial license.
     See LICENSE for full terms.
 
-     __   __ __   ______   __  __   ______   __           __   __ __   ______   ______   ______   __   __   ______   ______    
-    /\ \ / //\ \ /\  ___\ /\ \/\ \ /\  __ \ /\ \         /\ \ / //\ \ /\  == \ /\  == \ /\  __ \ /\ "-.\ \ /\  ___\ /\  ___\   
-    \ \ \'/ \ \ \\ \___  \\ \ \_\ \\ \  __ \\ \ \____    \ \ \'/ \ \ \\ \  __< \ \  __< \ \  __ \\ \ \-.  \\ \ \____\ \  __\   
-     \ \__|  \ \_\\/\_____\\ \_____\\ \_\ \_\\ \_____\    \ \__|  \ \_\\ \_____\\ \_\ \_\\ \_\ \_\\ \_\\"\_\\ \_____\\ \_____\ 
-      \/_/    \/_/ \/_____/ \/_____/ \/_/\/_/ \/_____/     \/_/    \/_/ \/_____/ \/_/ /_/ \/_/\/_/ \/_/ \/_/ \/_____/ \/_____/ 
-                                                                                                                        
-    
+     __   __ __   ______   __  __   ______   __           __   __ __   ______   ______   ______   __   __   ______   ______
+    /\ \ / //\ \ /\  ___\ /\ \/\ \ /\  __ \ /\ \         /\ \ / //\ \ /\  == \ /\  == \ /\  __ \ /\ "-.\ \ /\  ___\ /\  ___\
+    \ \ \'/ \ \ \\ \___  \\ \ \_\ \\ \  __ \\ \ \____    \ \ \'/ \ \ \\ \  __< \ \  __< \ \  __ \\ \ \-.  \\ \ \____\ \  __\
+     \ \__|  \ \_\\/\_____\\ \_____\\ \_\ \_\\ \_____\    \ \__|  \ \_\\ \_____\\ \_\ \_\\ \_\ \_\\ \_\\"\_\\ \_____\\ \_____\
+      \/_/    \/_/ \/_____/ \/_____/ \/_/\/_/ \/_____/     \/_/    \/_/ \/_____/ \/_/ /_/ \/_/\/_/ \/_/ \/_/ \/_____/ \/_____/
+
+
     By jbritain
     https://jbritain.net
-                                            
+
 */
 
 #include "/lib/common.glsl"
@@ -103,7 +103,7 @@
             #else
             vec3 worldWaveNormal = worldNormal;
             vec3 waveNormal = normal;
-            // material.f0 += 
+            // material.f0 +=
             #endif
 
 
@@ -133,7 +133,7 @@
                 } else {
                     dhMask = false;
                 }
-                
+
 
                 if(clamp01(refractedPos.xy) == refractedPos.xy && refractedDepth > translucentDepth){
                     color = texture(colortex0, refractedPos.xy);
@@ -146,7 +146,7 @@
 	        if(isWater){
 	            translucentFeetPlayerPos = floor((translucentFeetPlayerPos + cameraPosition) * PIXEL_SIZE) / PIXEL_SIZE - cameraPosition;
 	            translucentViewPos = (gbufferModelView * vec4(translucentFeetPlayerPos, 1.0)).xyz;
-	        }   
+	        }
 	        #endif
 
             #ifdef SNELLS_WINDOW
@@ -178,7 +178,7 @@
 
 
                 color.rgb = waterFog(color.rgb, translucentViewPos, opaqueViewPos, dhFactor);
-                
+
             }
 
             // SSR
@@ -215,14 +215,9 @@
 
             bool reflectionHit = doReflections;
 
-            
-            #ifdef DISTANT_HORIZONS
-                if(dhMask){
-                    reflectionHit = reflectionHit && rayIntersects(translucentViewPos, reflectedDir, SSR_STEPS, jitter, true, reflectedPos, dhDepthTex0, dhProjection);
-                } else{
-                    reflectionHit = reflectionHit && rayIntersects(translucentViewPos, reflectedDir, SSR_STEPS, jitter, true, reflectedPos, colortex6, combinedProjection);
-                }
 
+            #ifdef DISTANT_HORIZONS
+                reflectionHit = reflectionHit && rayIntersects(translucentViewPos, reflectedDir, SSR_STEPS, jitter, true, reflectedPos, dhDepthTex0, dhProjection);
             #else
                 reflectionHit = reflectionHit && rayIntersects(translucentViewPos, reflectedDir, SSR_STEPS, jitter, true, reflectedPos, depthtex0, gbufferProjection);
             #endif
@@ -277,7 +272,7 @@
                 reflectedColor = mix(skyReflection, reflectedColor, fadeFactor);
             }
 
-            
+
 
             vec3 fresnel = fresnel(material, dot(waveNormal, normalize(-translucentViewPos)));
 
