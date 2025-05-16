@@ -1,6 +1,7 @@
 /*
     Copyright (c) 2024 Josh Britain (jbritain)
-    All rights reserved
+    Licensed under a custom non-commercial license.
+    See LICENSE for full terms.
 
      __   __ __   ______   __  __   ______   __           __   __ __   ______   ______   ______   __   __   ______   ______    
     /\ \ / //\ \ /\  ___\ /\ \/\ \ /\  __ \ /\ \         /\ \ / //\ \ /\  == \ /\  == \ /\  __ \ /\ "-.\ \ /\  ___\ /\  ___\   
