@@ -83,6 +83,7 @@ const float sunPathRotation = 0.0; // [-90.0 -85.0 -80.0 -75.0 -70.0 -65.0 -60.0
 #define CAUSTICS
 #define WAVE_MODE 1 // [0 1 2]
 #define SNELLS_WINDOW
+#define WATER_HEIGHTMAP_HEIGHT 0.025
 
 // #define CUSTOM_SUN
 

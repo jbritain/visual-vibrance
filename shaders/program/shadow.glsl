@@ -2,12 +2,12 @@
     Copyright (c) 2024 Josh Britain (jbritain)
     All rights reserved
 
- __   __ __   ______   __  __   ______   __           __   __ __   ______   ______   ______   __   __   ______   ______    
-/\ \ / //\ \ /\  ___\ /\ \/\ \ /\  __ \ /\ \         /\ \ / //\ \ /\  == \ /\  == \ /\  __ \ /\ "-.\ \ /\  ___\ /\  ___\   
-\ \ \'/ \ \ \\ \___  \\ \ \_\ \\ \  __ \\ \ \____    \ \ \'/ \ \ \\ \  __< \ \  __< \ \  __ \\ \ \-.  \\ \ \____\ \  __\   
- \ \__|  \ \_\\/\_____\\ \_____\\ \_\ \_\\ \_____\    \ \__|  \ \_\\ \_____\\ \_\ \_\\ \_\ \_\\ \_\\"\_\\ \_____\\ \_____\ 
-  \/_/    \/_/ \/_____/ \/_____/ \/_/\/_/ \/_____/     \/_/    \/_/ \/_____/ \/_/ /_/ \/_/\/_/ \/_/ \/_/ \/_____/ \/_____/ 
-                                                                                                                           
+     __   __ __   ______   __  __   ______   __           __   __ __   ______   ______   ______   __   __   ______   ______    
+    /\ \ / //\ \ /\  ___\ /\ \/\ \ /\  __ \ /\ \         /\ \ / //\ \ /\  == \ /\  == \ /\  __ \ /\ "-.\ \ /\  ___\ /\  ___\   
+    \ \ \'/ \ \ \\ \___  \\ \ \_\ \\ \  __ \\ \ \____    \ \ \'/ \ \ \\ \  __< \ \  __< \ \  __ \\ \ \-.  \\ \ \____\ \  __\   
+     \ \__|  \ \_\\/\_____\\ \_____\\ \_\ \_\\ \_____\    \ \__|  \ \_\\ \_____\\ \_\ \_\\ \_\ \_\\ \_\\"\_\\ \_____\\ \_____\ 
+      \/_/    \/_/ \/_____/ \/_____/ \/_/\/_/ \/_____/     \/_/    \/_/ \/_____/ \/_/ /_/ \/_/\/_/ \/_/ \/_/ \/_____/ \/_____/ 
+                                                                                                                        
     
     By jbritain
     https://jbritain.net
@@ -54,8 +54,8 @@
 
         #ifdef FLOODFILL
         ivec3 voxelPos = mapVoxelPos(feetPlayerPos + vec3(at_midBlock.xyz * rcp(64.0)));
-        if(isWithinVoxelBounds(voxelPos) && gl_VertexID % 4 == 0 &&
-            (
+        if(isWithinVoxelBounds(voxelPos) && gl_VertexID % 4 == 0
+        && (
                 renderStage == MC_RENDER_STAGE_TERRAIN_SOLID ||
                 // renderStage == MC_RENDER_STAGE_BLOCK_ENTITIES ||
                 renderStage == MC_RENDER_STAGE_TERRAIN_TRANSLUCENT
@@ -77,6 +77,11 @@
 
             if(materialIsWater(materialID)){
                 data.emission = 0.0;
+            }
+
+            if(materialIsLightBlock(materialID)){
+                data.emission = 1.0;
+                data.color = vec3(1.0);
             }
 
             if(materialIsTintedGlass(materialID)){

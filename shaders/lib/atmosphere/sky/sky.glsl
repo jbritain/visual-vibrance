@@ -30,7 +30,11 @@ vec3 getSky(vec3 color, vec3 rayDir, bool includeSun){
     return endSky(rayDir, includeSun);
     #endif
 
-    vec3 lum = mix(pow(skyColor, vec3(2.2)), pow(fogColor, vec3(2.2)), fogify(max0(dot(rayDir, vec3(0.0, 1.0, 0.0))), 0.25));;
+    vec3 lum = mix(pow(skyColor, vec3(2.2)), pow(fogColor, vec3(2.2)), fogify(max0(dot(rayDir, vec3(0.0, 1.0, 0.0))), 0.25));
+
+    lum = hsv(lum);
+    lum.g *= 1.1;
+    lum = rgb(lum);
 
     if (!includeSun) return lum;
 

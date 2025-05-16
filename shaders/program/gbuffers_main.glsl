@@ -2,11 +2,11 @@
     Copyright (c) 2024 Josh Britain (jbritain)
     All rights reserved
 
- __   __ __   ______   __  __   ______   __           __   __ __   ______   ______   ______   __   __   ______   ______    
-/\ \ / //\ \ /\  ___\ /\ \/\ \ /\  __ \ /\ \         /\ \ / //\ \ /\  == \ /\  == \ /\  __ \ /\ "-.\ \ /\  ___\ /\  ___\   
-\ \ \'/ \ \ \\ \___  \\ \ \_\ \\ \  __ \\ \ \____    \ \ \'/ \ \ \\ \  __< \ \  __< \ \  __ \\ \ \-.  \\ \ \____\ \  __\   
- \ \__|  \ \_\\/\_____\\ \_____\\ \_\ \_\\ \_____\    \ \__|  \ \_\\ \_____\\ \_\ \_\\ \_\ \_\\ \_\\"\_\\ \_____\\ \_____\ 
-  \/_/    \/_/ \/_____/ \/_____/ \/_/\/_/ \/_____/     \/_/    \/_/ \/_____/ \/_/ /_/ \/_/\/_/ \/_/ \/_/ \/_____/ \/_____/ 
+     __   __ __   ______   __  __   ______   __           __   __ __   ______   ______   ______   __   __   ______   ______    
+    /\ \ / //\ \ /\  ___\ /\ \/\ \ /\  __ \ /\ \         /\ \ / //\ \ /\  == \ /\  == \ /\  __ \ /\ "-.\ \ /\  ___\ /\  ___\   
+    \ \ \'/ \ \ \\ \___  \\ \ \_\ \\ \  __ \\ \ \____    \ \ \'/ \ \ \\ \  __< \ \  __< \ \  __ \\ \ \-.  \\ \ \____\ \  __\   
+     \ \__|  \ \_\\/\_____\\ \_____\\ \_\ \_\\ \_____\    \ \__|  \ \_\\ \_____\\ \_\ \_\\ \_\ \_\\ \_\\"\_\\ \_____\\ \_____\ 
+      \/_/    \/_/ \/_____/ \/_____/ \/_/\/_/ \/_____/     \/_/    \/_/ \/_____/ \/_/ /_/ \/_/\/_/ \/_/ \/_/ \/_____/ \/_____/ 
                                                                                                                            
     
     By jbritain
@@ -130,7 +130,7 @@
     layout(location = 1) out vec4 outData1;
 
     void main() {
-        vec3 playerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
+        vec3 feetPlayerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
 
         float parallaxShadow = 1.0;
         vec2 dx = dFdx(texcoord);
@@ -177,7 +177,7 @@
 
         #ifdef PATCHY_LAVA
             if(materialIsLava(materialID)){
-                vec3 worldPos = playerPos + cameraPosition;
+                vec3 worldPos = feetPlayerPos + cameraPosition;
                 float noise = texture(perlinNoiseTex, mod(worldPos.xz / 100 + vec2(0.0, frameTimeCounter * 0.005), 1.0)).r;
                 noise *= texture(perlinNoiseTex, mod(worldPos.xz / 200 + vec2(frameTimeCounter * 0.005, 0.0), 1.0)).r;
                 albedo.rgb *= noise;
@@ -195,7 +195,7 @@
         #else
         vec4 specularData = texture(specular, texcoord);
         #endif
-        Material material = materialFromSpecularMap(albedo.rgb, specularData);
+        Material material = materialFromSpecularMap(albedo.rgb, specularData, materialID);
         material.ao = texture(normals, texcoord).z;
         #ifndef MC_TEXTURE_FORMAT_LAB_PBR
             if(material.emission == 0.0 && emission > 0.0 && (renderStage == MC_RENDER_STAGE_TERRAIN_SOLID || renderStage == MC_RENDER_STAGE_TERRAIN_TRANSLUCENT)){
@@ -208,11 +208,7 @@
         material.emission = 1.0;
         #endif
 
-        if(materialIsPlant(materialID)){
-            material.sss = 1.0;
-            material.f0 = vec3(0.04);
-            material.roughness = 0.5;
-        }
+
 
         
         if(materialIsWater(materialID)){
@@ -230,11 +226,11 @@
 
             vec2 localCoord = atlasToLocal(texcoord);
 
-            xPosMinus.z = luminance(pow(textureGrad(gtexture, localToAtlas(localCoord + xPosMinus.xy), dx, dy).rgb, vec3(2.2))) * 0.05 + 0.475;
-            xPosPlus.z = luminance(pow(textureGrad(gtexture, localToAtlas(localCoord + xPosPlus.xy), dx, dy).rgb, vec3(2.2))) * 0.05 + 0.475;
+            xPosMinus.z = luminance(pow(textureGrad(gtexture, localToAtlas(localCoord + xPosMinus.xy), dx, dy).rgb, vec3(2.2))) * (WATER_HEIGHTMAP_HEIGHT) + (0.5 - WATER_HEIGHTMAP_HEIGHT * 0.5);
+            xPosPlus.z = luminance(pow(textureGrad(gtexture, localToAtlas(localCoord + xPosPlus.xy), dx, dy).rgb, vec3(2.2))) * (WATER_HEIGHTMAP_HEIGHT) + (0.5 - WATER_HEIGHTMAP_HEIGHT * 0.5);
 
-            yPosMinus.z = luminance(pow(textureGrad(gtexture, localToAtlas(localCoord + yPosMinus.xy), dx, dy).rgb, vec3(2.2))) * 0.05 + 0.475;
-            yPosPlus.z = luminance(pow(textureGrad(gtexture, localToAtlas(localCoord + yPosPlus.xy), dx, dy).rgb, vec3(2.2))) * 0.05 + 0.475;
+            yPosMinus.z = luminance(pow(textureGrad(gtexture, localToAtlas(localCoord + yPosMinus.xy), dx, dy).rgb, vec3(2.2))) * (WATER_HEIGHTMAP_HEIGHT) + (0.5 - WATER_HEIGHTMAP_HEIGHT * 0.5);
+            yPosPlus.z = luminance(pow(textureGrad(gtexture, localToAtlas(localCoord + yPosPlus.xy), dx, dy).rgb, vec3(2.2))) * (WATER_HEIGHTMAP_HEIGHT) + (0.5 - WATER_HEIGHTMAP_HEIGHT * 0.5);
 
             vec3 xDir = normalize(xPosPlus - xPosMinus);
             vec3 yDir = normalize(yPosPlus - yPosMinus);
@@ -253,7 +249,7 @@
         #endif
 
         #if defined DYNAMIC_HANDLIGHT && !defined FLOODFILL
-            float dist = length(playerPos);
+            float dist = length(feetPlayerPos);
             float falloff = (1.0 - clamp01(smoothstep(0.0, 15.0, dist))) * max(heldBlockLightValue, heldBlockLightValue2) / 15.0;
 
             #ifdef DIRECTIONAL_LIGHTMAPS
@@ -270,7 +266,7 @@
         #ifdef RAIN_PUDDLES
         float rainFactor = clamp01(smoothstep(13.5 / 15.0, 14.5 / 15.0, lightmap.y)) * wetness;
 
-        rainFactor *= smoothstep(0.6, 0.7, texture(noisetex, mod((playerPos.xz + cameraPosition.xz) / 2.0, 64.0) / 64.0).r);
+        rainFactor *= smoothstep(0.6, 0.7, texture(noisetex, mod((feetPlayerPos.xz + cameraPosition.xz) / 2.0, 64.0) / 64.0).r);
 
         material.f0 = mix(material.f0, vec3(0.02), rainFactor * (1.0 - material.porosity));
         material.roughness = mix(material.roughness, 0.0, rainFactor * (1.0 - material.porosity) * 0.8);
@@ -285,20 +281,24 @@
 
         }  else {
             bool sampleColoredLight = false;
+
+            #ifdef PIXEL_LOCKED_LIGHTING
+                feetPlayerPos += cameraPosition;
+                feetPlayerPos = floor(feetPlayerPos * PIXEL_SIZE) / PIXEL_SIZE;
+                feetPlayerPos -= cameraPosition;
+
+                vec3 viewPos = (gbufferModelView * vec4(feetPlayerPos, 1.0)).xyz;
+            #endif
+
             #ifdef FLOODFILL
-                #ifdef PIXEL_LOCKED_LIGHTING
-                    playerPos += cameraPosition;
-                    playerPos = floor(playerPos * PIXEL_SIZE) / PIXEL_SIZE;
-                    playerPos -= cameraPosition;
-                #endif
                     
 
                 #ifdef DIRECTIONAL_LIGHTMAPS
                     vec3 offset = -mat3(gbufferModelViewInverse) * tbnMatrix[2] * 0.5 + mat3(gbufferModelViewInverse) * mappedNormal;
                     offset = mix(offset, vec3(0.0), material.sss * 0.25);
-                    vec3 voxelPosInterp = mapVoxelPosInterp(playerPos + offset);
+                    vec3 voxelPosInterp = mapVoxelPosInterp(feetPlayerPos + offset);
                 #else
-                    vec3 voxelPosInterp = mapVoxelPosInterp(playerPos + mat3(gbufferModelViewInverse) * tbnMatrix[2] * 0.5);
+                    vec3 voxelPosInterp = mapVoxelPosInterp(feetPlayerPos + mat3(gbufferModelViewInverse) * tbnMatrix[2] * 0.5);
                 #endif
             sampleColoredLight = clamp01(voxelPosInterp) == voxelPosInterp;
             #endif
@@ -317,7 +317,7 @@
                     }
 
                     #ifdef DYNAMIC_HANDLIGHT
-                        float dist = length(playerPos);
+                        float dist = length(feetPlayerPos);
                         float falloff = (1.0 - clamp01(smoothstep(0.0, 15.0, dist))) * max(heldBlockLightValue, heldBlockLightValue2) / 15.0;
 
                         #ifdef DIRECTIONAL_LIGHTMAPS

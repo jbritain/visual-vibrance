@@ -2,12 +2,12 @@
     Copyright (c) 2024 Josh Britain (jbritain)
     All rights reserved
 
- __   __ __   ______   __  __   ______   __           __   __ __   ______   ______   ______   __   __   ______   ______    
-/\ \ / //\ \ /\  ___\ /\ \/\ \ /\  __ \ /\ \         /\ \ / //\ \ /\  == \ /\  == \ /\  __ \ /\ "-.\ \ /\  ___\ /\  ___\   
-\ \ \'/ \ \ \\ \___  \\ \ \_\ \\ \  __ \\ \ \____    \ \ \'/ \ \ \\ \  __< \ \  __< \ \  __ \\ \ \-.  \\ \ \____\ \  __\   
- \ \__|  \ \_\\/\_____\\ \_____\\ \_\ \_\\ \_____\    \ \__|  \ \_\\ \_____\\ \_\ \_\\ \_\ \_\\ \_\\"\_\\ \_____\\ \_____\ 
-  \/_/    \/_/ \/_____/ \/_____/ \/_/\/_/ \/_____/     \/_/    \/_/ \/_____/ \/_/ /_/ \/_/\/_/ \/_/ \/_/ \/_____/ \/_____/ 
-                                                                                                                           
+     __   __ __   ______   __  __   ______   __           __   __ __   ______   ______   ______   __   __   ______   ______    
+    /\ \ / //\ \ /\  ___\ /\ \/\ \ /\  __ \ /\ \         /\ \ / //\ \ /\  == \ /\  == \ /\  __ \ /\ "-.\ \ /\  ___\ /\  ___\   
+    \ \ \'/ \ \ \\ \___  \\ \ \_\ \\ \  __ \\ \ \____    \ \ \'/ \ \ \\ \  __< \ \  __< \ \  __ \\ \ \-.  \\ \ \____\ \  __\   
+     \ \__|  \ \_\\/\_____\\ \_____\\ \_\ \_\\ \_____\    \ \__|  \ \_\\ \_____\\ \_\ \_\\ \_\ \_\\ \_\\"\_\\ \_____\\ \_____\ 
+      \/_/    \/_/ \/_____/ \/_____/ \/_/\/_/ \/_____/     \/_/    \/_/ \/_____/ \/_/ /_/ \/_/\/_/ \/_/ \/_/ \/_____/ \/_____/ 
+                                                                                                                        
     
     By jbritain
     https://jbritain.net
@@ -95,14 +95,14 @@ const Material waterMaterial = Material(
 	0.0
 );
 
-Material materialFromSpecularMap(vec3 albedo, vec4 specularData){
+Material materialFromSpecularMap(vec3 albedo, vec4 specularData, int materialID){
 	Material material;
 
 	material.albedo = albedo;
 
 	#if PBR_MODE == 0
 	material.roughness = 1.0;
-	material.f0 = vec3(0.0);
+	material.f0 = vec3(0.04);
 	material.metalID = NO_METAL;
 	material.porosity = 0.0;
 	material.sss = 0.0;
@@ -115,9 +115,26 @@ Material materialFromSpecularMap(vec3 albedo, vec4 specularData){
 	material.roughness = pow2(1.0 - specularData.r);
 	if(specularData.g <= 229.0/255.0){
 		material.f0 = vec3(specularData.g);
+
+		#ifndef MC_TEXTURE_FORMAT_LAB_PBR
+		if(material.f0 == vec3(0.0)){
+			material.f0 = vec3(0.04);
+			material.roughness = 0.4;
+
+			if(materialIsMetal(materialID)){
+				material.metalID = OTHER_METAL;
+				material.roughness = 0.0;
+				material.f0 = getMetalf0(material.metalID, albedo);
+			}
+
+
+		}
+		#endif
+
 		material.metalID = NO_METAL;
 	} else {
 		material.metalID = int(specularData.g * 255 + 0.5) - 229;
+
 		material.f0 = getMetalf0(material.metalID, albedo);
 	}
 
@@ -130,6 +147,12 @@ Material materialFromSpecularMap(vec3 albedo, vec4 specularData){
 	}
 
 	material.emission = specularData.a < 1.0 ? specularData.a : 0.0;
+
+	if(materialIsPlant(materialID)){
+		material.sss = 1.0;
+		material.f0 = vec3(0.04);
+		material.roughness = 0.5;
+	}
 
 	return material;
 }

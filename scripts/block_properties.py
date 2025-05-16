@@ -15,6 +15,9 @@ def main():
 	Enum = EnumFlag.Config(function_name=lambda flag: f"material{pascalcase(flag)}Type") | Sequence
 	Int = IntFlag.Config() | Sequence
 
+	copper_blocks = gather_blocks(type_filter = lambda block: "copper" in block.name and not any(s in block.name for s in ["weathered", "oxidized", "ore", "raw"]))
+	iron_blocks = gather_blocks(type_filter = lambda block: "iron" in block.name and not any(s in block.name for s in ["ore", "raw"]))
+
 	mapping = BlockMapping.solve({
 		'water': Bool(blocks('minecraft:water')),
 		'ice': Bool(blocks('minecraft:ice')),
@@ -38,6 +41,10 @@ def main():
 		'purple_froglight': Bool(blocks('minecraft:pearlescent_froglight')),
 		'yellow_froglight': Bool(blocks('minecraft:ochre_froglight')),
 		'green_froglight': Bool(blocks('minecraft:verdant_froglight')),
+
+		'light_block': Bool(blocks('minecraft:light')),
+
+		'metal': Bool(copper_blocks + iron_blocks + blocks('minecraft:gold_block')),
 
 		'max_emission': Bool(blocks('minecraft:nether_portal', 'minecraft:lava')),
 
