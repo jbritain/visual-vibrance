@@ -3,16 +3,16 @@
     Licensed under a custom non-commercial license.
     See LICENSE for full terms.
 
-     __   __ __   ______   __  __   ______   __           __   __ __   ______   ______   ______   __   __   ______   ______    
-    /\ \ / //\ \ /\  ___\ /\ \/\ \ /\  __ \ /\ \         /\ \ / //\ \ /\  == \ /\  == \ /\  __ \ /\ "-.\ \ /\  ___\ /\  ___\   
-    \ \ \'/ \ \ \\ \___  \\ \ \_\ \\ \  __ \\ \ \____    \ \ \'/ \ \ \\ \  __< \ \  __< \ \  __ \\ \ \-.  \\ \ \____\ \  __\   
-     \ \__|  \ \_\\/\_____\\ \_____\\ \_\ \_\\ \_____\    \ \__|  \ \_\\ \_____\\ \_\ \_\\ \_\ \_\\ \_\\"\_\\ \_____\\ \_____\ 
-      \/_/    \/_/ \/_____/ \/_____/ \/_/\/_/ \/_____/     \/_/    \/_/ \/_____/ \/_/ /_/ \/_/\/_/ \/_/ \/_/ \/_____/ \/_____/ 
-                                                                                                                           
-    
+     __   __ __   ______   __  __   ______   __           __   __ __   ______   ______   ______   __   __   ______   ______
+    /\ \ / //\ \ /\  ___\ /\ \/\ \ /\  __ \ /\ \         /\ \ / //\ \ /\  == \ /\  == \ /\  __ \ /\ "-.\ \ /\  ___\ /\  ___\
+    \ \ \'/ \ \ \\ \___  \\ \ \_\ \\ \  __ \\ \ \____    \ \ \'/ \ \ \\ \  __< \ \  __< \ \  __ \\ \ \-.  \\ \ \____\ \  __\
+     \ \__|  \ \_\\/\_____\\ \_____\\ \_\ \_\\ \_____\    \ \__|  \ \_\\ \_____\\ \_\ \_\\ \_\ \_\\ \_\\"\_\\ \_____\\ \_____\
+      \/_/    \/_/ \/_____/ \/_____/ \/_/\/_/ \/_____/     \/_/    \/_/ \/_____/ \/_/ /_/ \/_/\/_/ \/_/ \/_/ \/_____/ \/_____/
+
+
     By jbritain
     https://jbritain.net
-                                            
+
 */
 
 #include "/lib/common.glsl"
@@ -96,6 +96,7 @@
     #include "/lib/voxel/voxelMap.glsl"
     #include "/lib/voxel/voxelData.glsl"
     #include "/lib/ipbr/blocklightColors.glsl"
+    #include "/lib/dhBlend.glsl"
 
     in vec2 lmcoord;
     in vec2 texcoord;
@@ -121,7 +122,7 @@
         vec3 mappedNormal = materialIsWater(materialID) ? textureLod(normals, texcoord, 0).rgb : texture(normals, texcoord).rgb;
         mappedNormal = mappedNormal * 2.0 - 1.0;
         mappedNormal.z = sqrt(1.0 - dot(mappedNormal.xy, mappedNormal.xy)); // reconstruct z due to labPBR encoding
-        
+
         return tbnMatrix * mappedNormal;
     }
 
@@ -152,7 +153,7 @@
 
             #ifdef PARALLAX_SHADOW
             float pomJitter = interleavedGradientNoise(floor(gl_FragCoord.xy), frameCounter);
-            parallaxShadow = getParallaxShadow(parallaxPos, tbnMatrix, dx, dy, pomJitter, viewPos); 
+            parallaxShadow = getParallaxShadow(parallaxPos, tbnMatrix, dx, dy, pomJitter, viewPos);
             #endif
         }
         #endif
@@ -202,7 +203,7 @@
             if(material.emission == 0.0 && emission > 0.0 && (renderStage == MC_RENDER_STAGE_TERRAIN_SOLID || renderStage == MC_RENDER_STAGE_TERRAIN_TRANSLUCENT)){
                 material.emission = luminance(albedo.rgb);
             }
-            
+
         #endif
 
         #ifdef GBUFFERS_ARMOR_GLINT
@@ -211,7 +212,7 @@
 
 
 
-        
+
         if(materialIsWater(materialID)){
             #if WAVE_MODE == 1
             // sample texture 1 pixel in each direction to determine normal
@@ -221,7 +222,7 @@
 
             vec3 xPosMinus = vec3(-inversePixelSize, 0.0, 0.0);
             vec3 xPosPlus = vec3(inversePixelSize, 0.0, 0.0);
-            
+
             vec3 yPosMinus = vec3(0.0, -inversePixelSize, 0.0);
             vec3 yPosPlus = vec3(0.0, inversePixelSize, 0.0);
 
@@ -292,7 +293,7 @@
             #endif
 
             #ifdef FLOODFILL
-                    
+
 
                 #ifdef DIRECTIONAL_LIGHTMAPS
                     vec3 offset = -mat3(gbufferModelViewInverse) * tbnMatrix[2] * 0.5 + mat3(gbufferModelViewInverse) * mappedNormal;
@@ -328,7 +329,7 @@
                         blocklightColor += pow(vec3(255, 152, 54), vec3(2.2)) * 1e-8 * max0(exp(-(1.0 - falloff * 10.0)));
                     #endif
 
-                    color.rgb = getShadedColor(material, mappedNormal, tbnMatrix[2], blocklightColor, lightmap, viewPos, parallaxShadow);  
+                    color.rgb = getShadedColor(material, mappedNormal, tbnMatrix[2], blocklightColor, lightmap, viewPos, parallaxShadow);
                 #endif
             } else {
                 color.rgb = getShadedColor(material, mappedNormal, tbnMatrix[2], lightmap, viewPos, parallaxShadow);
@@ -337,6 +338,10 @@
 
             color.a = albedo.a;
         }
+
+        #ifdef DISTANT_HORIZONS
+        dhBlend(viewPos);
+        #endif
 
         outData1.xy = encodeNormal(mat3(gbufferModelViewInverse) * mappedNormal);
         outData1.z = lightmap.y;
