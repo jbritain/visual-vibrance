@@ -36,7 +36,7 @@ mat4 saturationMatrix( float saturation )
 }
 
 vec4 postProcess(vec4 color){
-    return contrastMatrix(CONTRAST) * saturationMatrix(SATURATION * 1.2) * color;
+    return contrastMatrix(CONTRAST) * saturationMatrix(SATURATION * 1.1) * color;
 }
 
 #endif
