@@ -7,7 +7,9 @@ assignees: ''
 
 ---
 
-**Please include your log file. This can be found at `.minecraft/logs/latest.log`**
+### Please Include
+- Your log file, which can be found at `.minecraft/logs/latest.log`
+- Your settings for the pack, which can be found at `.minecraft/shaderpacks/visual-vibrance-v[VERSION].txt`
 
 ### Describe the bug
 A clear and concise description of what the issue is.
