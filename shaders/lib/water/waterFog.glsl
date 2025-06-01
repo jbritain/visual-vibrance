@@ -19,7 +19,7 @@
 #define WATER_FOG_GLSL
 
 #define WATER_ABSORPTION (vec3(0.3, 0.08, 0.1))
-#define WATER_SCATTERING (vec3(0.01, 0.04, 0.05) * (isEyeInWater == 1 ? vec3(0.5, 2.0, 0.5) : vec3(0.01)))
+#define WATER_SCATTERING (vec3(0.01, 0.02, 0.05) * (isEyeInWater == 1 ? vec3(0.5, 2.0, 0.5) : vec3(0.01)))
 #define WATER_DENSITY 1.0
 
 vec3 waterExtinction = clamp01(WATER_ABSORPTION + WATER_SCATTERING);

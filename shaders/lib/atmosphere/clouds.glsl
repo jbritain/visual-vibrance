@@ -56,6 +56,10 @@ float getCloudDensity(vec2 pos){
 }
 
 vec3 getCloudShadow(vec3 origin){
+  #ifndef WORLD_OVERWORLD
+  return vec3(0.0);
+  #endif
+
   origin += cameraPosition;
 
   vec3 point;
