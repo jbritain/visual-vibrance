@@ -314,6 +314,10 @@
                         blocklightColor = texture(floodfillVoxelMapTex1, voxelPosInterp).rgb;
                     }
 
+                    blocklightColor = hsv(blocklightColor);
+                    blocklightColor.b = pow(blocklightColor.b, 0.4) * 6.0;
+                    blocklightColor = rgb(blocklightColor);
+
                     if(luminance(blocklightColor) < 0.2 && lightmap.x > 0.5 && renderStage == MC_RENDER_STAGE_PARTICLES){
                         material.emission = lightmap.x;
                     }
