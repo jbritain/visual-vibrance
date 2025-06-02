@@ -217,7 +217,12 @@
 
 
             #ifdef DISTANT_HORIZONS
-                reflectionHit = reflectionHit && rayIntersects(translucentViewPos, reflectedDir, SSR_STEPS, jitter, true, reflectedPos, dhDepthTex0, dhProjection);
+                if(dhMask){
+                    reflectionHit = reflectionHit && rayIntersects(translucentViewPos, reflectedDir, SSR_STEPS, jitter, true, reflectedPos, dhDepthTex0, dhProjection);
+                } else {
+                    reflectionHit = reflectionHit && rayIntersects(translucentViewPos, reflectedDir, SSR_STEPS, jitter, true, reflectedPos, colortex6, combinedProjection);
+                }
+                
             #else
                 reflectionHit = reflectionHit && rayIntersects(translucentViewPos, reflectedDir, SSR_STEPS, jitter, true, reflectedPos, depthtex0, gbufferProjection);
             #endif
