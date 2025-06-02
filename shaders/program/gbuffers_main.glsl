@@ -286,7 +286,7 @@
 
             #ifdef PIXEL_LOCKED_LIGHTING
                 feetPlayerPos += cameraPosition;
-                feetPlayerPos = floor(feetPlayerPos * PIXEL_SIZE) / PIXEL_SIZE;
+                feetPlayerPos = (floor(feetPlayerPos * PIXEL_SIZE) + vec3(0.5)) / PIXEL_SIZE;
                 feetPlayerPos -= cameraPosition;
 
                 vec3 viewPos = (gbufferModelView * vec4(feetPlayerPos, 1.0)).xyz;
