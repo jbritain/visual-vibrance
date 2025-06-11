@@ -75,9 +75,9 @@ vec3 fresnel(Material material, float NoV){
 
 vec3 fresnelRoughness(Material material, float NoV){
 	if(material.metalID == NO_METAL || material.metalID == OTHER_METAL){
-		return material.f0 + (max(vec3(1.0 - material.roughness), material.f0) - material.f0) * pow(clamp(1.0 - NoV, 0.0, 1.0), 5.0);
+		return material.f0 + (max(vec3(pow2(1.0 - material.roughness)), material.f0) - material.f0) * pow(clamp(1.0 - NoV, 0.0, 1.0), 5.0);
 	} else {
-		return material.albedo + (max(vec3(1.0 - material.roughness), material.albedo) - material.albedo) * pow(clamp(1.0 - NoV, 0.0, 1.0), 5.0);
+		return material.albedo + (max(vec3(pow2(1.0 - material.roughness)), material.albedo) - material.albedo) * pow(clamp(1.0 - NoV, 0.0, 1.0), 5.0);
 	}
 }
 
