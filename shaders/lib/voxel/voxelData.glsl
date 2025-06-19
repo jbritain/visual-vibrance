@@ -7,24 +7,47 @@ struct VoxelData {
   vec3 color; // 12 bits
 };
 
-uint encodeVoxelData(VoxelData data){
+uint encodeVoxelData(VoxelData data) {
   uint encodedData = 0;
 
-  encodedData = bitfieldInsert(encodedData, uint(clamp01(data.emission) * 15.0), 0, 4);
-  encodedData = bitfieldInsert(encodedData, uint(clamp01(data.opacity) * 15.0), 4, 4);
+  encodedData = bitfieldInsert(
+    encodedData,
+    uint(clamp01(data.emission) * 15.0),
+    0,
+    4
+  );
+  encodedData = bitfieldInsert(
+    encodedData,
+    uint(clamp01(data.opacity) * 15.0),
+    4,
+    4
+  );
 
   vec3 encodedColor = hsv(data.color).rbg;
 
-  encodedData = bitfieldInsert(encodedData, uint(clamp01(encodedColor.r) * 255.0), 8, 8);
-  encodedData = bitfieldInsert(encodedData, uint(clamp01(encodedColor.g) * 255.0), 16, 8);
-  encodedData = bitfieldInsert(encodedData, uint(clamp01(encodedColor.b) * 255.0), 24, 8);
-
-
+  encodedData = bitfieldInsert(
+    encodedData,
+    uint(clamp01(encodedColor.r) * 255.0),
+    8,
+    8
+  );
+  encodedData = bitfieldInsert(
+    encodedData,
+    uint(clamp01(encodedColor.g) * 255.0),
+    16,
+    8
+  );
+  encodedData = bitfieldInsert(
+    encodedData,
+    uint(clamp01(encodedColor.b) * 255.0),
+    24,
+    8
+  );
 
   return encodedData;
 }
 
-VoxelData decodeVoxelData(uint encodedData){
+VoxelData decodeVoxelData(uint encodedData) {
   VoxelData data;
 
   data.emission = float(uint(bitfieldExtract(encodedData, 0, 4))) / 15.0;

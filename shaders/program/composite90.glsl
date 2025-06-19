@@ -19,32 +19,32 @@
 
 #ifdef vsh
 
-    out vec2 texcoord;
+out vec2 texcoord;
 
-    void main() {
-        gl_Position = ftransform();
-	    texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
-    }
+void main() {
+  gl_Position = ftransform();
+  texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
+}
 
 #endif
 
 // ===========================================================================================
 
 #ifdef fsh
-    in vec2 texcoord;
+in vec2 texcoord;
 
-    /* RENDERTARGETS: 0 */
-    layout(location = 0) out vec4 color;
+/* RENDERTARGETS: 0 */
+layout(location = 0) out vec4 color;
 
-    const bool colortex0MipmapEnabled = true;
+const bool colortex0MipmapEnabled = true;
 
-    #include "/lib/post/FXAA.glsl"
+#include "/lib/post/FXAA.glsl"
 
-    void main() {
-      // color = texture(colortex0, texcoord);
-      // return;
-      color.rgb = FXAA311(texture(colortex0, texcoord).rgb);
-      color.a = 1.0;
-    }
+void main() {
+  // color = texture(colortex0, texcoord);
+  // return;
+  color.rgb = FXAA311(texture(colortex0, texcoord).rgb);
+  color.a = 1.0;
+}
 
 #endif

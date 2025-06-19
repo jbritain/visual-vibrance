@@ -19,42 +19,42 @@
 
 #ifdef vsh
 
-    out vec2 texcoord;
+out vec2 texcoord;
 
-    void main() {
-        gl_Position = ftransform();
-	    texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
-    }
+void main() {
+  gl_Position = ftransform();
+  texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
+}
 
 #endif
 
 // ===========================================================================================
 
 #ifdef fsh
-    in vec2 texcoord;
+in vec2 texcoord;
 
-    #include "/lib/dh.glsl"
+#include "/lib/dh.glsl"
 
-    /* RENDERTARGETS: 6 */
-    layout(location = 0) out float depth;
+/* RENDERTARGETS: 6 */
+layout(location = 0) out float depth;
 
-    void main() {
-        #ifdef DISTANT_HORIZONS
-        depth = texture(depthtex0, texcoord).r;
-        if(depth < 1.0){
-            depth = screenSpaceToViewSpace(depth);
-            depth = viewSpaceToScreenSpace(depth, combinedProjection);
-            return;
-        }
-        depth = texture(dhDepthTex0, texcoord).r;
+void main() {
+  #ifdef DISTANT_HORIZONS
+  depth = texture(depthtex0, texcoord).r;
+  if (depth < 1.0) {
+    depth = screenSpaceToViewSpace(depth);
+    depth = viewSpaceToScreenSpace(depth, combinedProjection);
+    return;
+  }
+  depth = texture(dhDepthTex0, texcoord).r;
 
-        if(depth == 1.0){
-            return;
-        }
+  if (depth == 1.0) {
+    return;
+  }
 
-        depth = screenSpaceToViewSpace(depth, dhProjectionInverse);
-        depth = viewSpaceToScreenSpace(depth, combinedProjection);
-        #endif
-    }
+  depth = screenSpaceToViewSpace(depth, dhProjectionInverse);
+  depth = viewSpaceToScreenSpace(depth, combinedProjection);
+  #endif
+}
 
 #endif

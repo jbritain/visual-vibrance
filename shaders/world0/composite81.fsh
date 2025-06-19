@@ -3,5 +3,5 @@
 #define fsh
 #define WORLD_OVERWORLD
 
-#define TILE_INDEX 1
+#define TILE_INDEX (1)
 #include "/program/bloomDownsample.glsl"

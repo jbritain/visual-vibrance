@@ -22,46 +22,46 @@ bool dhMask = false;
 
 #ifdef DISTANT_HORIZONS
 
-int convertDHMaterialIDs(int id){
-    switch(id) {
-        case DH_BLOCK_WATER:
-            return MATERIAL_WATER;
+int convertDHMaterialIDs(int id) {
+  switch (id) {
+    case DH_BLOCK_WATER:
+      return MATERIAL_WATER;
 
-        case DH_BLOCK_LEAVES:
-            return MATERIAL_LEAVES;
+    case DH_BLOCK_LEAVES:
+      return MATERIAL_LEAVES;
 
-        case DH_BLOCK_LAVA:
-            return MATERIAL_LAVA;
-    }
+    case DH_BLOCK_LAVA:
+      return MATERIAL_LAVA;
+  }
 
-    return 0;
+  return 0;
 }
 
-void dhOverride(inout float depth, inout vec3 viewPos, bool opaque){
-    dhMask = false;
-    if(depth != 1.0) return;
+void dhOverride(inout float depth, inout vec3 viewPos, bool opaque) {
+  dhMask = false;
+  if (depth != 1.0) return;
 
+  if (opaque) {
+    depth = texture(dhDepthTex1, texcoord).r;
+  } else {
+    depth = texture(dhDepthTex0, texcoord).r;
+  }
 
-    if(opaque){
-        depth = texture(dhDepthTex1, texcoord).r;
-    } else {
-        depth = texture(dhDepthTex0, texcoord).r;
-    }
+  if (depth == 1.0) return;
 
-    if(depth == 1.0) return;
+  dhMask = true;
 
-    dhMask = true;
+  vec3 screenPos = vec3(texcoord, depth);
 
-    vec3 screenPos = vec3(texcoord, depth);
-
-    screenPos *= 2.0; screenPos -= 1.0; // ndcPos
-    vec4 homPos = dhProjectionInverse * vec4(screenPos, 1.0);
-    viewPos = homPos.xyz / homPos.w;
+  screenPos *= 2.0;
+  screenPos -= 1.0; // ndcPos
+  vec4 homPos = dhProjectionInverse * vec4(screenPos, 1.0);
+  viewPos = homPos.xyz / homPos.w;
 }
 
 #else
 
-void dhOverride(inout float depth, inout vec3 viewPos, bool opaque){
+void dhOverride(inout float depth, inout vec3 viewPos, bool opaque) {
   return;
 }
 

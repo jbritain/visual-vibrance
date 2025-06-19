@@ -29,9 +29,7 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           curseforge-id: 1244801
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          
+
           files: "Visual-Vibrance-${{ github.event.release.tag_name }}.zip"
           loaders: iris
           game-versions: ">=1.20"
-
-          

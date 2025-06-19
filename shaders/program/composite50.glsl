@@ -19,26 +19,26 @@
 
 #ifdef vsh
 
-    out vec2 texcoord;
+out vec2 texcoord;
 
-    void main() {
-        gl_Position = ftransform();
-	    texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
-    }
+void main() {
+  gl_Position = ftransform();
+  texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
+}
 
 #endif
 
 // ===========================================================================================
 
 #ifdef fsh
-    in vec2 texcoord;
+in vec2 texcoord;
 
-    /* RENDERTARGETS: 0 */
-    layout(location = 0) out vec4 color;
+/* RENDERTARGETS: 0 */
+layout(location = 0) out vec4 color;
 
-    void main() {
-        color = texture(colortex0, texcoord);
-        color.rgb *= 0.01 * EXPOSURE;
-    }
+void main() {
+  color = texture(colortex0, texcoord);
+  color.rgb *= 0.01 * EXPOSURE;
+}
 
 #endif
