@@ -3,8 +3,11 @@
     Licensed under a custom non-commercial license.
     See LICENSE for full terms.
 
-     __   __ __   ______   __  __   ______   __           __   __ __   ______   ______   ______   __   __   ______   ______
-    /\ \ / //\ \ /\  ___\ /\ \/\ \ /\  __ \ /\ \         /\ \ / //\ \ /\  == \ /\  == \ /\  __ \ /\ "-.\ \ /\  ___\ /\  ___    \ \ \'/ \ \ \\ \___  \\ \ \_\ \\ \  __ \\ \ \____    \ \ \'/ \ \ \\ \  __< \ \  __< \ \  __ \\ \ \-.  \\ \ \____\ \  __     \ \__|  \ \_\\/\_____\\ \_____\\ \_\ \_\\ \_____\    \ \__|  \ \_\\ \_____\\ \_\ \_\\ \_\ \_\\ \_\\"\_\\ \_____\\ \_____      \/_/    \/_/ \/_____/ \/_____/ \/_/\/_/ \/_____/     \/_/    \/_/ \/_____/ \/_/ /_/ \/_/\/_/ \/_/ \/_/ \/_____/ \/_____/ 
+     __   __ __   ______   __  __   ______   __           __   __ __   ______   ______   ______   __   __   ______   ______    
+    /\ \ / //\ \ /\  ___\ /\ \/\ \ /\  __ \ /\ \         /\ \ / //\ \ /\  == \ /\  == \ /\  __ \ /\ "-.\ \ /\  ___\ /\  ___\   
+    \ \ \'/ \ \ \\ \___  \\ \ \_\ \\ \  __ \\ \ \____    \ \ \'/ \ \ \\ \  __< \ \  __< \ \  __ \\ \ \-.  \\ \ \____\ \  __\   
+     \ \__|  \ \_\\/\_____\\ \_____\\ \_\ \_\\ \_____\    \ \__|  \ \_\\ \_____\\ \_\ \_\\ \_\ \_\\ \_\\"\_\\ \_____\\ \_____\ 
+      \/_/    \/_/ \/_____/ \/_____/ \/_/\/_/ \/_____/     \/_/    \/_/ \/_____/ \/_/ /_/ \/_/\/_/ \/_/ \/_/ \/_____/ \/_____/ 
  
  
 
@@ -20,7 +23,7 @@
 
 #define CLOUD_PLANE_ALTITUDE (192) // [64 96 128 160 192]
 #define CLOUD_PLANE_HEIGHT (4) // [1 2 3 4 5 6 7 8]
-#define CLOUD_EXTINCTION_COLOR (vec3(1.0))
+#define CLOUD_EXTINCTION_COLOR (vec3(0.1 + wetness))
 
 float remap(float val, float oMin, float oMax, float nMin, float nMax) {
   return mix(nMin, nMax, smoothstep(oMin, oMax, val));
@@ -120,6 +123,10 @@ vec3 getClouds(
     }
   }
 
+  if (length(feetPlayerPos) < length(a - cameraPosition) && depth != 1.0) {
+    return vec3(0.0);
+  }
+
   vec3 b;
   if (
     !rayPlaneIntersection(
@@ -137,21 +144,22 @@ vec3 getClouds(
   }
   ;
 
-  // a -= cameraPosition;
-  // b -= cameraPosition;
+  a -= cameraPosition;
+  b -= cameraPosition;
 
-  // if(length(a) > length(b)){ // for convenience, a will always be closer to the camera
-  //   vec3 swap = a;
-  //   a = b;
-  //   b = swap;
-  // }
+  if (length(a) > length(b)) {
+    // for convenience, a will always be closer to the camera
+    vec3 swap = a;
+    a = b;
+    b = swap;
+  }
 
-  // if(depth != 1.0 && length(b) > length(feetPlayerPos)){
-  //   b = feetPlayerPos;
-  // }
+  if (depth != 1.0 && length(feetPlayerPos) < length(b)) {
+    b = feetPlayerPos;
+  }
 
-  // a += cameraPosition;
-  // b += cameraPosition;
+  a += cameraPosition;
+  b += cameraPosition;
 
   float totalDensity = 0.0;
 
@@ -163,24 +171,33 @@ vec3 getClouds(
   for (int i = 0; i < 8; i++, rayPos += rayStep) {
     totalDensity += getCloudDensity(rayPos.xz); // I should be multiplying by the ray step length but it looks fine anyway
   }
-
-  scatter = vec3(
-    mix(sunlightColor, skylightColor, 0.5) * 0.5 * step(0.01, totalDensity)
+  transmittance = vec3(
+    exp(-totalDensity * length(rayStep) * CLOUD_EXTINCTION_COLOR)
   );
 
-  float mixFactor =
-    (1.0 - rainStrength) *
-      henyeyGreenstein(0.6, dot(worldDir, worldLightDir)) *
-      0.9 +
-    0.1;
-  mixFactor *= 2.0;
+  vec3 radiance =
+    sunlightColor *
+      (1.0 - wetness * 0.5) *
+      henyeyGreenstein(0.6, dot(worldDir, worldLightDir)) +
+    skylightColor * henyeyGreenstein(0.0, 0.0);
 
-  scatter *= mix(1.0, mixFactor, totalDensity / 7.0);
-  transmittance = mix(
-    transmittance,
-    transmittance * 0.1,
-    rainStrength * step(0.01, totalDensity)
-  );
+  scatter =
+    (radiance - radiance * clamp01(transmittance)) / CLOUD_EXTINCTION_COLOR;
+
+  scatter = mix(scatter * 5.0, scatter, smoothstep(6.0, 7.0, totalDensity));
+
+  // scatter = vec3(
+  //   mix(sunlightColor, skylightColor, 0.5) * 0.5 * step(0.01, totalDensity)
+  // );
+
+  // float mixFactor =
+  //   (1.0 - rainStrength) *
+  //     henyeyGreenstein(0.6, dot(worldDir, worldLightDir)) *
+  //     0.9 +
+  //   0.1;
+  // mixFactor *= 2.0;
+
+  // scatter *= mix(1.0, mixFactor, totalDensity / 7.0);
 
   float fade = smoothstep(1000.0, 2000.0, length(a - cameraPosition));
 

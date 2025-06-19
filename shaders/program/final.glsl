@@ -58,11 +58,9 @@ void main() {
   #endif
 
   float rain = texture(colortex5, texcoord).r;
-  color.rgb = mix(
-    color.rgb,
-    bloom,
-    clamp01(0.01 * BLOOM_STRENGTH + rain * 0.1 + wetness * 0.05 + blindness)
-  );
+  color.rgb = mix(color.rgb, vec3(0.0, 0.0, 1.0), rain * 0.02);
+
+  color.rgb = mix(color.rgb, bloom, clamp01(0.01 * BLOOM_STRENGTH + blindness));
 
   color.rgb *= 1.0 - 0.8 * blindness;
   #endif

@@ -3,13 +3,13 @@
     Licensed under a custom non-commercial license.
     See LICENSE for full terms.
 
-     __   __ __   ______   __  __   ______   __           __   __ __   ______   ______   ______   __   __   ______   ______
-    /\ \ / //\ \ /\  ___\ /\ \/\ \ /\  __ \ /\ \         /\ \ / //\ \ /\  == \ /\  == \ /\  __ \ /\ "-.\ \ /\  ___\ /\  ___    \ \ \'/ \ \ \\ \___  \\ \ \_\ \\ \  __ \\ \ \____    \ \ \'/ \ \ \\ \  __< \ \  __< \ \  __ \\ \ \-.  \\ \ \____\ \  __     \ \__|  \ \_\\/\_____\\ \_____\\ \_\ \_\\ \_____\    \ \__|  \ \_\\ \_____\\ \_\ \_\\ \_\ \_\\ \_\\"\_\\ \_____\\ \_____      \/_/    \/_/ \/_____/ \/_____/ \/_/\/_/ \/_____/     \/_/    \/_/ \/_____/ \/_/ /_/ \/_/\/_/ \/_/ \/_/ \/_____/ \/_____/ 
- 
- 
-
-
-
+     __   __ __   ______   __  __   ______   __           __   __ __   ______   ______   ______   __   __   ______   ______    
+    /\ \ / //\ \ /\  ___\ /\ \/\ \ /\  __ \ /\ \         /\ \ / //\ \ /\  == \ /\  == \ /\  __ \ /\ "-.\ \ /\  ___\ /\  ___\   
+    \ \ \'/ \ \ \\ \___  \\ \ \_\ \\ \  __ \\ \ \____    \ \ \'/ \ \ \\ \  __< \ \  __< \ \  __ \\ \ \-.  \\ \ \____\ \  __\   
+     \ \__|  \ \_\\/\_____\\ \_____\\ \_\ \_\\ \_____\    \ \__|  \ \_\\ \_____\\ \_\ \_\\ \_\ \_\\ \_\\"\_\\ \_____\\ \_____\ 
+      \/_/    \/_/ \/_____/ \/_____/ \/_/\/_/ \/_____/     \/_/    \/_/ \/_____/ \/_/ /_/ \/_/\/_/ \/_/ \/_/ \/_____/ \/_____/ 
+                                                                                                                        
+    
     By jbritain
     https://jbritain.net
 
@@ -44,10 +44,23 @@ in vec2 texcoord;
 #include "/lib/atmosphere/fog.glsl"
 #include "/lib/atmosphere/clouds.glsl"
 
+#if GODRAYS > 0
+/* RENDERTARGETS: 0,1 */
+#else
 /* RENDERTARGETS: 0 */
+#endif
+
 layout(location = 0) out vec4 color;
 
+#if GODRAYS > 0
+layout(location = 1) out vec3 occlusion;
+#endif
+
 void main() {
+  #if GODRAYS > 0
+  occlusion = vec3(0.0);
+  #endif
+
   color = texture(colortex0, texcoord);
   vec4 data1 = texture(colortex1, texcoord);
 
@@ -61,7 +74,7 @@ void main() {
   bool inWater = isEyeInWater == 1;
 
   float translucentDepth = texture(depthtex0, texcoord).r;
-  float opaqueDepth = texture(depthtex2, texcoord).r;
+  float opaqueDepth = texture(depthtex1, texcoord).r;
 
   vec3 translucentViewPos = screenSpaceToViewSpace(
     vec3(texcoord, translucentDepth)
@@ -98,6 +111,18 @@ void main() {
       isWater = true;
       color.rgb = vec3(0.0);
     }
+  }
+  #endif
+
+  // if we are in the water, render the clouds before the water
+  #ifdef WORLD_OVERWORLD
+  if(inWater && isWater){
+    vec3 transmittance;
+    vec3 scattering = getClouds(vec3(0.0), opaqueFeetPlayerPos, transmittance, opaqueDepth);
+    color.rgb = color.rgb * transmittance + scattering;
+    #if GODRAYS > 0
+    occlusion = pow2(transmittance);
+    #endif
   }
   #endif
 
@@ -340,7 +365,7 @@ void main() {
         translucentFeetPlayerPos,
         worldReflectedDir * 1000.0,
         transmittance,
-        translucentDepth
+        1.0
       );
       skyReflection = skyReflection * transmittance + cloudScatter;
       skyReflection *= skyLightmap;
@@ -399,6 +424,17 @@ void main() {
       color.rgb = waterFog(color.rgb, vec3(0.0), opaqueViewPos);
     }
   }
+  // if we are not in water, render clouds over the water
+  #ifdef WORLD_OVERWORLD
+  else {
+    vec3 transmittance;
+    vec3 scattering = getClouds(vec3(0.0), opaqueFeetPlayerPos, transmittance, opaqueDepth);
+    color.rgb = color.rgb * transmittance + scattering;
+    #if GODRAYS > 0
+    occlusion = pow2(transmittance);
+    #endif
+  }
+  #endif
 }
 
 #endif
