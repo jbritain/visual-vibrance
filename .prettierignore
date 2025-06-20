@@ -1,4 +1,5 @@
 shaders/lib/common/settings.glsl
-block_wrangler/*
+scripts/block_wrangler
+*.pyc
 *.md
 package-lock.json
