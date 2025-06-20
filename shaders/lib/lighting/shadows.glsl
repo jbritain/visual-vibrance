@@ -130,7 +130,36 @@ vec3 getShadowing(
         texture(shadowtex0HW, shadowScreenPos) < 0.5;
 
       if (isWater) {
-        // shadow = vec3(1.0, 0.0, 0.0);
+        const ivec2 causticsSize = textureSize(causticsTex, 0);
+        const int slices = causticsSize.y / causticsSize.x;
+
+        vec3 worldPos = feetPlayerPos + cameraPosition;
+
+        vec3 worldNormal = mat3(gbufferModelViewInverse) * faceNormal;
+
+        // we want to find the two smallest components of the normal and use those to align the texture
+        // i.e if normal.y is biggest we use the xz of the position
+        vec3 faceMask =
+          1.0 - vec3(equal(worldNormal, vec3(maxVec3(abs(worldNormal))))); // sets the largest component to 0.0 and the other two to 1.0
+
+        show(faceMask);
+
+        vec2 causticsPos =
+          faceMask.y == 0.0
+            ? worldPos.xz
+            : faceMask.x == 0.0
+              ? worldPos.yz
+              : worldPos.xy;
+
+        causticsPos = fract(causticsPos / 2.0);
+
+        causticsPos.y /= float(slices);
+        causticsPos.y += fract(
+          rcp(float(slices)) * floor(frameTimeCounter * 20.0)
+        );
+
+        shadow *=
+          texelFetch(causticsTex, ivec2(causticsPos * causticsSize), 0).r * 3.0;
       }
       #endif
     }

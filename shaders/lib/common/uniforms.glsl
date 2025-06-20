@@ -143,6 +143,8 @@ uniform sampler2D blueNoiseTex;
 uniform sampler2D turbulentNoiseTex;
 uniform sampler2D vanillaCloudTex;
 
+uniform sampler2D causticsTex;
+
 #ifdef DISTANT_HORIZONS
 uniform int dhRenderDistance;
 uniform float dhFarPlane;

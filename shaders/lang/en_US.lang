@@ -282,7 +282,7 @@ option.SNELLS_WINDOW=Snell's Window
 option.SNELLS_WINDOW.comment=An approximate recreation of a real phenomena where refraction of light stops you seeing out of water at some angles. §aMinimal performance impact.
 
 option.CAUSTICS=Caustics
-option.CAUSTICS.comment=Emulates how light refracting through water appears to cast a shadow. Requires §eshadows §fto be enabled, and will look bad at lower §eshadow quality §fsettings. §aMinimal performance impact.
+option.CAUSTICS.comment=Emulates how light refracting through water appears to cast a shadow. Requires §eshadows §fto be enabled. §aMinimal performance impact.
 
 option.BLOOM=Bloom
 option.BLOOM.comment=Makes bright objects appear to glow. §6Moderate performance impact.
