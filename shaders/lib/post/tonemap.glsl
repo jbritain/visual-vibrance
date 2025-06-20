@@ -134,6 +134,7 @@ vec3 agxTonemap(vec3 col) {
   return col;
 }
 
+// prettier-ignore
 #define tonemap ACESTonemap // [agxTonemap jodieReinhardTonemap uncharted2FilmicTonemap hejlBurgessTonemap ACESTonemap]
 
 #endif // TONEMAP_GLSL
