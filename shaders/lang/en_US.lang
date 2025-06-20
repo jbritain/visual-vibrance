@@ -206,6 +206,9 @@ value.PBR_MODE.1=LabPBR 1.3
 option.CLOUDS=Clouds
 option.CLOUDS.comment=§aMinimal performance impact.
 
+option.VANILLA_CLOUD_TEXTURE=Vanilla Cloud Shape
+option.VANILLA_CLOUD_SHAPE.comment=Uses the cloud shape texture provided by vanilla Minecraft instead of the custom one. §9No performance impact!
+
 option.CLOUD_PLANE_ALTITUDE=Cloud Plane Altitude
 option.CLOUD_PLANE_ALTITUDE.comment=§9No performance impact!
 
