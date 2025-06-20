@@ -1,0 +1,4 @@
+shaders/lib/common/settings.glsl
+block_wrangler/*
+*.md
+package-lock.json

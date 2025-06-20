@@ -179,7 +179,10 @@ vec3 getClouds(
     sunlightColor *
       (1.0 - wetness * 0.5) *
       henyeyGreenstein(0.6, dot(worldDir, worldLightDir)) +
-    skylightColor * henyeyGreenstein(0.0, 0.0);
+    skylightColor *
+      (1.0 - wetness * 0.3) *
+      vec3(0.5, 1.0, 2.0) *
+      henyeyGreenstein(0.0, 0.0);
 
   scatter =
     (radiance - radiance * clamp01(transmittance)) / CLOUD_EXTINCTION_COLOR;
