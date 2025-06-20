@@ -55,6 +55,8 @@ const float sunPathRotation = 0.0; // [-90.0 -85.0 -80.0 -75.0 -70.0 -65.0 -60.0
 #define FXAA_EDGE_SENSITIVITY 1 //[0 1 2]
 
 #define CLOUDS
+#define CLOUD_PLANE_ALTITUDE 192 // [64 96 128 160 192]
+#define CLOUD_PLANE_HEIGHT 4 // [1 2 3 4 5 6 7 8]
 // #define VANILLA_CLOUD_TEXTURE
 // #define BLOCKY_CLOUDS
 #define CLOUD_SHADOWS

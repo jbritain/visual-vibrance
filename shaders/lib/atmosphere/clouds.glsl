@@ -21,8 +21,6 @@
 #ifndef CLOUDS_GLSL
 #define CLOUDS_GLSL
 
-#define CLOUD_PLANE_ALTITUDE (192) // [64 96 128 160 192]
-#define CLOUD_PLANE_HEIGHT (4) // [1 2 3 4 5 6 7 8]
 #define CLOUD_EXTINCTION_COLOR (vec3(0.1 + wetness))
 
 float remap(float val, float oMin, float oMax, float nMin, float nMax) {
