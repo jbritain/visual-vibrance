@@ -5,6 +5,6 @@ Visual Vibrance is _an alpha_ and since it was forked from my other pack, [Glimm
 ## Compatibility
 
 - OpenGL 4.3+ - macOS is _not_ supported, nor is the Raspberry Pi. Most modern GPUs (integrated or dedicated) should work fine.
-- Iris 1.8+, OptiFine is _not_ supported.
+- Iris 1.7+, OptiFine is _not_ supported.
 
 If you are interested in contributing or assisting in the development of this shaderpack, don't hesitate to make a pull request, as I have only some interest in maintaining this pack, and it was mainly made just to see if I could recreate the look.
