@@ -32,6 +32,7 @@ def main():
 			'full': tags['sway/full']
 		}),
 		'tinted_glass': Bool(blocks('minecraft:tinted_glass')),
+		'glow_berries': Bool(blocks('minecraft:cave_vines_plant')),
 
 		'fire_light_color': Bool(blocks('minecraft:fire', 'minecraft:campfire', 'minecraft:jack_o_lantern', 'minecraft:lava')),
 		'torch_light_color': Bool(blocks('minecraft:torch', 'minecraft:wall_torch', 'minecraft:lantern')),

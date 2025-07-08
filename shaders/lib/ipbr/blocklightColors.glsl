@@ -33,6 +33,10 @@ vec3 getBlocklightColor(int ID) {
     return vec3(242 / 255.0, 199 / 255.0, 70 / 255.0);
   }
 
+  if (materialIsGlowBerries(ID)) {
+    return vec3(242 / 255.0, 150 / 255.0, 30 / 255.0);
+  }
+
   return vec3(0.0);
 }
 
