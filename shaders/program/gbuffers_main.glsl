@@ -253,6 +253,10 @@ void main() {
   material.emission = 1.0;
   #endif
 
+  if (renderStage == MC_RENDER_STAGE_ENTITIES && entityId == 1) {
+    material.emission = 1.0;
+  }
+
   if (materialIsWater(materialID)) {
     #if WAVE_MODE == 1
     // sample texture 1 pixel in each direction to determine normal
