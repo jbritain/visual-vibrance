@@ -72,7 +72,7 @@ void main() {
       data.color = pow(averageTextureData.rgb, vec3(2.2));
     }
     data.opacity = pow(averageTextureData.a, rcp(3));
-    data.emission = at_midBlock.w / 15.0;
+    data.emission = pow2(at_midBlock.w / 15.0);
     // data.emission = textureLod(specular, mc_midTexCoord, 4).a;
     // if(data.emission == 1.0){
     //     data.emission = 0.0;

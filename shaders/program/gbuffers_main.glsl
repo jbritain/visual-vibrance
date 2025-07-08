@@ -244,7 +244,7 @@ void main() {
     (renderStage == MC_RENDER_STAGE_TERRAIN_SOLID ||
       renderStage == MC_RENDER_STAGE_TERRAIN_TRANSLUCENT)
   ) {
-    material.emission = luminance(albedo.rgb);
+    material.emission = luminance(albedo.rgb) * emission;
   }
 
   #endif
@@ -452,7 +452,7 @@ void main() {
         lightmap.x > 0.5 &&
         renderStage == MC_RENDER_STAGE_PARTICLES
       ) {
-        material.emission = lightmap.x;
+        material.emission = max(lightmap.x, material.emission);
       }
 
       #ifdef DYNAMIC_HANDLIGHT
