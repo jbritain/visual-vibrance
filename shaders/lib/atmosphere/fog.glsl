@@ -145,11 +145,13 @@ vec3 cloudyFog(vec3 color, vec3 playerPos, float depth, vec3 scatterFactor) {
 
   vec3 phase = vec3(dualHenyeyGreenstein(-0.5, 0.8, costh, 0.5));
 
-  vec3 radiance = sunlightColor * scatterFactor * phase + skylightColor * EBS.y;
+  vec3 radiance = sunlightColor * scatterFactor * phase;
 
   vec3 scatter = vec3(1.0 - transmittance) / 2; // / max(opticalDepth, 1e-6);
   scatter *= radiance;
   scatter *= skyMultiplier;
+
+  transmittance = mix(transmittance, 1.0, 0.7);
 
   return color * transmittance + scatter;
 }
