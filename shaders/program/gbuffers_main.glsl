@@ -237,7 +237,7 @@ void main() {
     materialID
   );
   material.ao = texture(normals, texcoord).z;
-  #ifndef MC_TEXTURE_FORMAT_LAB_PBR
+  #if ( ! defined MC_TEXTURE_FORMAT_LAB_PBR && defined INTEGRATED_EMISSION )
   if (
     material.emission == 0.0 &&
     emission > 0.0 &&

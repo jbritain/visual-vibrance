@@ -256,6 +256,9 @@ value.REFLECTION_MODE.2=SSR
 
 option.ROUGH_SKY_REFLECTIONS=Rough Sky Reflections
 
+option.INTEGRATED_EMISSION=Integrated Emission
+option.INTEGRATED_EMISSION.comment=Automatically detects blocks which emit light and makes them glow. §2Imperceptible performance impact.
+
 option.WAVE_MODE=Water Normals
 option.WAVE_MODE.comment=How normals are generated for water. §eResource pack §fwill use whatever normals are provided by the resource pack. §eGenerated §fwill generate them based on the brightness of the water texture. §eRealistic §fwill create more real looking water waves that are not pixelated. §aMinimal performance impact.
 value.WAVE_MODE.0=Resource Pack

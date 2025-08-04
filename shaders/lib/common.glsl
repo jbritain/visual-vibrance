@@ -114,4 +114,7 @@ const bool colortex7Clear = false;
 #ifdef VANILLA_CLOUD_TEXTURE
 #endif
 
+#ifdef INTEGRATED_EMISSION
+#endif
+
 #endif // COMMON_GLSL
