@@ -187,7 +187,7 @@ vec3 getClouds(
   scatter =
     (radiance - radiance * clamp01(transmittance)) / CLOUD_EXTINCTION_COLOR;
 
-  scatter = mix(scatter * 5.0, scatter, smoothstep(6.0, 7.0, totalDensity));
+  scatter = mix(scatter * 2.0, scatter, smoothstep(6.0, 7.0, totalDensity));
 
   // scatter = vec3(
   //   mix(sunlightColor, skylightColor, 0.5) * 0.5 * step(0.01, totalDensity)

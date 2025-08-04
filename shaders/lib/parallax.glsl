@@ -18,10 +18,6 @@
 #ifndef PARALLAX_GLSL
 #define PARALLAX_GLSL
 
-float getDepth(vec2 texcoord, vec2 dx, vec2 dy) {
-  return 1.0 - textureGrad(normals, texcoord, dx, dy).a;
-}
-
 vec2 localToAtlas(vec2 texcoord) {
   // vec2 localCoord = 1.0 - abs(mod(texcoord, 2.0) - 1.0); // mirror the texture coordinate if it goes out of bounds instead of wrapping it
   vec2 localCoord = mod(texcoord, 1.0); // wrap texture coordinate
@@ -31,6 +27,41 @@ vec2 localToAtlas(vec2 texcoord) {
 
 vec2 atlasToLocal(vec2 texcoord) {
   return (texcoord - textureBounds.xy) / singleTexSize;
+}
+
+vec4 bilinearSample(sampler2D tex, vec2 texcoord, vec2 dx, vec2 dy) {
+  vec2 localCoord = atlasToLocal(texcoord);
+
+  vec2 f = fract(localCoord * singleTexSize - 0.5);
+
+  vec2 invRes = rcp(atlasSize);
+  vec4 tl = textureGrad(tex, texcoord, dx, dy);
+  vec4 tr = textureGrad(
+    tex,
+    localToAtlas(localCoord + vec2(invRes.x, 0.0)),
+    dx,
+    dy
+  );
+  vec4 bl = textureGrad(
+    tex,
+    localToAtlas(localCoord + vec2(0.0, invRes.y)),
+    dx,
+    dy
+  );
+  vec4 br = textureGrad(tex, localToAtlas(localCoord + invRes), dx, dy);
+
+  vec4 top = mix(tl, tr, f.x);
+  vec4 bottom = mix(bl, br, f.x);
+
+  return mix(top, bottom, f.y);
+}
+
+float getDepth(vec2 texcoord, vec2 dx, vec2 dy) {
+  #ifdef SMOOTH_PARALLAX
+  return 1.0 - bilinearSample(normals, texcoord, dx, dy).a;
+  #else
+  return 1.0 - textureGrad(normals, texcoord, dx, dy).a;
+  #endif
 }
 
 vec2 getParallaxTexcoord(
@@ -73,8 +104,6 @@ vec2 getParallaxTexcoord(
     return texcoord;
   }
 
-  // pos += rayStep * jitter;
-
   depth = getDepth(localToAtlas(pos.xy), dx, dy);
 
   while (depth - pos.z > rcp(255.0)) {
@@ -83,12 +112,13 @@ vec2 getParallaxTexcoord(
     pos += rayStep;
   }
 
+  pos = previousPos;
   depth = getDepth(localToAtlas(pos.xy), dx, dy);
   // binary refinement
   for (int i = 0; i < 6; i++) {
     rayStep /= 2.0;
 
-    pos += rayStep * float(depth - pos.z > rcp(255.0));
+    pos += rayStep * (depth - pos.z > rcp(255.0) ? 1.0 : -1.0);
     depth = getDepth(localToAtlas(pos.xy), dx, dy);
 
     if (depth - pos.z > rcp(255.0)) {
