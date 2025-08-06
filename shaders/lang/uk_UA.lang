@@ -1,0 +1,350 @@
+option.GLIMMER_SHADERS=Visual Vibrance
+value.GLIMMER_SHADERS.1=§dВід jbritain
+value.GLIMMER_SHADERS.2=§dВід jbritain
+
+option.WEBSITE=https://
+value.WEBSITE.1=§djbritain.net
+value.WEBSITE.2=§djbritain.net
+
+screen.LIGHTING=Освітлення і тіні
+screen.SHADOWS=Тіні
+screen.ATMOSPHERICS=Небо та туман
+screen.WATER=Вода
+screen.POST=Постобробка
+screen.WORLD=Світ
+screen.MATERIALS=Матеріали
+screen.PARALLAX=Паралакс (ОП)
+screen.DH=Distant Horizons
+screen.DEBUG=Розробка
+
+profile.potato=§cКартопля
+profile.toaster=§6Тостер
+profile.igpu=§aІнтегрована графіка
+profile.dgpu=§bВиділена графіка
+
+option.DEBUG_ENABLE=Режим налагодження
+option.DEBUG_ENABLE.comment=Промальовує на екран будь-яку функцію show().
+
+option.FREEZE_TIME=Стоп-час
+option.FREEZE_TIME.comment=Вимикає всі анімації, вбудовані в шейдер, наприклад хвилі води.
+
+option.CONTRAST=Контраст
+option.CONTRAST.comment=§9Не впливає на продуктивність!
+option.SATURATION=Насиченість
+option.SATURATION.comment=§9Не впливає на продуктивність!
+
+option.EXPOSURE=Контакт
+option.EXPOSURE.comment=Контролює остаточну яскравість екрана. §9Не впливає на продуктивність!
+value.EXPOSURE.0=0.0
+value.EXPOSURE.1=0.1
+value.EXPOSURE.2=0.2
+value.EXPOSURE.3=0.3
+value.EXPOSURE.4=0.4
+value.EXPOSURE.5=0.5
+value.EXPOSURE.6=0.6
+value.EXPOSURE.7=0.7
+value.EXPOSURE.8=0.8
+value.EXPOSURE.9=0.9
+value.EXPOSURE.10=1.0
+value.EXPOSURE.11=1.1
+value.EXPOSURE.12=1.2
+value.EXPOSURE.13=1.3
+value.EXPOSURE.14=1.4
+value.EXPOSURE.15=1.5
+value.EXPOSURE.16=1.6
+value.EXPOSURE.17=1.7
+value.EXPOSURE.18=1.8
+value.EXPOSURE.19=1.9
+value.EXPOSURE.20=2.0
+value.EXPOSURE.21=2.1
+value.EXPOSURE.22=2.2
+value.EXPOSURE.23=2.3
+value.EXPOSURE.24=2.4
+value.EXPOSURE.25=2.5
+value.EXPOSURE.26=2.6
+value.EXPOSURE.27=2.7
+value.EXPOSURE.28=2.8
+value.EXPOSURE.29=2.9
+value.EXPOSURE.30=3.0
+value.EXPOSURE.31=3.1
+value.EXPOSURE.32=3.2
+value.EXPOSURE.33=3.3
+value.EXPOSURE.34=3.4
+value.EXPOSURE.35=3.5
+value.EXPOSURE.36=3.6
+value.EXPOSURE.37=3.7
+value.EXPOSURE.38=3.8
+value.EXPOSURE.39=3.9
+value.EXPOSURE.40=4.0
+value.EXPOSURE.41=4.1
+value.EXPOSURE.42=4.2
+value.EXPOSURE.43=4.3
+value.EXPOSURE.44=4.4
+value.EXPOSURE.45=4.5
+value.EXPOSURE.46=4.6
+value.EXPOSURE.47=4.7
+value.EXPOSURE.48=4.8
+value.EXPOSURE.49=4.9
+value.EXPOSURE.50=5.0
+value.EXPOSURE.51=5.1
+value.EXPOSURE.52=5.2
+value.EXPOSURE.53=5.3
+value.EXPOSURE.54=5.4
+value.EXPOSURE.55=5.5
+value.EXPOSURE.56=5.6
+value.EXPOSURE.57=5.7
+value.EXPOSURE.58=5.8
+value.EXPOSURE.59=5.9
+value.EXPOSURE.60=6.0
+value.EXPOSURE.61=6.1
+value.EXPOSURE.62=6.2
+value.EXPOSURE.63=6.3
+value.EXPOSURE.64=6.4
+value.EXPOSURE.65=6.5
+value.EXPOSURE.66=6.6
+value.EXPOSURE.67=6.7
+value.EXPOSURE.68=6.8
+value.EXPOSURE.69=6.9
+value.EXPOSURE.70=7.0
+value.EXPOSURE.71=7.1
+value.EXPOSURE.72=7.2
+value.EXPOSURE.73=7.3
+value.EXPOSURE.74=7.4
+value.EXPOSURE.75=7.5
+value.EXPOSURE.76=7.6
+value.EXPOSURE.77=7.7
+value.EXPOSURE.78=7.8
+value.EXPOSURE.79=7.9
+value.EXPOSURE.80=8.0
+
+option.AMBIENT_STRENGTH=Сила навколишнього освітлення
+option.AMBIENT_STRENGTH.comment=Мінімальна кількість світла, яка може бути в будь-якій ситуації. §9Не впливає на продуктивність!
+
+option.FLOODFILL=Кольорове вітло блоків
+option.FLOODFILL.comment=Робить колір свіила таким самим, як блок. Потрібно ввімкнути §eтіні§f. §6Помірний вплив на продуктивність.
+
+option.EMISSION_STRENGTH=Сила сяяння
+option.EMISSION_STRENGTH.comment=Наскільки яскраве сяяння. §9Не впливає на продуктивність!
+
+option.BLOCKLIGHT_STRENGTH=Сила світла блоків
+option.BLOCKLIGHT_STRENGTH.comment=Наскільки яскраве світло блоків. §9Не впливає на продуктивність!
+
+option.ambientOcclusionLevel=Сила навколишнього оклюзії
+option.ambientOcclusionLevel.comment=Затемнює кути, де зустрічаються блоки, щоб імітувати навколишнє затінення. §9Не впливає на продуктивність! §fТакож впливає на §eнавколишню оклюзію Distant Horizon.
+
+option.SHADOWS=Тіні
+
+option.shadowDistance=Дальність тіні
+option.shadowDistance.comment=Радіус навколо гравця, в якому об'єкти можуть відкидати тінь. §cВисокий вплив на продуктивність!
+value.shadowDistance.16.0=1 чанк
+value.shadowDistance.32.0=2 чанки
+value.shadowDistance.48.0=3 чанки
+value.shadowDistance.64.0=4 чанки
+value.shadowDistance.80.0=5 чанків
+value.shadowDistance.96.0=6 чанків
+value.shadowDistance.112.0=7 чанків
+value.shadowDistance.128.0=8 чанків
+value.shadowDistance.144.0=9 чанків
+value.shadowDistance.160.0=10 чанків
+value.shadowDistance.176.0=11 чанків
+value.shadowDistance.192.0=12 чанків
+value.shadowDistance.208.0=13 чанків
+value.shadowDistance.224.0=14 чанків
+value.shadowDistance.240.0=15 чанків
+value.shadowDistance.256.0=16 чанків
+value.shadowDistance.272.0=17 чанків
+value.shadowDistance.288.0=18 чанків
+value.shadowDistance.304.0=19 чанків
+value.shadowDistance.320.0=20 чанків
+value.shadowDistance.336.0=21 чанк
+value.shadowDistance.352.0=22 чанки
+value.shadowDistance.368.0=23 чанки
+value.shadowDistance.384.0=24 чанки
+value.shadowDistance.400.0=25 чанків
+value.shadowDistance.416.0=26 чанків
+value.shadowDistance.432.0=27 чанків
+value.shadowDistance.448.0=28 чанків
+value.shadowDistance.464.0=29 чанків
+value.shadowDistance.480.0=30 чанків
+value.shadowDistance.496.0=31 чанк
+value.shadowDistance.512.0=32 чанки
+
+option.entityShadowDistanceMul=Відстань тіні сутности
+option.entityShadowDistanceMul.comment=Частка відстані тіні, в межах якої сутності відкидають тінь. Значення 0 повністю вимкне тіні сутнотей. §6Помірний вплив на продуктивність.
+suffix.entityShadowDistanceMul=x
+
+option.shadowMapResolution=Роздільна датність тіні
+option.shadowMapResolution.comment=Роздільна здатність мапи тіней (наскільки вона пікселізована). §cВисокий вплив на продуктивність!
+value.shadowMapResolution.128=128x
+value.shadowMapResolution.256=256x
+value.shadowMapResolution.512=512x
+value.shadowMapResolution.1024=1024x
+value.shadowMapResolution.2048=2048x
+value.shadowMapResolution.4096=4096x
+value.shadowMapResolution.8192=8192x
+
+option.SHADOW_SAMPLES=Зразки тіней
+option.SHADOW_SAMPLES.comment=Кількість зразків тіні, взятих на піксель. Вищі значення зменшують шум. §cВисокий вплив на продуктивність!
+
+option.SHADOW_SOFTNESS=М'якість тіні
+option.SHADOW_SOFTNESS.comment=Як виглядатимуть м'які тіні. Вищі значення м'якости краще приховують піксельні тіні за рахунок шуму. §9Не впливає на продуктивність!
+
+option.sunPathRotation=Кут Сонця та Місяця
+option.sunPathRotation.comment=Кут шляху, яким Сонце та Місяць йдуть небом. §9Не впливає на продуктивність!
+
+option.DIRECTIONAL_LIGHTMAPS=Спрямоване освітлення
+option.DIRECTIONAL_LIGHTMAPS.comment=Спроба вгадати, з якого напрямку йде блок і світло. Найкраще працює з пакетом ресурсів, який містить карти нормалей. §2Малий вплив на продуктивність.
+
+option.DYNAMIC_HANDLIGHT=Динамічний ліхтар
+option.DYNAMIC_HANDLIGHT.comment=Освітлює область навколо гравця, коли він тримає джерело світла. §2Малий вплив на продуктивність.
+
+option.PBR_MODE=Підтримка PBR
+option.PBR_MODE.comment=LabPBR вимагає підтримуваного пакета ресурсів. §6Помірний вплив на продуктивність.
+value.PBR_MODE.0=ВИМК.
+value.PBR_MODE.1=LabPBR 1.3
+
+option.CLOUDS=Хмари
+option.CLOUDS.comment=§aМайже не впливає на продуктивність.
+
+option.VANILLA_CLOUD_TEXTURE=Усталена форма хмари
+option.VANILLA_CLOUD_SHAPE.comment=Використовує текстуру форми хмари, надану Minecraft замість спеціальної. §9Не впливає на продуктивність!
+
+option.CLOUD_PLANE_ALTITUDE=Висота площини хмар
+option.CLOUD_PLANE_ALTITUDE.comment=§9Не впливає на продуктивність!
+
+option.CLOUD_PLANE_HEIGHT=Висота хмари
+option.CLOUD_PLANE_HEIGHT.comment=§9Не впливає на продуктивність!
+
+option.BLOCKY_CLOUDS=Хмари-блоки
+option.BLOCKY_CLOUDS.comment=Робить хмари чітко визначеними квадратними формами. Спочатку це була помилка, але людям вона сподобалася, тож тепер це функція! §9Не впливає на продуктивність!
+
+option.ATMOSPHERIC_FOG=Туман
+option.ATMOSPHERIC_FOG.comment=Змушує місцевість зникати вдалині. §2Малий вплив на продуктивність.
+
+option.VANILLA_FOG_DENSITY=Щільність туману
+option.VANILLA_FOG_DENSITY.comment=Скільки туману. §9Не впливає на продуктивність!
+
+option.CLOUDY_FOG=Красивий туман
+option.CLOUDY_FOG.comment=Додає схожий на млу туман над землею. Більш помітно вранці та під час дощу. §6Помірний вплив на продуктивність.
+
+option.BASE_FOG_DENSITY=Базова щільність туману
+option.BASE_FOG_DENSITY.comment=Щільність §eкрасивого туману§f. §9Не впливає на продуктивність!
+
+option.MORNING_FOG_DENSITY=Щільність ранкового туману
+option.MORNING_FOG_DENSITY.comment=Наскільки збільшується щільність §eкрасивого туману§f вранці. §9Не впливає на продуктивність!
+
+option.GODRAYS=Божі промені (VL)
+option.GODRAYS.comment=Створюється враження, що об'єкти відкидають тінь крізь туман модів. §fРежим §eпростору екрана§f має §aмінімальний вплив на продуктивність§f, але він менш точний і зникне, якщо на екрані немає сонця. §eОб'ємний§f режим має §6помірний вплив на продуктивність§f, потрібно ввімкнути §eтіні§f, і він виглядатиме погано при нижчих значення §eякости тіней§f.
+value.GODRAYS.0=ВИМК.
+value.GODRAYS.1=Простір екрана
+value.GODRAYS.2=Об'ємний
+
+option.GODRAYS_SAMPLES=Зразки божих променів
+option.GODRAYS_SAMPLES.comment=Скільки зразків береться під час промальовування божих променів. Вищі значення зменшують шум за рахунок продуктивности. §6Помірний вплив на продуктивність.
+
+option.CLOUD_SHADOWS=Тіні хмар
+option.CLOUD_SHADOWS.comment=Змушує хмари відкидати тінь. §aМінімальний вплив на продуктивність.
+
+option.BORDER_FOG=Туман межі
+option.BORDER_FOG.comment=Змушує рельєф зникати у небі на краю дальности промальовування. §2Невідчутний вплив на продуктивність.
+
+option.REFLECTION_MODE=Відблиски
+option.REFLECTION_MODE.comment=Додає відблиски у воду. «Швидкий» варіант угадує, де може бути відблиск, і часто є неточним, тоді як SSR простежує сцену, щоб знайти точку перетину. §cВисокий вплив на продуктивність!
+value.REFLECTION_MODE.0=ВИМК.
+value.REFLECTION_MODE.1=Швидкий
+value.REFLECTION_MODE.2=SSR
+
+option.ROUGH_SKY_REFLECTIONS=Грубі відблиски неба
+
+option.WAVE_MODE=Нормальний рівень води
+option.WAVE_MODE.comment=Як генеруються нормалі для води. §eПакет ресурсів§f — використовуватиме будь-які звичайні параметри, надані пакетом ресурсів. §eЗгенеровано§f — згенерує їх на основі яскравості текстури води. §eРеалістичний§f — створить більш реалістичні водні хвилі без пікселів. §aМінімальний вплив на продуктивність.
+value.WAVE_MODE.0=Пакет ресурсів
+value.WAVE_MODE.1=Згенеровано
+value.WAVE_MODE.2=Реалістичний
+
+option.CUSTOM_SUN=Пакет ресурсів Сонця і Місяця
+option.CUSTOM_SUN.comment=Якщо це вимкнено, пакет шейдерів намагається видалити «цвітіння» навколо сонця та місяця. Це може спричинити проблеми з користувацькими пакетами ресурсів неба, тому цей параметр вимикає його. §2Невідчутний вплив на продуктивність.
+
+option.PIXEL_LOCKED_LIGHTING=Освітлення блокування пікселів
+option.PIXEL_SIZE=Розмір блокування пікселів
+option.RAIN_PUDDLES=Дощові калюжі
+
+option.SSR_STEPS=Кроки SSR
+option.SSR_STEPS.comment=Більші значення зменшать шум/поступ у віддзеркаленнях води, §eякщо SSR увімкнено §fпідвищить за рахунок продуктивности. §6Помірний вплив на продуктивність. §7 верніть увагу, що кожен крок бере 4 зразки.
+
+option.FADE_REFLECTIONS=Зникнення краю відблисків
+option.FADE_REFLECTIONS.comment=Змушує зникати відблиски в небі, коли вони наближаються до краю екрана, щоб запобігти різкому обрізанню. §2Невідчутний вплив на продуктивність.
+
+option.SSR_JITTER=Джитер SSR
+option.SSR_JITTER.comment=Якщо ввімкнено, віддзеркалення §eSSR§f виглядатимуть шумно, однак не буде ефекту «сходинки». §2Невідчутний вплив на продуктивність.
+
+option.REFRACTION=Відблиски
+option.REFRACTION.comment=Згинає світло, коли воно потрапляє у воду або виходить з неї. §aМінімальний вплив на продуктивність.
+
+option.SNELLS_WINDOW=Вікно Снелла
+option.SNELLS_WINDOW.comment=Приблизне відтворення реального явища, де заломлення світла заважає вам бачити поза водою під деякими кутами. §aМінімальний вплив на продуктивність.
+
+option.CAUSTICS=Каустика
+option.CAUSTICS.comment=Емулює те, як світло, що заломлюється крізь воду, відкидає тінь. Потрібно ввімкнути §eтіні§f. §aМінімальний вплив на продуктивність.
+
+option.BLOOM=Цвітіння
+option.BLOOM.comment=Створюється враження, що яскраві об'єкти світяться. §6Помірний вплив на продуктивність.
+
+option.BLOOM_RADIUS=Радіус цвітіння
+option.BLOOM_RADIUS.comment=Як далеко екраном розповсюдиться цвітіння. §9Без впливу на продуктивність!
+
+option.BLOOM_STRENGTH=Сила цвітіння
+option.BLOOM_STRENGTH.comment=Наскільки сильно колір впливає на кінцевий колір екрана. §9Без впливу на продуктивність!
+
+option.BLOOM_QUALITY=Якість цвітіння
+option.BLOOM_QUALITY.comment=Який відсоток роздільної здатності екрана запускати цвітіння. §6Помірний вплив на продуктивність.
+
+option.TEMPORAL_FILTER=Тимчасова фільтраці
+option.TEMPORAL_FILTER.comment=Використовує дані з попередніх кадрів для зменшення шуму. Може призвести до розмитостb та ореолів. §2Невідчутний вплив на продуктивність. §7Будь ласка, не купуйтеся на кампанію Threat Interactive проти ТЗ. §7Він правий, що багато сучасних ігор використовують його як милицю, але не має довіри та не розуміє графічного програмування. §7Cправжня проблема полягає в тому, що більшість студій не дають розробникам часу, необхідного для належної оптимізації своїх ігор.
+
+option.FXAA=ШНЗ
+option.FXAA.comment=Згладжування — видаляє нерівні краї. §aМінімальний вплив на продуктивність.
+
+option.WAVING_BLOCKS=Коливальні блоки
+option.WAVING_BLOCKS.comment=Змушує рослини коливатися на вітрі. §aМінімальний вплив на продуктивність.
+
+option.PATCHY_LAVA=Нерівна лава
+option.PATCHY_LAVA.comment=Додає деякі варіації до яскравости лави. §2Невідчутний вплив на продуктивність.
+
+option.INFINITE_OCEAN=Нескінченний океан
+option.INFINITE_OCEAN.comment=Додає океан, який тягнеться до нескінченності. §6Помірний вплив на продуктивність.
+
+option.SEA_LEVEL=Рівень моря
+option.SEA_LEVEL.comment=На якій висоті повинен промальовуватися нескінченний океан. §9Не впливає на продуктивність! §7Якщо вам потрібен рівень моря, якого тут немає, дайте мені знати! 
+
+option.DH_AO=Навколишня оклюзія
+option.DH_AO.comment=Робить краї блоків більш чіткими на місцевости Distant Horizons. §6Помірний вплив на продуктивність.
+
+option.DH_AO_SAMPLES=Зразки AO
+option.DH_AO_SAMPLES.comment=Вищі значення працюватимуть гірше, але зменшать шум. §6Помірний вплив на продуктивність.
+
+option.PARALLAX=Паралакс
+option.PARALLAX.comment=Зробить так, щоб блоки та сутності мали глибину. §6Помірний вплив на продуктивність.
+
+option.PARALLAX_HEIGHT=Висота паралакса
+option.PARALLAX_HEIGHT.comment=Як далеко в блок має бути глибина 1,0. §9Без впливу на продуктивність!
+
+option.PARALLAX_DISTANCE=Відстань промальовування паралакса
+option.PARALLAX_DISTANCE.comment=Наскільки далеко паралакс повинен припинити промальовування. §6Помірний вплив на продуктивність.
+
+option.PARALLAX_SAMPLES=Зразки паралакса
+option.PARALLAX_SAMPLES.comment=Скільки зразків потрібно взяти під час обчислення паралакса. Більш високі значення зменшують зубчасті краї, але втрачають продуктивність. §6Помірний вплив на продуктивність.
+
+option.PARALLAX_SHADOW=Тінь паралакса
+option.PARALLAX_SHADOW.comment=Дозволяє паралаксу відкидати тінь. §6Помірний вплив на продуктивність.
+
+option.PARALLAX_SHADOW_SAMPLES=Зразки тіні паралакса
+option.PARALLAX_SHADOW_SAMPLES.comment=Скільки зразків потрібно взяти під час обчислення тіней паралакса. §6Помірний вплив на продуктивність. 
+
+option.tonemap=Оператор мапи тонів
+option.tonemap.comment=Як оцінюється остаточний колір. §2Невідчутний вплив на продуктивність.
+value.tonemap.agxTonemap=AGX (пробивний)
+value.tonemap.jodieReinhardTonemap=Джоді-Рейнхард
+value.tonemap.uncharted2FilmicTonemap=Можливий
+value.tonemap.hejlBurgessTonemap=Гейл-Берґес
+value.tonemap.ACESTonemap=ACES Прибл.
