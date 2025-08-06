@@ -120,7 +120,7 @@ value.EXPOSURE.80=8.0
 option.AMBIENT_STRENGTH=Сила навколишнього освітлення
 option.AMBIENT_STRENGTH.comment=Мінімальна кількість світла, яка може бути в будь-якій ситуації. §9Не впливає на продуктивність!
 
-option.FLOODFILL=Кольорове вітло блоків
+option.FLOODFILL=Кольорове світло блоків
 option.FLOODFILL.comment=Робить колір свіила таким самим, як блок. Потрібно ввімкнути §eтіні§f. §6Помірний вплив на продуктивність.
 
 option.EMISSION_STRENGTH=Сила сяяння
