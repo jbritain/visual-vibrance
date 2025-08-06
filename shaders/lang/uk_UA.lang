@@ -121,7 +121,7 @@ option.AMBIENT_STRENGTH=Сила навколишнього освітлення
 option.AMBIENT_STRENGTH.comment=Мінімальна кількість світла, яка може бути в будь-якій ситуації. §9Не впливає на продуктивність!
 
 option.FLOODFILL=Кольорове світло блоків
-option.FLOODFILL.comment=Робить колір свіила таким самим, як блок. Потрібно ввімкнути §eтіні§f. §6Помірний вплив на продуктивність.
+option.FLOODFILL.comment=Робить колір світла таким самим, як блок. Потрібно ввімкнути §eтіні§f. §6Помірний вплив на продуктивність.
 
 option.EMISSION_STRENGTH=Сила сяяння
 option.EMISSION_STRENGTH.comment=Наскільки яскраве сяяння. §9Не впливає на продуктивність!
@@ -206,7 +206,7 @@ value.PBR_MODE.1=LabPBR 1.3
 option.CLOUDS=Хмари
 option.CLOUDS.comment=§aМайже не впливає на продуктивність.
 
-option.VANILLA_CLOUD_TEXTURE=Усталена форма хмари
+option.VANILLA_CLOUD_TEXTURE=Усталена форма хмар
 option.VANILLA_CLOUD_SHAPE.comment=Використовує текстуру форми хмари, надану Minecraft замість спеціальної. §9Не впливає на продуктивність!
 
 option.CLOUD_PLANE_ALTITUDE=Висота площини хмар
@@ -262,7 +262,7 @@ value.WAVE_MODE.0=Пакет ресурсів
 value.WAVE_MODE.1=Згенеровано
 value.WAVE_MODE.2=Реалістичний
 
-option.CUSTOM_SUN=Пакет ресурсів Сонця і Місяця
+option.CUSTOM_SUN=Пакет ресур. Сонця і Місяця
 option.CUSTOM_SUN.comment=Якщо це вимкнено, пакет шейдерів намагається видалити «цвітіння» навколо сонця та місяця. Це може спричинити проблеми з користувацькими пакетами ресурсів неба, тому цей параметр вимикає його. §2Невідчутний вплив на продуктивність.
 
 option.PIXEL_LOCKED_LIGHTING=Освітлення блокування пікселів
