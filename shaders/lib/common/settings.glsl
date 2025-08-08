@@ -7,7 +7,7 @@ const bool shadowHardwareFiltering = true;
 // #define FREEZE_TIME
 
 #define EXPOSURE 20 // [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80]
-#define CONTRAST 1.0 // [0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0]
+#define CONTRAST 0.9 // [0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0]
 #define SATURATION 1.0 // [0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2.0]
 
 #define AMBIENT_STRENGTH 0.01 // [0.00 0.01 0.02 0.03 0.04 0.05 0.06 0.07 0.08 0.09 0.10]
@@ -59,7 +59,7 @@ const float sunPathRotation = 0.0; // [-90.0 -85.0 -80.0 -75.0 -70.0 -65.0 -60.0
 #define CLOUDS
 #define CLOUD_PLANE_ALTITUDE 192 // [64 96 128 160 192]
 #define CLOUD_PLANE_HEIGHT 4 // [1 2 3 4 5 6 7 8]
-// #define VANILLA_CLOUD_TEXTURE
+#define VANILLA_CLOUD_TEXTURE
 // #define BLOCKY_CLOUDS
 #define CLOUD_SHADOWS
 

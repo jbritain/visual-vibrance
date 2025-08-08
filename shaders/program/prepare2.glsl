@@ -27,7 +27,9 @@ layout(r32ui) uniform uimage3D voxelMap;
 #include "/lib/atmosphere/sky/sky.glsl"
 
 void main() {
-  skylightColor = texture(lightmap, vec2(0.0, 1.0)).rgb;
+  skylightColor =
+    texture(lightmap, vec2(0.0, 1.0)).rgb *
+    mix(vec3(3.0), vec3(0.9, 0.9, 1.0), smoothstep(-0.1, 0.1, worldLightDir.y));
   sunlightColor =
     sunPosition == shadowLightPosition
       ? sunIrradiance

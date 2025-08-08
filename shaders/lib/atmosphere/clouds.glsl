@@ -176,7 +176,7 @@ vec3 getClouds(
   vec3 radiance =
     sunlightColor *
       (1.0 - wetness * 0.5) *
-      henyeyGreenstein(0.6, dot(worldDir, worldLightDir)) *
+      (henyeyGreenstein(0.6, dot(worldDir, worldLightDir)) + 0.5) *
       0.2 +
     mix(skylightColor, sunlightColor, 0.2) *
       (1.0 - wetness * 0.3) *
@@ -188,6 +188,8 @@ vec3 getClouds(
     (radiance - radiance * clamp01(transmittance)) / CLOUD_EXTINCTION_COLOR;
 
   scatter = mix(scatter * 2.0, scatter, smoothstep(6.0, 7.0, totalDensity));
+
+  scatter *= 0.5;
 
   // scatter = vec3(
   //   mix(sunlightColor, skylightColor, 0.5) * 0.5 * step(0.01, totalDensity)
@@ -206,6 +208,8 @@ vec3 getClouds(
 
   scatter = mix(scatter, vec3(0.0), fade);
   transmittance = mix(transmittance, vec3(1.0), fade);
+
+  scatter *= smoothstep(0.0, 0.1, worldSunDir.y) * 0.75 + 0.25;
 
   return scatter;
 }

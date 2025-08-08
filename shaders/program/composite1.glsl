@@ -367,6 +367,8 @@ void main() {
         transmittance,
         1.0
       );
+      cloudScatter *= 0.5;
+      transmittance = transmittance * 0.5 + 0.5;
       skyReflection = skyReflection * transmittance + cloudScatter;
       skyReflection *= skyLightmap;
 

@@ -138,6 +138,8 @@ void main() {
   scattering = pow2(scattering);
   #endif
 
+  show(scattering);
+
 }
 
 #endif
