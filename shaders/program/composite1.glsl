@@ -116,12 +116,20 @@ void main() {
 
   // if we are in the water, render the clouds before the water
   #ifdef WORLD_OVERWORLD
-  if(inWater && isWater){
+  if (inWater && isWater) {
     vec3 transmittance;
-    vec3 scattering = getClouds(vec3(0.0), opaqueFeetPlayerPos, transmittance, opaqueDepth);
+    vec3 scattering = getClouds(
+      vec3(0.0),
+      opaqueFeetPlayerPos,
+      transmittance,
+      opaqueDepth
+    );
     color.rgb = color.rgb * transmittance + scattering;
     #if GODRAYS > 0
-    occlusion = pow2(transmittance);
+    if (inWater) {
+      occlusion = pow2(transmittance);
+    }
+
     #endif
   }
   #endif
@@ -425,18 +433,23 @@ void main() {
     } else {
       color.rgb = waterFog(color.rgb, vec3(0.0), opaqueViewPos);
     }
-  }
-  // if we are not in water, render clouds over the water
-  #ifdef WORLD_OVERWORLD
+  } // if we are not in water, but looking at it, render clouds over the water
   else {
+    #ifdef WORLD_OVERWORLD
     vec3 transmittance;
-    vec3 scattering = getClouds(vec3(0.0), opaqueFeetPlayerPos, transmittance, opaqueDepth);
+    vec3 scattering = getClouds(
+      vec3(0.0),
+      translucentFeetPlayerPos,
+      transmittance,
+      translucentDepth
+    );
     color.rgb = color.rgb * transmittance + scattering;
     #if GODRAYS > 0
     occlusion = pow2(transmittance);
     #endif
+    #endif
   }
-  #endif
+
 }
 
 #endif
