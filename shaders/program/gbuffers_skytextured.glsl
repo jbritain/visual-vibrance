@@ -43,6 +43,9 @@ layout(location = 0) out vec4 color;
 void main() {
   color = texture(gtexture, texcoord) * glcolor;
 
+  #ifdef WORLD_THE_END
+  color.rgb *= 0.1;
+  #else
   #ifndef CUSTOM_SUN
   if (color.b < 0.3 && color.r > color.b) {
     // remove bloom
@@ -54,6 +57,7 @@ void main() {
     // sun
     color.rgb *= vec3(10.0, 7.0, 5.0);
   }
+  #endif
 
   color.rgb = pow(color.rgb, vec3(2.2));
 }

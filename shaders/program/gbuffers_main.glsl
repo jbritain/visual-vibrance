@@ -249,10 +249,6 @@ void main() {
 
   #endif
 
-  #ifdef GBUFFERS_ARMOR_GLINT
-  material.emission = 1.0;
-  #endif
-
   if (renderStage == MC_RENDER_STAGE_ENTITIES && entityId == 1) {
     material.emission = 1.0;
   }
@@ -405,6 +401,11 @@ void main() {
   if (materialIsWater(materialID)) {
     color.rgb = material.albedo;
     color.a = 0.0;
+
+    #ifdef GBUFFERS_ARMOR_GLINT
+  } else if (true) {
+    color.rgb = material.albedo * 3.0;
+    #endif
 
   } else {
     bool sampleColoredLight = false;

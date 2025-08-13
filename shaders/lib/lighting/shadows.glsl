@@ -142,8 +142,6 @@ vec3 getShadowing(
         vec3 faceMask =
           1.0 - vec3(equal(worldNormal, vec3(maxVec3(abs(worldNormal))))); // sets the largest component to 0.0 and the other two to 1.0
 
-        show(faceMask);
-
         vec2 causticsPos =
           faceMask.y == 0.0
             ? worldPos.xz

@@ -86,11 +86,11 @@ void main() {
 
   float depth = texture(depthtex0, texcoord).r;
   vec3 viewPos = screenSpaceToViewSpace(vec3(texcoord, depth));
-  #ifdef PIXEL_LOCKED_LIGHTING
-  viewPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz + cameraPosition;
-  viewPos = floor(viewPos * PIXEL_SIZE) / PIXEL_SIZE;
-  viewPos = (gbufferModelView * vec4(viewPos - cameraPosition, 1.0)).xyz;
-  #endif
+  // #ifdef PIXEL_LOCKED_LIGHTING
+  // viewPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz + cameraPosition;
+  // viewPos = floor(viewPos * PIXEL_SIZE) / PIXEL_SIZE;
+  // viewPos = (gbufferModelView * vec4(viewPos - cameraPosition, 1.0)).xyz;
+  // #endif
 
   if (depth == 1.0) {
     viewPos = normalize(viewPos) * shadowDistance;
@@ -122,23 +122,27 @@ void main() {
     }
 
     vec3 cloudShadow = vec3(1.0);
-    #ifdef CLOUD_SHADOWS
-    cloudShadow = getCloudShadow(feetPlayerPos);
-    cloudShadow = pow3(cloudShadow);
-    #endif
-    scattering += vec3(shadow2D(shadowtex0HW, screenSamplePos).r) * cloudShadow;
+    // #ifdef CLOUD_SHADOWS
+    // cloudShadow = getCloudShadow(samplePos);
+    // cloudShadow = pow3(cloudShadow);
+    // #endif
+    // if(isEyeInWater == 1){
+    //     scattering += vec3(texture(shadowtex1HW, screenSamplePos).r) * cloudShadow;
+    // } else {
+    scattering +=
+      vec3(texture(shadowtex0HW, screenSamplePos).r) *
+      cloudShadow *
+      length(sampleDelta);
+    // }
 
     samplePos += sampleDelta;
     samplePosShadow += sampleDeltaShadow;
   }
-
-  scattering /= GODRAYS_SAMPLES;
-  scattering *= distance(a, b);
-  scattering /= shadowDistance / 2.0;
-  scattering = pow2(scattering);
-  #endif
-
+  scattering /= shadowDistance;
   show(scattering);
+  // scattering /= (shadowDistance / 2.0);
+  // scattering = pow2(scattering);
+  #endif
 
 }
 
