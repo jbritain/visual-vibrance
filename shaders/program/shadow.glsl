@@ -83,7 +83,6 @@ void main() {
     }
 
     if (materialIsLightBlock(materialID)) {
-      data.emission = 1.0;
       data.color = vec3(1.0);
     }
 
