@@ -46,7 +46,10 @@ vec3 getShadedColor(
 
   float ambient = AMBIENT_STRENGTH;
   #ifdef WORLD_THE_NETHER
-  ambient *= 4.0;
+  ambient += 0.5;
+  #endif
+  #ifdef WORLD_THE_END
+  ambient += 0.1;
   #endif
 
   ambient += 2.0 * nightVision;

@@ -30,10 +30,15 @@ void main() {
   skylightColor =
     texture(lightmap, vec2(0.0, 1.0)).rgb *
     mix(vec3(3.0), vec3(0.9, 0.9, 1.0), smoothstep(-0.1, 0.1, worldLightDir.y));
+  
   sunlightColor =
     sunPosition == shadowLightPosition
       ? sunIrradiance
       : moonIrradiance;
+
+  #ifdef WORLD_THE_END
+  sunlightColor = vec3(0.4, 0.0, 1.0) * endFlashIntensity;
+  #endif
 
   if (isEyeInWater == 1 && sunPosition == shadowLightPosition) {
     sunlightColor *= vec3(1.5, 1.5, 0.5);

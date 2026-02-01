@@ -145,6 +145,8 @@ uniform sampler2D vanillaCloudTex;
 
 uniform sampler2D causticsTex;
 
+uniform float endFlashIntensity = 1.0;
+
 #ifdef DISTANT_HORIZONS
 uniform int dhRenderDistance;
 uniform float dhFarPlane;

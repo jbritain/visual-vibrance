@@ -56,9 +56,13 @@ void main() {
   vec3 viewPos = screenSpaceToViewSpace(vec3(texcoord, depth));
   dhOverride(depth, viewPos, false);
 
-  vec3 feetPlayerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
+  #ifdef WORLD_THE_END
+  if(depth == 1.0){
+    color.rgb = getSky(color.rgb, mat3(gbufferModelViewInverse) * normalize(viewPos), true);
+  }
+  #endif
 
-  // color.rgb = getSky(color.rgb, worldDir, true);
+
 
 }
 

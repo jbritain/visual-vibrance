@@ -3,6 +3,8 @@
 
 const float PI = 3.14159265358;
 
+#define rcp(x) 1.0/x
+
 // macro wizardry by BruceKnowsHow
 #define DEFINE_genFType(func)                                                  \
   func ( float ) func ( vec2 ) func ( vec3 ) func ( vec4 )
@@ -16,10 +18,6 @@ const float PI = 3.14159265358;
 #define DEFINE_genBType(func)                                                  \
   func ( bool ) func ( bvec2 ) func ( bvec3 ) func ( bvec4 )
 
-#define rcp_(type)                                                             \
-  type rcp(type x) {                                                           \
-    return 1.0 / x;                                                            \
-  }
 #define pow2_(type)                                                            \
   type pow2(type x) {                                                          \
     return x * x;                                                              \
@@ -55,7 +53,6 @@ const float PI = 3.14159265358;
     return x * x;                                                              \
   }
 
-DEFINE_genFType(rcp_)
 DEFINE_genFType(pow2_)
 DEFINE_genFType(pow3_)
 DEFINE_genFType(pow4_)

@@ -15,14 +15,7 @@ float fogify(float x, float w) {
 }
 
 vec3 endSky(vec3 dir, bool includeSun) {
-  return vec3(0.5, 0.4, 1.0) *
-    8.0 *
-    clamp01(dot(dir, worldLightDir) * 0.5 + 0.5) *
-    0.01 +
-  step(0.9989, dot(dir, worldLightDir)) *
-    step(dot(dir, worldLightDir), 0.999) *
-    100 *
-    float(includeSun);
+  return sunlightColor * smoothstep(0.8, 1.0, dot(dir, worldLightDir)) * float(includeSun);
 }
 
 vec3 getSky(vec3 color, vec3 rayDir, bool includeSun) {
